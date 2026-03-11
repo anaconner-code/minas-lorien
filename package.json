@@ -1,0 +1,12 @@
+{
+  "name": "wins-vault",
+  "version": "1.0.0",
+  "description": "My personal wins vault",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^24.0.0"
+  }
+}

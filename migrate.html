@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Migrate</title></head>
+<body>
+<h2>Migration Tool</h2>
+<p id="status">Reading localStorage...</p>
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+  import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDi-jwSpGo0OWt5wcRp6wGSfYX0qAveO3k",
+    authDomain: "minas-lorien.firebaseapp.com",
+    projectId: "minas-lorien",
+    storageBucket: "minas-lorien.firebasestorage.app",
+    messagingSenderId: "756139418843",
+    appId: "1:756139418843:web:858ee8cf548802ef0358fe"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const winsCollection = collection(db, 'wins');
+
+  var status = document.getElementById('status');
+  var old = JSON.parse(localStorage.getItem('wins') || '[]');
+
+  if (old.length === 0) {
+    status.textContent = 'No old entries found in localStorage. Nothing to migrate!';
+  } else {
+    status.textContent = 'Found ' + old.length + ' entries. Migrating...';
+    var promises = old.map(function(w) {
+      return addDoc(winsCollection, {
+        category: w.category || 'Work',
+        type: w.type || 'Note',
+        title: w.title || '',
+        text: w.text || '',
+        image: w.image || null,
+        createdAt: w.id || Date.now()
+      });
+    });
+    Promise.all(promises).then(function() {
+      status.textContent = '✅ Done! Migrated ' + old.length + ' entries to Firebase. You can close this window.';
+    }).catch(function(e) {
+      status.textContent = '⚠️ Error: ' + e.message;
+    });
+  }
+</script>
+</body>
+</html>
+```
+
+Save and close Notepad. Now in Command Prompt type:
+```
+npm start

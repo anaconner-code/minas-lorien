@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minas Lórien</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: #16213e;
+      padding: 20px 30px;
+      border-bottom: 2px solid #0f3460;
+    }
+    header h1 { font-size: 1.5em; color: #c9a84c; }
+    header p { font-size: 0.85em; color: #aaa; }
+    .tabs {
+      display: flex;
+      background: #16213e;
+      padding: 0 30px;
+      gap: 5px;
+    }
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      color: #aaa;
+      font-size: 0.9em;
+    }
+    .tab.active { border-bottom-color: #c9a84c; color: #fff; }
+    .content { flex: 1; padding: 30px; overflow-y: auto; }
+    .surprise-btn {
+      display: block;
+      margin: 0 auto 30px;
+      padding: 15px 40px;
+      background: #c9a84c;
+      color: #1a1a2e;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.2em;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.1s;
+    }
+    .surprise-btn:hover { transform: scale(1.05); }
+    .category-filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 7px 18px;
+      border-radius: 20px;
+      border: 2px solid #0f3460;
+      background: transparent;
+      color: #aaa;
+      cursor: pointer;
+      font-size: 0.85em;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: #c9a84c; color: #fff; }
+    .filter-btn.active { background: #c9a84c; border-color: #c9a84c; color: #1a1a2e; font-weight: bold; }
+    .win-card {
+      background: #16213e;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 15px;
+      position: relative;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .win-card.cat-work { border-left: 4px solid #4a9eff; }
+    .win-card.cat-creativity { border-left: 4px solid #c084fc; }
+    .win-card.cat-family { border-left: 4px solid #4ade80; }
+    .win-card.cat-inspiration { border-left: 4px solid #fbbf24; }
+    .win-card-text { flex: 1; }
+    .win-card .category-badge {
+      display: inline-block;
+      font-size: 0.7em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    .badge-work { background: #1a3a5c; color: #4a9eff; }
+    .badge-creativity { background: #2d1f47; color: #c084fc; }
+    .badge-family { background: #1a3a2a; color: #4ade80; }
+    .badge-inspiration { background: #3a2e10; color: #fbbf24; }
+    .win-card .tag { font-size: 0.75em; color: #aaa; margin-bottom: 8px; }
+    .win-card .text { line-height: 1.6; }
+    .win-card img {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+    .win-card .delete {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: none;
+      border: none;
+      color: #555;
+      cursor: pointer;
+      font-size: 1.1em;
+    }
+    .win-card .delete:hover { color: #e94560; }
+    .win-card .edit {
+      position: absolute;
+      top: 10px; right: 35px;
+      background: none;
+      border: none;
+      color: #555;
+      cursor: pointer;
+      font-size: 1.1em;
+    }
+    .win-card .edit:hover { color: #c9a84c; }
+    .link-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #0f3460;
+      border-radius: 8px;
+      padding: 12px 15px;
+      margin-top: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    .link-card:hover { background: #1a4a80; }
+    .link-card .link-icon { font-size: 1.5em; flex-shrink: 0; }
+    .link-card .link-info { flex: 1; overflow: hidden; }
+    .link-card .link-title {
+      font-size: 0.9em;
+      color: #eee;
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .link-card .link-url {
+      font-size: 0.75em;
+      color: #4a9eff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .link-card .link-arrow { color: #aaa; font-size: 1em; }
+    .spotlight {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 40px;
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+    .spotlight.cat-work { border: 2px solid #4a9eff; }
+    .spotlight.cat-creativity { border: 2px solid #c084fc; }
+    .spotlight.cat-family { border: 2px solid #4ade80; }
+    .spotlight.cat-inspiration { border: 2px solid #fbbf24; }
+    .spotlight-text { flex: 1; }
+    .spotlight .tag { color: #aaa; margin-bottom: 8px; font-size: 0.85em; display: block; }
+    .spotlight .text { font-size: 1.2em; line-height: 1.8; }
+    .spotlight img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .inspire-filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .add-form {
+      background: #16213e;
+      border-radius: 8px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+    .add-form h3 { margin-bottom: 15px; color: #c9a84c; }
+    .form-row { display: flex; gap: 12px; margin-bottom: 12px; }
+    .form-row select { flex: 1; margin-bottom: 0; }
+    .add-form select, .add-form input, .add-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      background: #0f3460;
+      border: 1px solid #1a4a80;
+      border-radius: 6px;
+      color: #eee;
+      font-size: 0.95em;
+    }
+    .add-form textarea { height: 100px; resize: vertical; }
+    .add-form button {
+      padding: 10px 25px;
+      background: #c9a84c;
+      color: #1a1a2e;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95em;
+      font-weight: bold;
+    }
+    .image-upload-area {
+      border: 2px dashed #1a4a80;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 12px;
+      cursor: pointer;
+      color: #aaa;
+      transition: border-color 0.2s;
+    }
+    .image-upload-area:hover { border-color: #c9a84c; color: #eee; }
+    .image-preview {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      display: none;
+    }
+    .empty { text-align: center; color: #555; padding: 40px; }
+    .count-badge {
+      background: #0f3460;
+      color: #aaa;
+      font-size: 0.8em;
+      padding: 3px 8px;
+      border-radius: 10px;
+      margin-left: 8px;
+    }
+    .loading {
+      text-align: center;
+      color: #c9a84c;
+      padding: 40px;
+      font-size: 1.1em;
+    }
+    .status-bar {
+      text-align: center;
+      font-size: 0.8em;
+      padding: 5px;
+      background: #0f3460;
+      color: #aaa;
+    }
+    .status-bar.synced { color: #4ade80; }
+    .status-bar.syncing { color: #c9a84c; }
+    .status-bar.error { color: #e94560; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🏰 Minas Lórien</h1>
+    <p>Your tower of light and memory</p>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" id="btn-inspire">✨ Inspire Me</div>
+    <div class="tab" id="btn-vault">📁 My Vault</div>
+    <div class="tab" id="btn-add">➕ Add Entry</div>
+  </div>
+
+  <div class="status-bar" id="status-bar">⏳ Connecting to your vault...</div>
+
+  <div class="content">
+
+    <div id="tab-inspire">
+      <div class="inspire-filters">
+        <button class="filter-btn active" data-cat="all">🏰 All</button>
+        <button class="filter-btn" data-cat="Work">💼 Work</button>
+        <button class="filter-btn" data-cat="Creativity">🎨 Creativity</button>
+        <button class="filter-btn" data-cat="Family">👨‍👩‍👧 Family</button>
+        <button class="filter-btn" data-cat="Inspiration">✨ Inspiration</button>
+      </div>
+      <button class="surprise-btn" id="surprise-btn">🎲 Show Me Something!</button>
+      <div id="spotlight"></div>
+    </div>
+
+    <div id="tab-vault" style="display:none">
+      <div class="category-filters">
+        <button class="filter-btn active" data-filter="all">All <span class="count-badge" id="count-all">0</span></button>
+        <button class="filter-btn" data-filter="Work">💼 Work <span class="count-badge" id="count-work">0</span></button>
+        <button class="filter-btn" data-filter="Creativity">🎨 Creativity <span class="count-badge" id="count-creativity">0</span></button>
+        <button class="filter-btn" data-filter="Family">👨‍👩‍👧 Family <span class="count-badge" id="count-family">0</span></button>
+        <button class="filter-btn" data-filter="Inspiration">✨ Inspiration <span class="count-badge" id="count-inspiration">0</span></button>
+      </div>
+      <div id="vault-list"></div>
+    </div>
+
+    <div id="tab-add" style="display:none">
+      <div class="add-form">
+        <h3>Add a new entry</h3>
+        <div class="form-row">
+          <select id="win-category">
+            <option value="Work">💼 Work</option>
+            <option value="Creativity">🎨 Creativity</option>
+            <option value="Family">👨‍👩‍👧 Family</option>
+            <option value="Inspiration">✨ Inspiration</option>
+          </select>
+          <select id="win-type">
+            <option value="Feedback">💬 Feedback</option>
+            <option value="Review">⭐ Performance Review</option>
+            <option value="Achievement">🏅 Achievement</option>
+            <option value="Quote">💡 Quote</option>
+            <option value="Link">🔗 Link</option>
+            <option value="Note">📝 Note</option>
+            <option value="Memory">💛 Memory</option>
+          </select>
+        </div>
+        <input id="win-title" type="text" placeholder="Title (e.g. 'Inspiring video' or 'Q3 review from Sarah')">
+        <textarea id="win-text" placeholder="Paste your content here — feedback, a quote, a URL, a memory, anything!"></textarea>
+        <img id="image-preview" class="image-preview">
+        <div class="image-upload-area" id="upload-area">
+          📷 Click to attach an image (optional)
+        </div>
+        <input type="file" id="image-input" accept="image/*" style="display:none">
+        <button id="save-btn">Save to Minas Lórien ✨</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDi-jwSpGo0OWt5wcRp6wGSfYX0qAveO3k",
+      authDomain: "minas-lorien.firebaseapp.com",
+      projectId: "minas-lorien",
+      storageBucket: "minas-lorien.firebasestorage.app",
+      messagingSenderId: "756139418843",
+      appId: "1:756139418843:web:858ee8cf548802ef0358fe"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const winsCollection = collection(db, 'wins');
+
+    var wins = [];
+    var currentImageData = null;
+    var currentVaultFilter = 'all';
+    var currentInspireFilter = 'all';
+    var editingId = null;
+
+    function setStatus(msg, type) {
+      var bar = document.getElementById('status-bar');
+      bar.textContent = msg;
+      bar.className = 'status-bar ' + (type || '');
+    }
+
+    async function loadWins() {
+      try {
+        setStatus('⏳ Loading your vault...', 'syncing');
+        var snapshot = await getDocs(winsCollection);
+        wins = [];
+        snapshot.forEach(function(docSnap) {
+          wins.push(Object.assign({ firestoreId: docSnap.id }, docSnap.data()));
+        });
+        setStatus('✅ Vault synced', 'synced');
+        renderVault();
+      } catch(e) {
+        setStatus('⚠️ Could not connect to cloud — check your internet', 'error');
+      }
+    }
+
+    function isURL(str) {
+      return /^(https?:\/\/)[^\s]+/.test(str.trim());
+    }
+
+    function getDomain(url) {
+      try { return new URL(url.trim()).hostname.replace('www.', ''); }
+      catch(e) { return url.trim(); }
+    }
+
+    function getLinkIcon(url) {
+      var domain = getDomain(url);
+      if (domain.includes('youtube') || domain.includes('youtu.be')) return '▶️';
+      if (domain.includes('tiktok')) return '🎵';
+      if (domain.includes('instagram')) return '📸';
+      if (domain.includes('twitter') || domain.includes('x.com')) return '🐦';
+      if (domain.includes('linkedin')) return '💼';
+      if (domain.includes('spotify')) return '🎧';
+      if (domain.includes('pinterest')) return '📌';
+      return '🔗';
+    }
+
+    function renderText(text, type) {
+      if (type === 'Link' && isURL(text)) {
+        var domain = getDomain(text);
+        var icon = getLinkIcon(text);
+        return '<a class="link-card" data-url="' + text.trim() + '" href="' + text.trim() + '" target="_blank">' +
+          '<span class="link-icon">' + icon + '</span>' +
+          '<span class="link-info">' +
+            '<span class="link-title">' + domain + '</span>' +
+            '<span class="link-url">' + text.trim() + '</span>' +
+          '</span>' +
+          '<span class="link-arrow">→</span>' +
+        '</a>';
+      }
+      return text.replace(/(https?:\/\/[^\s]+)/g, function(url) {
+        return '<a class="link-card" data-url="' + url + '" href="' + url + '" target="_blank" style="display:inline-flex;margin-top:6px;">' +
+          '<span class="link-icon">🔗</span>' +
+          '<span class="link-info"><span class="link-url">' + url + '</span></span>' +
+          '<span class="link-arrow">→</span></a>';
+      });
+    }
+
+    function showTab(name) {
+      ['inspire','vault','add'].forEach(function(t) {
+        document.getElementById('tab-' + t).style.display = 'none';
+        document.getElementById('btn-' + t).classList.remove('active');
+      });
+      document.getElementById('tab-' + name).style.display = 'block';
+      document.getElementById('btn-' + name).classList.add('active');
+      if (name === 'vault') renderVault();
+    }
+
+    async function addWin() {
+      var category = document.getElementById('win-category').value;
+      var type = document.getElementById('win-type').value;
+      var title = document.getElementById('win-title').value.trim();
+      var text = document.getElementById('win-text').value.trim();
+      if (!text) { alert('Please add some content!'); return; }
+
+      var entry = { category: category, type: type, title: title, text: text, image: currentImageData, createdAt: Date.now() };
+
+      try {
+        setStatus('⏳ Saving...', 'syncing');
+        if (editingId) {
+          await updateDoc(doc(db, 'wins', editingId), entry);
+          editingId = null;
+        } else {
+          await addDoc(winsCollection, entry);
+        }
+        setStatus('✅ Saved to your vault!', 'synced');
+        document.getElementById('win-title').value = '';
+        document.getElementById('win-text').value = '';
+        document.getElementById('image-preview').style.display = 'none';
+        document.getElementById('upload-area').textContent = '📷 Click to attach an image (optional)';
+        document.getElementById('add-form-title').textContent = 'Add a new entry';
+        document.getElementById('save-btn').textContent = 'Save to Minas Lórien ✨';
+        currentImageData = null;
+        await loadWins();
+        showTab('vault');
+      } catch(e) {
+        setStatus('⚠️ Could not save — check your internet', 'error');
+      }
+    }
+
+    async function deleteWin(firestoreId) {
+      try {
+        setStatus('⏳ Deleting...', 'syncing');
+        await deleteDoc(doc(db, 'wins', firestoreId));
+        await loadWins();
+        setStatus('✅ Deleted', 'synced');
+      } catch(e) {
+        setStatus('⚠️ Could not delete — check your internet', 'error');
+      }
+    }
+
+    function editWin(firestoreId) {
+      var win = wins.find(function(w) { return w.firestoreId === firestoreId; });
+      if (!win) return;
+      document.getElementById('win-category').value = win.category || 'Work';
+      document.getElementById('win-type').value = win.type;
+      document.getElementById('win-title').value = win.title || '';
+      document.getElementById('win-text').value = win.text;
+      if (win.image) {
+        currentImageData = win.image;
+        var preview = document.getElementById('image-preview');
+        preview.src = win.image;
+        preview.style.display = 'block';
+        document.getElementById('upload-area').textContent = '✅ Image attached — click to change';
+      } else {
+        currentImageData = null;
+        document.getElementById('image-preview').style.display = 'none';
+        document.getElementById('upload-area').textContent = '📷 Click to attach an image (optional)';
+      }
+      editingId = firestoreId;
+      document.getElementById('add-form-title').textContent = 'Edit entry';
+      document.getElementById('save-btn').textContent = 'Update entry ✨';
+      showTab('add');
+    }
+
+    function getCatClass(cat) { return 'cat-' + cat.toLowerCase(); }
+    function getBadgeClass(cat) { return 'badge-' + cat.toLowerCase(); }
+
+    function renderVault() {
+      var list = document.getElementById('vault-list');
+      var filtered = currentVaultFilter === 'all' ? wins : wins.filter(function(w) { return w.category === currentVaultFilter; });
+
+      document.getElementById('count-all').textContent = wins.length;
+      document.getElementById('count-work').textContent = wins.filter(function(w){ return w.category === 'Work'; }).length;
+      document.getElementById('count-creativity').textContent = wins.filter(function(w){ return w.category === 'Creativity'; }).length;
+      document.getElementById('count-family').textContent = wins.filter(function(w){ return w.category === 'Family'; }).length;
+      document.getElementById('count-inspiration').textContent = wins.filter(function(w){ return w.category === 'Inspiration'; }).length;
+
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="empty">Nothing here yet — go add some! 💪</div>';
+        return;
+      }
+
+      list.innerHTML = filtered.map(function(w) {
+        var imgHtml = w.image ? '<img src="' + w.image + '" style="width:120px;height:120px;object-fit:cover;border-radius:8px;flex-shrink:0;">' : '';
+        var cat = w.category || 'Work';
+        return '<div class="win-card ' + getCatClass(cat) + '">' +
+          '<div class="win-card-text">' +
+            '<span class="category-badge ' + getBadgeClass(cat) + '">' + cat + '</span>' +
+            '<div class="tag">' + w.type + (w.title ? ' · ' + w.title : '') + '</div>' +
+            '<div class="text">' + renderText(w.text, w.type) + '</div>' +
+          '</div>' +
+          imgHtml +
+          '<button class="delete" data-id="' + w.firestoreId + '">✕</button>' +
+          '<button class="edit" data-id="' + w.firestoreId + '">✏️</button>' +
+        '</div>';
+      }).join('');
+
+      document.querySelectorAll('.delete').forEach(function(btn) {
+        btn.addEventListener('click', function() { deleteWin(btn.getAttribute('data-id')); });
+      });
+      document.querySelectorAll('.edit').forEach(function(btn) {
+        btn.addEventListener('click', function() { editWin(btn.getAttribute('data-id')); });
+      });
+    }
+
+    function showRandom() {
+      var spotlight = document.getElementById('spotlight');
+      var pool = currentInspireFilter === 'all' ? wins : wins.filter(function(w) { return w.category === currentInspireFilter; });
+      if (pool.length === 0) {
+        spotlight.innerHTML = '<div class="empty">Nothing here yet — go add some! 💪</div>';
+        return;
+      }
+      var win = pool[Math.floor(Math.random() * pool.length)];
+      var imgHtml = win.image ? '<img src="' + win.image + '">' : '';
+      var cat = win.category || 'Work';
+      spotlight.innerHTML =
+        '<div class="spotlight ' + getCatClass(cat) + '">' +
+          '<div class="spotlight-text">' +
+            '<span class="category-badge ' + getBadgeClass(cat) + '">' + cat + '</span>' +
+            '<div class="tag">' + win.type + (win.title ? ' · ' + win.title : '') + '</div>' +
+            '<div class="text">' + renderText(win.text, win.type) + '</div>' +
+          '</div>' +
+          imgHtml +
+        '</div>';
+    }
+
+    document.querySelectorAll('[data-filter]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('[data-filter]').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        currentVaultFilter = btn.getAttribute('data-filter');
+        renderVault();
+      });
+    });
+
+    document.querySelectorAll('[data-cat]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('[data-cat]').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        currentInspireFilter = btn.getAttribute('data-cat');
+      });
+    });
+
+    document.getElementById('upload-area').addEventListener('click', function() {
+      document.getElementById('image-input').click();
+    });
+
+    document.getElementById('image-input').addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        currentImageData = ev.target.result;
+        var preview = document.getElementById('image-preview');
+        preview.src = currentImageData;
+        preview.style.display = 'block';
+        document.getElementById('upload-area').textContent = '✅ Image attached — click to change';
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('btn-inspire').addEventListener('click', function() { showTab('inspire'); });
+    document.getElementById('btn-vault').addEventListener('click', function() { showTab('vault'); });
+    document.getElementById('btn-add').addEventListener('click', function() { showTab('add'); });
+    document.getElementById('surprise-btn').addEventListener('click', showRandom);
+    document.getElementById('save-btn').addEventListener('click', addWin);
+
+    loadWins();
+  </script>
+</body>
+</html>
