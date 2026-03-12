@@ -10,7 +10,7 @@
       font-family: 'Segoe UI', sans-serif;
       background: #1a1a2e;
       color: #eee;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
@@ -48,22 +48,24 @@
       cursor: pointer;
       font-weight: bold;
       transition: transform 0.1s;
+      width: 100%;
+      max-width: 400px;
     }
     .surprise-btn:hover { transform: scale(1.05); }
     .category-filters {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
     .filter-btn {
-      padding: 7px 18px;
+      padding: 6px 14px;
       border-radius: 20px;
       border: 2px solid #0f3460;
       background: transparent;
       color: #aaa;
       cursor: pointer;
-      font-size: 0.85em;
+      font-size: 0.8em;
       transition: all 0.2s;
     }
     .filter-btn:hover { border-color: #c9a84c; color: #fff; }
@@ -71,18 +73,18 @@
     .win-card {
       background: #16213e;
       border-radius: 8px;
-      padding: 20px;
+      padding: 15px;
       margin-bottom: 15px;
       position: relative;
       display: flex;
-      gap: 20px;
+      gap: 15px;
       align-items: flex-start;
     }
     .win-card.cat-work { border-left: 4px solid #4a9eff; }
     .win-card.cat-creativity { border-left: 4px solid #c084fc; }
     .win-card.cat-family { border-left: 4px solid #4ade80; }
     .win-card.cat-inspiration { border-left: 4px solid #fbbf24; }
-    .win-card-text { flex: 1; }
+    .win-card-text { flex: 1; min-width: 0; }
     .win-card .category-badge {
       display: inline-block;
       font-size: 0.7em;
@@ -97,32 +99,34 @@
     .badge-family { background: #1a3a2a; color: #4ade80; }
     .badge-inspiration { background: #3a2e10; color: #fbbf24; }
     .win-card .tag { font-size: 0.75em; color: #aaa; margin-bottom: 8px; }
-    .win-card .text { line-height: 1.6; }
+    .win-card .text { line-height: 1.6; word-break: break-word; }
     .win-card img {
-      width: 120px;
-      height: 120px;
+      width: 80px;
+      height: 80px;
       object-fit: cover;
       border-radius: 8px;
       flex-shrink: 0;
     }
     .win-card .delete {
       position: absolute;
-      top: 10px; right: 10px;
+      top: 8px; right: 8px;
       background: none;
       border: none;
       color: #555;
       cursor: pointer;
-      font-size: 1.1em;
+      font-size: 1em;
+      padding: 4px;
     }
     .win-card .delete:hover { color: #e94560; }
     .win-card .edit {
       position: absolute;
-      top: 10px; right: 35px;
+      top: 8px; right: 30px;
       background: none;
       border: none;
       color: #555;
       cursor: pointer;
-      font-size: 1.1em;
+      font-size: 1em;
+      padding: 4px;
     }
     .win-card .edit:hover { color: #c9a84c; }
     .link-card {
@@ -159,12 +163,15 @@
     .spotlight {
       background: #16213e;
       border-radius: 12px;
-      padding: 40px;
+      padding: 30px;
       max-width: 700px;
       margin: 0 auto;
       display: flex;
-      gap: 30px;
-      align-items: center;
+      flex-direction: column;
+      gap: 20px;
+    }
+    @media (min-width: 600px) {
+      .spotlight { flex-direction: row; align-items: center; }
     }
     .spotlight.cat-work { border: 2px solid #4a9eff; }
     .spotlight.cat-creativity { border: 2px solid #c084fc; }
@@ -172,17 +179,19 @@
     .spotlight.cat-inspiration { border: 2px solid #fbbf24; }
     .spotlight-text { flex: 1; }
     .spotlight .tag { color: #aaa; margin-bottom: 8px; font-size: 0.85em; display: block; }
-    .spotlight .text { font-size: 1.2em; line-height: 1.8; }
+    .spotlight .text { font-size: 1.1em; line-height: 1.8; word-break: break-word; }
     .spotlight img {
-      width: 200px;
+      width: 100%;
+      max-width: 200px;
       height: 200px;
       object-fit: cover;
       border-radius: 10px;
       flex-shrink: 0;
+      align-self: center;
     }
     .inspire-filters {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       margin-bottom: 25px;
       justify-content: center;
       flex-wrap: wrap;
@@ -190,31 +199,32 @@
     .add-form {
       background: #16213e;
       border-radius: 8px;
-      padding: 25px;
+      padding: 20px;
       margin-bottom: 20px;
     }
     .add-form h3 { margin-bottom: 15px; color: #c9a84c; }
-    .form-row { display: flex; gap: 12px; margin-bottom: 12px; }
-    .form-row select { flex: 1; margin-bottom: 0; }
+    .form-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+    .form-row select { flex: 1; min-width: 120px; margin-bottom: 0; }
     .add-form select, .add-form input, .add-form textarea {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-bottom: 12px;
       background: #0f3460;
       border: 1px solid #1a4a80;
       border-radius: 6px;
       color: #eee;
-      font-size: 0.95em;
+      font-size: 1em;
     }
-    .add-form textarea { height: 100px; resize: vertical; }
+    .add-form textarea { height: 120px; resize: vertical; }
     .add-form button {
-      padding: 10px 25px;
+      width: 100%;
+      padding: 14px 25px;
       background: #c9a84c;
       color: #1a1a2e;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.95em;
+      font-size: 1em;
       font-weight: bold;
     }
     .image-upload-area {
@@ -244,12 +254,6 @@
       padding: 3px 8px;
       border-radius: 10px;
       margin-left: 8px;
-    }
-    .loading {
-      text-align: center;
-      color: #c9a84c;
-      padding: 40px;
-      font-size: 1.1em;
     }
     .status-bar {
       text-align: center;
@@ -304,7 +308,7 @@
 
     <div id="tab-add" style="display:none">
       <div class="add-form">
-        <h3>Add a new entry</h3>
+        <h3 id="add-form-title">Add a new entry</h3>
         <div class="form-row">
           <select id="win-category">
             <option value="Work">💼 Work</option>
@@ -375,7 +379,7 @@
         setStatus('✅ Vault synced', 'synced');
         renderVault();
       } catch(e) {
-        setStatus('⚠️ Could not connect to cloud — check your internet', 'error');
+        setStatus('⚠️ Could not connect — check your internet', 'error');
       }
     }
 
@@ -404,7 +408,7 @@
       if (type === 'Link' && isURL(text)) {
         var domain = getDomain(text);
         var icon = getLinkIcon(text);
-        return '<a class="link-card" data-url="' + text.trim() + '" href="' + text.trim() + '" target="_blank">' +
+        return '<a class="link-card" href="' + text.trim() + '" target="_blank" rel="noopener">' +
           '<span class="link-icon">' + icon + '</span>' +
           '<span class="link-info">' +
             '<span class="link-title">' + domain + '</span>' +
@@ -414,7 +418,7 @@
         '</a>';
       }
       return text.replace(/(https?:\/\/[^\s]+)/g, function(url) {
-        return '<a class="link-card" data-url="' + url + '" href="' + url + '" target="_blank" style="display:inline-flex;margin-top:6px;">' +
+        return '<a class="link-card" href="' + url + '" target="_blank" rel="noopener" style="display:inline-flex;margin-top:6px;">' +
           '<span class="link-icon">🔗</span>' +
           '<span class="link-info"><span class="link-url">' + url + '</span></span>' +
           '<span class="link-arrow">→</span></a>';
@@ -448,7 +452,7 @@
         } else {
           await addDoc(winsCollection, entry);
         }
-        setStatus('✅ Saved to your vault!', 'synced');
+        setStatus('✅ Saved!', 'synced');
         document.getElementById('win-title').value = '';
         document.getElementById('win-text').value = '';
         document.getElementById('image-preview').style.display = 'none';
@@ -459,7 +463,7 @@
         await loadWins();
         showTab('vault');
       } catch(e) {
-        setStatus('⚠️ Could not save — check your internet', 'error');
+        setStatus('⚠️ Could not save — ' + e.message, 'error');
       }
     }
 
@@ -470,7 +474,7 @@
         await loadWins();
         setStatus('✅ Deleted', 'synced');
       } catch(e) {
-        setStatus('⚠️ Could not delete — check your internet', 'error');
+        setStatus('⚠️ Could not delete', 'error');
       }
     }
 
@@ -517,7 +521,7 @@
       }
 
       list.innerHTML = filtered.map(function(w) {
-        var imgHtml = w.image ? '<img src="' + w.image + '" style="width:120px;height:120px;object-fit:cover;border-radius:8px;flex-shrink:0;">' : '';
+        var imgHtml = w.image ? '<img src="' + w.image + '" style="width:80px;height:80px;object-fit:cover;border-radius:8px;flex-shrink:0;">' : '';
         var cat = w.category || 'Work';
         return '<div class="win-card ' + getCatClass(cat) + '">' +
           '<div class="win-card-text">' +
@@ -605,3 +609,10 @@
   </script>
 </body>
 </html>
+```
+
+Save and close Notepad, then we need to push this to GitHub so Vercel picks it up automatically. Run these in Command Prompt:
+```
+git add .
+git commit -m "Fix mobile saving, improve mobile layout"
+git push origin main
