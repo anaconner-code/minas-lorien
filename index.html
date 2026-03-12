@@ -4,54 +4,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Minas Lórien</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #1a1a2e;
-      color: #eee;
+      font-family: 'EB Garamond', Georgia, serif;
+      background: #0d1f1a;
+      color: #f0ede6;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
     header {
-      background: #16213e;
+      background: #112920;
       padding: 20px 30px;
-      border-bottom: 2px solid #0f3460;
+      border-bottom: 1px solid #2a5a45;
     }
-    header h1 { font-size: 1.5em; color: #c9a84c; }
-    header p { font-size: 0.85em; color: #aaa; }
+    header h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 1.6em;
+      color: #c9a84c;
+      letter-spacing: 0.05em;
+    }
+    header p {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.95em;
+      color: #7aab94;
+      margin-top: 2px;
+    }
     .tabs {
       display: flex;
-      background: #16213e;
-      padding: 0 30px;
-      gap: 5px;
+      background: #112920;
+      padding: 0 20px;
+      gap: 0;
+      border-bottom: 1px solid #2a5a45;
     }
     .tab {
-      padding: 10px 20px;
+      padding: 12px 20px;
       cursor: pointer;
       border-bottom: 3px solid transparent;
-      color: #aaa;
-      font-size: 0.9em;
+      color: #7aab94;
+      font-family: 'Cinzel', serif;
+      font-size: 0.75em;
+      letter-spacing: 0.08em;
+      transition: all 0.2s;
     }
-    .tab.active { border-bottom-color: #c9a84c; color: #fff; }
-    .content { flex: 1; padding: 30px; overflow-y: auto; }
+    .tab.active { border-bottom-color: #c9a84c; color: #c9a84c; }
+    .tab:hover { color: #e8f4f0; }
+    .content { flex: 1; padding: 25px 20px; overflow-y: auto; }
     .surprise-btn {
       display: block;
       margin: 0 auto 30px;
-      padding: 15px 40px;
-      background: #c9a84c;
-      color: #1a1a2e;
+      padding: 14px 40px;
+      background: linear-gradient(135deg, #c9a84c, #a8873a);
+      color: #0d1f1a;
       border: none;
       border-radius: 30px;
-      font-size: 1.2em;
+      font-family: 'Cinzel', serif;
+      font-size: 0.95em;
+      letter-spacing: 0.08em;
       cursor: pointer;
-      font-weight: bold;
-      transition: transform 0.1s;
+      font-weight: 600;
+      transition: transform 0.1s, box-shadow 0.2s;
       width: 100%;
       max-width: 400px;
+      box-shadow: 0 4px 20px rgba(201, 168, 76, 0.3);
     }
-    .surprise-btn:hover { transform: scale(1.05); }
+    .surprise-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 25px rgba(201, 168, 76, 0.5);
+    }
     .category-filters {
       display: flex;
       gap: 8px;
@@ -61,45 +84,67 @@
     .filter-btn {
       padding: 6px 14px;
       border-radius: 20px;
-      border: 2px solid #0f3460;
+      border: 1px solid #2a5a45;
       background: transparent;
-      color: #aaa;
+      color: #7aab94;
       cursor: pointer;
-      font-size: 0.8em;
+      font-family: 'EB Garamond', serif;
+      font-size: 0.9em;
       transition: all 0.2s;
     }
-    .filter-btn:hover { border-color: #c9a84c; color: #fff; }
-    .filter-btn.active { background: #c9a84c; border-color: #c9a84c; color: #1a1a2e; font-weight: bold; }
+    .filter-btn:hover { border-color: #c9a84c; color: #e8f4f0; }
+    .filter-btn.active {
+      background: #c9a84c;
+      border-color: #c9a84c;
+      color: #0d1f1a;
+      font-weight: bold;
+    }
     .win-card {
-      background: #16213e;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 15px;
+      background: #112920;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 14px;
       position: relative;
       display: flex;
       gap: 15px;
       align-items: flex-start;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      transition: box-shadow 0.2s;
     }
-    .win-card.cat-work { border-left: 4px solid #4a9eff; }
-    .win-card.cat-creativity { border-left: 4px solid #c084fc; }
-    .win-card.cat-family { border-left: 4px solid #4ade80; }
-    .win-card.cat-inspiration { border-left: 4px solid #fbbf24; }
+    .win-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+    .win-card.cat-work { border-left: 3px solid #4a9eff; }
+    .win-card.cat-creativity { border-left: 3px solid #c084fc; }
+    .win-card.cat-family { border-left: 3px solid #4ade80; }
+    .win-card.cat-inspiration { border-left: 3px solid #c9a84c; }
     .win-card-text { flex: 1; min-width: 0; }
     .win-card .category-badge {
       display: inline-block;
-      font-size: 0.7em;
+      font-family: 'Cinzel', serif;
+      font-size: 0.65em;
       text-transform: uppercase;
       padding: 2px 8px;
       border-radius: 10px;
       margin-bottom: 6px;
-      font-weight: bold;
+      letter-spacing: 0.1em;
     }
-    .badge-work { background: #1a3a5c; color: #4a9eff; }
-    .badge-creativity { background: #2d1f47; color: #c084fc; }
-    .badge-family { background: #1a3a2a; color: #4ade80; }
-    .badge-inspiration { background: #3a2e10; color: #fbbf24; }
-    .win-card .tag { font-size: 0.75em; color: #aaa; margin-bottom: 8px; }
-    .win-card .text { line-height: 1.6; word-break: break-word; }
+    .badge-work { background: #0f2a40; color: #4a9eff; }
+    .badge-creativity { background: #1f1030; color: #c084fc; }
+    .badge-family { background: #0f2a1a; color: #4ade80; }
+    .badge-inspiration { background: #2a1f0a; color: #c9a84c; }
+    .win-card .tag {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.85em;
+      color: #7aab94;
+      margin-bottom: 8px;
+    }
+    .win-card .text {
+      font-family: 'EB Garamond', serif;
+      font-size: 1em;
+      line-height: 1.7;
+      color: #e8f4f0;
+      word-break: break-word;
+    }
     .win-card img {
       width: 80px;
       height: 80px;
@@ -112,10 +157,11 @@
       top: 8px; right: 8px;
       background: none;
       border: none;
-      color: #555;
+      color: #2a5a45;
       cursor: pointer;
       font-size: 1em;
       padding: 4px;
+      transition: color 0.2s;
     }
     .win-card .delete:hover { color: #e94560; }
     .win-card .edit {
@@ -123,30 +169,33 @@
       top: 8px; right: 30px;
       background: none;
       border: none;
-      color: #555;
+      color: #2a5a45;
       cursor: pointer;
       font-size: 1em;
       padding: 4px;
+      transition: color 0.2s;
     }
     .win-card .edit:hover { color: #c9a84c; }
     .link-card {
       display: flex;
       align-items: center;
       gap: 12px;
-      background: #0f3460;
+      background: #0d2a20;
+      border: 1px solid #2a5a45;
       border-radius: 8px;
       padding: 12px 15px;
       margin-top: 8px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
       text-decoration: none;
     }
-    .link-card:hover { background: #1a4a80; }
-    .link-card .link-icon { font-size: 1.5em; flex-shrink: 0; }
+    .link-card:hover { background: #112920; border-color: #c9a84c; }
+    .link-card .link-icon { font-size: 1.4em; flex-shrink: 0; }
     .link-card .link-info { flex: 1; overflow: hidden; }
     .link-card .link-title {
-      font-size: 0.9em;
-      color: #eee;
+      font-family: 'EB Garamond', serif;
+      font-size: 0.95em;
+      color: #e8f4f0;
       margin-bottom: 3px;
       white-space: nowrap;
       overflow: hidden;
@@ -154,32 +203,46 @@
     }
     .link-card .link-url {
       font-size: 0.75em;
-      color: #4a9eff;
+      color: #4a9e8a;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .link-card .link-arrow { color: #aaa; font-size: 1em; }
+    .link-card .link-arrow { color: #7aab94; font-size: 1em; }
     .spotlight {
-      background: #16213e;
-      border-radius: 12px;
+      background: #112920;
+      border-radius: 14px;
       padding: 30px;
       max-width: 700px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
       gap: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
     }
     @media (min-width: 600px) {
       .spotlight { flex-direction: row; align-items: center; }
     }
-    .spotlight.cat-work { border: 2px solid #4a9eff; }
-    .spotlight.cat-creativity { border: 2px solid #c084fc; }
-    .spotlight.cat-family { border: 2px solid #4ade80; }
-    .spotlight.cat-inspiration { border: 2px solid #fbbf24; }
+    .spotlight.cat-work { border: 1px solid #4a9eff; }
+    .spotlight.cat-creativity { border: 1px solid #c084fc; }
+    .spotlight.cat-family { border: 1px solid #4ade80; }
+    .spotlight.cat-inspiration { border: 1px solid #c9a84c; }
     .spotlight-text { flex: 1; }
-    .spotlight .tag { color: #aaa; margin-bottom: 8px; font-size: 0.85em; display: block; }
-    .spotlight .text { font-size: 1.1em; line-height: 1.8; word-break: break-word; }
+    .spotlight .tag {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      color: #7aab94;
+      margin-bottom: 12px;
+      font-size: 0.95em;
+      display: block;
+    }
+    .spotlight .text {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.2em;
+      line-height: 1.9;
+      color: #e8f4f0;
+      word-break: break-word;
+    }
     .spotlight img {
       width: 100%;
       max-width: 200px;
@@ -197,47 +260,70 @@
       flex-wrap: wrap;
     }
     .add-form {
-      background: #16213e;
-      border-radius: 8px;
-      padding: 20px;
+      background: #112920;
+      border-radius: 10px;
+      padding: 24px;
       margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
-    .add-form h3 { margin-bottom: 15px; color: #c9a84c; }
+    .add-form h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 1em;
+      letter-spacing: 0.08em;
+      margin-bottom: 18px;
+      color: #c9a84c;
+    }
     .form-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
     .form-row select { flex: 1; min-width: 120px; margin-bottom: 0; }
     .add-form select, .add-form input, .add-form textarea {
       width: 100%;
       padding: 12px;
       margin-bottom: 12px;
-      background: #0f3460;
-      border: 1px solid #1a4a80;
+      background: #0d2a20;
+      border: 1px solid #2a5a45;
       border-radius: 6px;
-      color: #eee;
+      color: #e8f4f0;
+      font-family: 'EB Garamond', serif;
       font-size: 1em;
+      transition: border-color 0.2s;
+    }
+    .add-form select:focus, .add-form input:focus, .add-form textarea:focus {
+      outline: none;
+      border-color: #c9a84c;
     }
     .add-form textarea { height: 120px; resize: vertical; }
     .add-form button {
       width: 100%;
       padding: 14px 25px;
-      background: #c9a84c;
-      color: #1a1a2e;
+      background: linear-gradient(135deg, #c9a84c, #a8873a);
+      color: #0d1f1a;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 1em;
-      font-weight: bold;
+      font-family: 'Cinzel', serif;
+      font-size: 0.9em;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(201, 168, 76, 0.3);
+      transition: all 0.2s;
+    }
+    .add-form button:hover {
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.5);
+      transform: translateY(-1px);
     }
     .image-upload-area {
-      border: 2px dashed #1a4a80;
+      border: 1px dashed #2a5a45;
       border-radius: 8px;
       padding: 20px;
       text-align: center;
       margin-bottom: 12px;
       cursor: pointer;
-      color: #aaa;
-      transition: border-color 0.2s;
+      color: #7aab94;
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      transition: all 0.2s;
     }
-    .image-upload-area:hover { border-color: #c9a84c; color: #eee; }
+    .image-upload-area:hover { border-color: #c9a84c; color: #e8f4f0; }
     .image-preview {
       width: 100%;
       max-height: 200px;
@@ -246,21 +332,31 @@
       margin-bottom: 12px;
       display: none;
     }
-    .empty { text-align: center; color: #555; padding: 40px; }
+    .empty {
+      text-align: center;
+      color: #2a5a45;
+      padding: 40px;
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 1.1em;
+    }
     .count-badge {
-      background: #0f3460;
-      color: #aaa;
-      font-size: 0.8em;
-      padding: 3px 8px;
+      background: #0d2a20;
+      color: #7aab94;
+      font-size: 0.75em;
+      padding: 2px 7px;
       border-radius: 10px;
-      margin-left: 8px;
+      margin-left: 6px;
     }
     .status-bar {
       text-align: center;
-      font-size: 0.8em;
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.85em;
       padding: 5px;
-      background: #0f3460;
-      color: #aaa;
+      background: #0d2a20;
+      color: #7aab94;
+      border-bottom: 1px solid #2a5a45;
     }
     .status-bar.synced { color: #4ade80; }
     .status-bar.syncing { color: #c9a84c; }
@@ -308,7 +404,7 @@
 
     <div id="tab-add" style="display:none">
       <div class="add-form">
-        <h3 id="add-form-title">Add a new entry</h3>
+        <h3 id="add-form-title">Add a New Entry</h3>
         <div class="form-row">
           <select id="win-category">
             <option value="Work">💼 Work</option>
@@ -457,7 +553,7 @@
         document.getElementById('win-text').value = '';
         document.getElementById('image-preview').style.display = 'none';
         document.getElementById('upload-area').textContent = '📷 Click to attach an image (optional)';
-        document.getElementById('add-form-title').textContent = 'Add a new entry';
+        document.getElementById('add-form-title').textContent = 'Add a New Entry';
         document.getElementById('save-btn').textContent = 'Save to Minas Lórien ✨';
         currentImageData = null;
         await loadWins();
@@ -497,8 +593,8 @@
         document.getElementById('upload-area').textContent = '📷 Click to attach an image (optional)';
       }
       editingId = firestoreId;
-      document.getElementById('add-form-title').textContent = 'Edit entry';
-      document.getElementById('save-btn').textContent = 'Update entry ✨';
+      document.getElementById('add-form-title').textContent = 'Edit Entry';
+      document.getElementById('save-btn').textContent = 'Update Entry ✨';
       showTab('add');
     }
 
@@ -611,8 +707,8 @@
 </html>
 ```
 
-Save and close Notepad, then we need to push this to GitHub so Vercel picks it up automatically. Run these in Command Prompt:
+Save, close, then push to GitHub:
 ```
 git add .
-git commit -m "Fix mobile saving, improve mobile layout"
+git commit -m "Lothlórien color palette and Cinzel/Garamond fonts"
 git push origin main
