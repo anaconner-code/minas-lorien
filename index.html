@@ -470,7 +470,7 @@
       bar.className = 'status-bar ' + (type || '');
     }
 
-    async function loadWins() {
+  async function loadWins() {
       try {
         setStatus('⏳ Loading your vault...', 'syncing');
         var snapshot = await getDocs(winsCollection);
@@ -478,10 +478,14 @@
         snapshot.forEach(function(docSnap) {
           wins.push(Object.assign({ firestoreId: docSnap.id }, docSnap.data()));
         });
-        setStatus('✅ Vault synced', 'synced');
+        setStatus('✅ Vault synced · ' + wins.length + ' entries', 'synced');
         renderVault();
+        if (document.getElementById('tab-vault').style.display !== 'none') {
+          renderVault();
+        }
       } catch(e) {
         setStatus('⚠️ Could not connect — check your internet', 'error');
+        console.error('Firebase error:', e);
       }
     }
 
