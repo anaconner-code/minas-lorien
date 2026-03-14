@@ -99,7 +99,7 @@
     }
     .shake { animation: shake 0.4s ease; }
 
-    /* ── Main app ── */
+    /* ── Main app (hidden until logged in) ── */
     #app { display: none; flex-direction: column; flex: 1; }
 
     header {
@@ -233,7 +233,7 @@
       color: #dde4e0;
       word-break: break-word;
     }
-    .win-card .card-image {
+    .win-card img {
       width: 80px;
       height: 80px;
       object-fit: cover;
@@ -264,55 +264,6 @@
       transition: color 0.2s;
     }
     .win-card .edit:hover { color: #c9a84c; }
-
-    /* ── File attachment display ── */
-    .file-attachment {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #1e2d3a;
-      border: 1px solid #3a5a6a;
-      border-radius: 4px;
-      padding: 7px 12px;
-      margin-top: 8px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s;
-      max-width: 100%;
-    }
-    .file-attachment:hover { border-color: #c9a84c; background: #263340; }
-    .file-attachment .file-icon { font-size: 1.2em; flex-shrink: 0; }
-    .file-attachment .file-name {
-      font-family: 'Raleway', sans-serif;
-      font-size: 0.8em;
-      color: #c8d8d0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 200px;
-    }
-    .file-attachment .file-arrow { color: #7a9a8a; font-size: 0.9em; flex-shrink: 0; }
-
-    /* ── Audio player ── */
-    .audio-player {
-      margin-top: 8px;
-      width: 100%;
-    }
-    .audio-player audio {
-      width: 100%;
-      height: 32px;
-      accent-color: #c9a84c;
-    }
-    .audio-label {
-      font-family: 'Raleway', sans-serif;
-      font-size: 0.75em;
-      color: #7a9a8a;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
     .link-card {
       display: flex;
       align-items: center;
@@ -447,9 +398,7 @@
       transition: all 0.2s;
     }
     .add-form button:hover { background: #c9a84c; color: #1e2d3a; }
-
-    /* ── File upload area ── */
-    .file-upload-area {
+    .image-upload-area {
       border: 1px dashed #3a5a6a;
       border-radius: 4px;
       padding: 20px;
@@ -461,8 +410,7 @@
       font-style: italic;
       transition: all 0.2s;
     }
-    .file-upload-area:hover { border-color: #c9a84c; color: #dde4e0; }
-    .file-upload-area.has-file { border-color: #6aaa88; color: #6aaa88; border-style: solid; }
+    .image-upload-area:hover { border-color: #c9a84c; color: #dde4e0; }
     .image-preview {
       width: 100%;
       max-height: 200px;
@@ -471,33 +419,6 @@
       margin-bottom: 12px;
       display: none;
     }
-
-    /* ── Upload progress ── */
-    .upload-progress {
-      display: none;
-      margin-bottom: 12px;
-    }
-    .upload-progress-bar-wrap {
-      background: #1e2d3a;
-      border-radius: 4px;
-      height: 6px;
-      overflow: hidden;
-      margin-top: 6px;
-    }
-    .upload-progress-bar {
-      height: 100%;
-      background: #c9a84c;
-      border-radius: 4px;
-      transition: width 0.2s;
-      width: 0%;
-    }
-    .upload-progress-label {
-      font-family: 'EB Garamond', serif;
-      font-style: italic;
-      font-size: 0.85em;
-      color: #c9a84c;
-    }
-
     .empty {
       text-align: center;
       color: #3a5a6a;
@@ -604,20 +525,11 @@
           </div>
           <input id="win-title" type="text" placeholder="Title (e.g. 'Inspiring video' or 'Q3 review from Sarah')">
           <textarea id="win-text" placeholder="Paste your content here — feedback, a quote, a URL, a memory, anything!"></textarea>
-
           <img id="image-preview" class="image-preview">
-          <div class="file-upload-area" id="upload-area">
-            📎 Click to attach a file — image, PDF, Word doc, audio, or video (optional)
+          <div class="image-upload-area" id="upload-area">
+            📷 Click to attach an image (optional)
           </div>
-          <input type="file" id="file-input" accept="image/*,.pdf,.doc,.docx,.mp3,.wav,.m4a,.ogg,.mp4,.mov,.webm" style="display:none">
-
-          <div class="upload-progress" id="upload-progress">
-            <div class="upload-progress-label" id="upload-progress-label">Uploading...</div>
-            <div class="upload-progress-bar-wrap">
-              <div class="upload-progress-bar" id="upload-progress-bar"></div>
-            </div>
-          </div>
-
+          <input type="file" id="image-input" accept="image/*" style="display:none">
           <button id="save-btn">Save to Minas Lórien ✨</button>
         </div>
       </div>
@@ -628,7 +540,6 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
     import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
-    import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyDi-jwSpGo0OWt5wcRp6wGSfYX0qAveO3k",
@@ -641,14 +552,10 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const storage = getStorage(app);
     const winsCollection = collection(db, 'wins');
 
     var wins = [];
-    var currentFile = null;        // the File object selected
-    var currentFileURL = null;     // existing Storage URL (when editing)
-    var currentFileName = null;    // filename to display
-    var currentFileType = null;    // mime type
+    var currentImageData = null;
     var currentVaultFilter = 'all';
     var currentInspireFilter = 'all';
     var editingId = null;
@@ -667,7 +574,7 @@
         } else {
           var box = document.getElementById('login-box');
           box.classList.remove('shake');
-          void box.offsetWidth;
+          void box.offsetWidth; // reflow to restart animation
           box.classList.add('shake');
           document.getElementById('login-error').textContent = 'Incorrect password — try again.';
           document.getElementById('login-password').value = '';
@@ -678,6 +585,7 @@
       }
     }
 
+    // Skip login if already authenticated this session
     if (sessionStorage.getItem('ml-auth') === 'true') {
       document.getElementById('login-overlay').style.display = 'none';
       document.getElementById('app').style.display = 'flex';
@@ -689,35 +597,30 @@
       if (e.key === 'Enter') checkPassword();
     });
 
-    // ── Helpers ────────────────────────────────────────────
+    // ── App logic ──────────────────────────────────────────
     function setStatus(msg, type) {
       var bar = document.getElementById('status-bar');
       bar.textContent = msg;
       bar.className = 'status-bar ' + (type || '');
     }
 
-    function getFileIcon(mimeType, fileName) {
-      if (!mimeType && !fileName) return '📎';
-      var mt = (mimeType || '').toLowerCase();
-      var fn = (fileName || '').toLowerCase();
-      if (mt.startsWith('image/')) return '🖼️';
-      if (mt === 'application/pdf' || fn.endsWith('.pdf')) return '📄';
-      if (mt.includes('word') || fn.endsWith('.doc') || fn.endsWith('.docx')) return '📝';
-      if (mt.startsWith('audio/') || fn.endsWith('.mp3') || fn.endsWith('.m4a') || fn.endsWith('.wav') || fn.endsWith('.ogg')) return '🎵';
-      if (mt.startsWith('video/') || fn.endsWith('.mp4') || fn.endsWith('.mov') || fn.endsWith('.webm')) return '🎬';
-      return '📎';
-    }
-
-    function isAudio(mimeType, fileName) {
-      var mt = (mimeType || '').toLowerCase();
-      var fn = (fileName || '').toLowerCase();
-      return mt.startsWith('audio/') || fn.endsWith('.mp3') || fn.endsWith('.m4a') || fn.endsWith('.wav') || fn.endsWith('.ogg');
-    }
-
-    function isImage(mimeType, fileName) {
-      var mt = (mimeType || '').toLowerCase();
-      var fn = (fileName || '').toLowerCase();
-      return mt.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp|svg)$/.test(fn);
+    async function loadWins() {
+      try {
+        setStatus('⏳ Loading your vault...', 'syncing');
+        var snapshot = await getDocs(winsCollection);
+        wins = [];
+        snapshot.forEach(function(docSnap) {
+          wins.push(Object.assign({ firestoreId: docSnap.id }, docSnap.data()));
+        });
+        setStatus('✅ Vault synced · ' + wins.length + ' entries', 'synced');
+        renderVault();
+        if (document.getElementById('tab-vault').style.display !== 'none') {
+          renderVault();
+        }
+      } catch(e) {
+        setStatus('⚠️ Could not connect — check your internet', 'error');
+        console.error('Firebase error:', e);
+      }
     }
 
     function isURL(str) {
@@ -741,85 +644,6 @@
       return '🔗';
     }
 
-    // ── File upload to Firebase Storage ───────────────────
-    function uploadFile(file) {
-      return new Promise(function(resolve, reject) {
-        var fileName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-        var storageRef = ref(storage, 'wins/' + fileName);
-        var uploadTask = uploadBytesResumable(storageRef, file);
-
-        document.getElementById('upload-progress').style.display = 'block';
-
-        uploadTask.on('state_changed',
-          function(snapshot) {
-            var pct = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            document.getElementById('upload-progress-bar').style.width = pct + '%';
-            document.getElementById('upload-progress-label').textContent = 'Uploading... ' + pct + '%';
-          },
-          function(error) {
-            document.getElementById('upload-progress').style.display = 'none';
-            reject(error);
-          },
-          async function() {
-            var url = await getDownloadURL(uploadTask.snapshot.ref);
-            document.getElementById('upload-progress').style.display = 'none';
-            resolve({ url: url, fileName: file.name, fileType: file.type, storagePath: 'wins/' + fileName });
-          }
-        );
-      });
-    }
-
-    // ── File picker ────────────────────────────────────────
-    document.getElementById('upload-area').addEventListener('click', function() {
-      document.getElementById('file-input').click();
-    });
-
-    document.getElementById('file-input').addEventListener('change', function(e) {
-      var file = e.target.files[0];
-      if (!file) return;
-      currentFile = file;
-      currentFileName = file.name;
-      currentFileType = file.type;
-
-      var area = document.getElementById('upload-area');
-      var preview = document.getElementById('image-preview');
-
-      if (isImage(file.type, file.name)) {
-        var reader = new FileReader();
-        reader.onload = function(ev) {
-          preview.src = ev.target.result;
-          preview.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-      } else {
-        preview.style.display = 'none';
-      }
-
-      area.textContent = getFileIcon(file.type, file.name) + ' ' + file.name + ' — click to change';
-      area.classList.add('has-file');
-    });
-
-    // ── Render file attachment in cards ───────────────────
-    function renderFileAttachment(fileURL, fileName, fileType) {
-      if (!fileURL) return '';
-      if (isImage(fileType, fileName)) {
-        return '<img src="' + fileURL + '" class="card-image" style="width:80px;height:80px;object-fit:cover;border-radius:4px;flex-shrink:0;">';
-      }
-      if (isAudio(fileType, fileName)) {
-        return '<div class="audio-player">' +
-          '<div class="audio-label">' + getFileIcon(fileType, fileName) + ' ' + (fileName || 'Audio') + '</div>' +
-          '<audio controls src="' + fileURL + '"></audio>' +
-        '</div>';
-      }
-      var icon = getFileIcon(fileType, fileName);
-      var name = fileName || 'Download file';
-      return '<a class="file-attachment" href="' + fileURL + '" target="_blank" rel="noopener">' +
-        '<span class="file-icon">' + icon + '</span>' +
-        '<span class="file-name">' + name + '</span>' +
-        '<span class="file-arrow">↗</span>' +
-      '</a>';
-    }
-
     function renderText(text, type) {
       if (type === 'Link' && isURL(text)) {
         var domain = getDomain(text);
@@ -841,7 +665,6 @@
       });
     }
 
-    // ── Tabs ───────────────────────────────────────────────
     function showTab(name) {
       ['inspire','vault','add'].forEach(function(t) {
         document.getElementById('tab-' + t).style.display = 'none';
@@ -852,24 +675,6 @@
       if (name === 'vault') renderVault();
     }
 
-    // ── Load wins ──────────────────────────────────────────
-    async function loadWins() {
-      try {
-        setStatus('⏳ Loading your vault...', 'syncing');
-        var snapshot = await getDocs(winsCollection);
-        wins = [];
-        snapshot.forEach(function(docSnap) {
-          wins.push(Object.assign({ firestoreId: docSnap.id }, docSnap.data()));
-        });
-        setStatus('✅ Vault synced · ' + wins.length + ' entries', 'synced');
-        renderVault();
-      } catch(e) {
-        setStatus('⚠️ Could not connect — check your internet', 'error');
-        console.error('Firebase error:', e);
-      }
-    }
-
-    // ── Save / update win ──────────────────────────────────
     async function addWin() {
       var category = document.getElementById('win-category').value;
       var type = document.getElementById('win-type').value;
@@ -877,44 +682,24 @@
       var text = document.getElementById('win-text').value.trim();
       if (!text) { alert('Please add some content!'); return; }
 
-      var fileURL = currentFileURL || null;
-      var fileName = currentFileName || null;
-      var fileType = currentFileType || null;
-      var storagePath = null;
+      var entry = { category: category, type: type, title: title, text: text, image: currentImageData, createdAt: Date.now() };
 
       try {
         setStatus('⏳ Saving...', 'syncing');
-
-        // Upload new file if one was selected
-        if (currentFile) {
-          var uploaded = await uploadFile(currentFile);
-          fileURL = uploaded.url;
-          fileName = uploaded.fileName;
-          fileType = uploaded.fileType;
-          storagePath = uploaded.storagePath;
-        }
-
-        var entry = {
-          category: category,
-          type: type,
-          title: title,
-          text: text,
-          fileURL: fileURL,
-          fileName: fileName,
-          fileType: fileType,
-          storagePath: storagePath,
-          createdAt: Date.now()
-        };
-
         if (editingId) {
           await updateDoc(doc(db, 'wins', editingId), entry);
           editingId = null;
         } else {
           await addDoc(winsCollection, entry);
         }
-
         setStatus('✅ Saved!', 'synced');
-        resetForm();
+        document.getElementById('win-title').value = '';
+        document.getElementById('win-text').value = '';
+        document.getElementById('image-preview').style.display = 'none';
+        document.getElementById('upload-area').textContent = '📷 Click to attach an image (optional)';
+        document.getElementById('add-form-title').textContent = 'Add a New Entry';
+        document.getElementById('save-btn').textContent = 'Save to Minas Lórien ✨';
+        currentImageData = null;
         await loadWins();
         showTab('vault');
       } catch(e) {
@@ -922,30 +707,9 @@
       }
     }
 
-    function resetForm() {
-      document.getElementById('win-title').value = '';
-      document.getElementById('win-text').value = '';
-      document.getElementById('image-preview').style.display = 'none';
-      document.getElementById('upload-area').textContent = '📎 Click to attach a file — image, PDF, Word doc, audio, or video (optional)';
-      document.getElementById('upload-area').classList.remove('has-file');
-      document.getElementById('file-input').value = '';
-      document.getElementById('add-form-title').textContent = 'Add a New Entry';
-      document.getElementById('save-btn').textContent = 'Save to Minas Lórien ✨';
-      currentFile = null;
-      currentFileURL = null;
-      currentFileName = null;
-      currentFileType = null;
-    }
-
-    // ── Delete win ─────────────────────────────────────────
     async function deleteWin(firestoreId) {
-      var win = wins.find(function(w) { return w.firestoreId === firestoreId; });
       try {
         setStatus('⏳ Deleting...', 'syncing');
-        // Delete file from Storage if it exists
-        if (win && win.storagePath) {
-          try { await deleteObject(ref(storage, win.storagePath)); } catch(e) { /* ignore if already gone */ }
-        }
         await deleteDoc(doc(db, 'wins', firestoreId));
         await loadWins();
         setStatus('✅ Deleted', 'synced');
@@ -954,7 +718,6 @@
       }
     }
 
-    // ── Edit win ───────────────────────────────────────────
     function editWin(firestoreId) {
       var win = wins.find(function(w) { return w.firestoreId === firestoreId; });
       if (!win) return;
@@ -962,48 +725,23 @@
       document.getElementById('win-type').value = win.type;
       document.getElementById('win-title').value = win.title || '';
       document.getElementById('win-text').value = win.text;
-
-      var area = document.getElementById('upload-area');
-      var preview = document.getElementById('image-preview');
-
-      if (win.fileURL) {
-        currentFileURL = win.fileURL;
-        currentFileName = win.fileName || null;
-        currentFileType = win.fileType || null;
-        if (isImage(win.fileType, win.fileName)) {
-          preview.src = win.fileURL;
-          preview.style.display = 'block';
-        } else {
-          preview.style.display = 'none';
-        }
-        var icon = getFileIcon(win.fileType, win.fileName);
-        area.textContent = icon + ' ' + (win.fileName || 'File attached') + ' — click to change';
-        area.classList.add('has-file');
+      if (win.image) {
+        currentImageData = win.image;
+        var preview = document.getElementById('image-preview');
+        preview.src = win.image;
+        preview.style.display = 'block';
+        document.getElementById('upload-area').textContent = '✅ Image attached — click to change';
       } else {
-        // Legacy: handle old base64 image entries
-        if (win.image) {
-          preview.src = win.image;
-          preview.style.display = 'block';
-          area.textContent = '🖼️ Image attached (legacy) — click to replace';
-          area.classList.add('has-file');
-        } else {
-          preview.style.display = 'none';
-          area.textContent = '📎 Click to attach a file — image, PDF, Word doc, audio, or video (optional)';
-          area.classList.remove('has-file');
-        }
-        currentFileURL = null;
-        currentFileName = null;
-        currentFileType = null;
+        currentImageData = null;
+        document.getElementById('image-preview').style.display = 'none';
+        document.getElementById('upload-area').textContent = '📷 Click to attach an image (optional)';
       }
-
-      currentFile = null;
       editingId = firestoreId;
       document.getElementById('add-form-title').textContent = 'Edit Entry';
       document.getElementById('save-btn').textContent = 'Update Entry ✨';
       showTab('add');
     }
 
-    // ── Render vault ───────────────────────────────────────
     function getCatClass(cat) { return 'cat-' + cat.toLowerCase(); }
     function getBadgeClass(cat) { return 'badge-' + cat.toLowerCase(); }
 
@@ -1023,24 +761,15 @@
       }
 
       list.innerHTML = filtered.map(function(w) {
+        var imgHtml = w.image ? '<img src="' + w.image + '" style="width:80px;height:80px;object-fit:cover;border-radius:4px;flex-shrink:0;">' : '';
         var cat = w.category || 'Work';
-        // Support both new Storage files and legacy base64 images
-        var fileHTML = '';
-        if (w.fileURL) {
-          fileHTML = renderFileAttachment(w.fileURL, w.fileName, w.fileType);
-        } else if (w.image) {
-          fileHTML = '<img src="' + w.image + '" class="card-image" style="width:80px;height:80px;object-fit:cover;border-radius:4px;flex-shrink:0;">';
-        }
-        // Images go to the right of the card; audio/docs go below the text
-        var isImg = w.fileURL ? isImage(w.fileType, w.fileName) : !!w.image;
         return '<div class="win-card ' + getCatClass(cat) + '">' +
           '<div class="win-card-text">' +
             '<span class="category-badge ' + getBadgeClass(cat) + '">' + cat + '</span>' +
             '<div class="tag">' + w.type + (w.title ? ' · ' + w.title : '') + '</div>' +
             '<div class="text">' + renderText(w.text, w.type) + '</div>' +
-            (!isImg ? fileHTML : '') +
           '</div>' +
-          (isImg ? fileHTML : '') +
+          imgHtml +
           '<button class="delete" data-id="' + w.firestoreId + '">✕</button>' +
           '<button class="edit" data-id="' + w.firestoreId + '">✏️</button>' +
         '</div>';
@@ -1054,7 +783,6 @@
       });
     }
 
-    // ── Inspire tab ────────────────────────────────────────
     function showRandom() {
       var spotlight = document.getElementById('spotlight');
       var pool = currentInspireFilter === 'all' ? wins : wins.filter(function(w) { return w.category === currentInspireFilter; });
@@ -1063,13 +791,8 @@
         return;
       }
       var win = pool[Math.floor(Math.random() * pool.length)];
+      var imgHtml = win.image ? '<img src="' + win.image + '">' : '';
       var cat = win.category || 'Work';
-      var imgHTML = '';
-      if (win.fileURL && isImage(win.fileType, win.fileName)) {
-        imgHTML = '<img src="' + win.fileURL + '">';
-      } else if (win.image) {
-        imgHTML = '<img src="' + win.image + '">';
-      }
       spotlight.innerHTML =
         '<div class="spotlight ' + getCatClass(cat) + '">' +
           '<div class="spotlight-text">' +
@@ -1077,11 +800,10 @@
             '<div class="tag">' + win.type + (win.title ? ' · ' + win.title : '') + '</div>' +
             '<div class="text">' + renderText(win.text, win.type) + '</div>' +
           '</div>' +
-          imgHTML +
+          imgHtml +
         '</div>';
     }
 
-    // ── Event listeners ────────────────────────────────────
     document.querySelectorAll('[data-filter]').forEach(function(btn) {
       btn.addEventListener('click', function() {
         document.querySelectorAll('[data-filter]').forEach(function(b) { b.classList.remove('active'); });
@@ -1097,6 +819,24 @@
         btn.classList.add('active');
         currentInspireFilter = btn.getAttribute('data-cat');
       });
+    });
+
+    document.getElementById('upload-area').addEventListener('click', function() {
+      document.getElementById('image-input').click();
+    });
+
+    document.getElementById('image-input').addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        currentImageData = ev.target.result;
+        var preview = document.getElementById('image-preview');
+        preview.src = currentImageData;
+        preview.style.display = 'block';
+        document.getElementById('upload-area').textContent = '✅ Image attached — click to change';
+      };
+      reader.readAsDataURL(file);
     });
 
     document.getElementById('btn-inspire').addEventListener('click', function() { showTab('inspire'); });
