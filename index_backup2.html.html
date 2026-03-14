@@ -346,55 +346,6 @@
       text-overflow: ellipsis;
     }
     .link-card .link-arrow { color: #7a9a8a; }
-
-    /* ── Link preview card (large) ── */
-    .link-preview {
-      display: block;
-      background: #1e2d3a;
-      border: 1px solid #3a5a6a;
-      border-radius: 6px;
-      margin-top: 10px;
-      overflow: hidden;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-    .link-preview:hover { border-color: #c9a84c; background: #263340; }
-    .link-preview-thumb {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      display: block;
-      background: #263340;
-    }
-    .link-preview-thumb-placeholder {
-      width: 100%;
-      height: 160px;
-      background: #263340;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5em;
-    }
-    .link-preview-info {
-      padding: 10px 14px 12px;
-    }
-    .link-preview-title {
-      font-family: 'Raleway', sans-serif;
-      font-size: 0.9em;
-      font-weight: 500;
-      color: #c8d8d0;
-      margin-bottom: 3px;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-    }
-    .link-preview-domain {
-      font-size: 0.75em;
-      color: #6aaacc;
-      font-family: 'Raleway', sans-serif;
-    }
-
     .spotlight {
       background: #263340;
       border-radius: 8px;
@@ -869,93 +820,19 @@
       '</a>';
     }
 
-    // ── YouTube thumbnail helpers ──────────────────────────
-    function getYouTubeID(url) {
-      var m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
-      return m ? m[1] : null;
-    }
-
-    function isYouTube(url) {
-      return !!(url && (url.includes('youtube.com') || url.includes('youtu.be')));
-    }
-
-    // Build a preview card element and inject thumbnail async
-    function buildLinkPreview(url, containerEl) {
-      var domain = getDomain(url);
-      var icon = getLinkIcon(url);
-      var ytId = getYouTubeID(url);
-
-      // Create the card skeleton
-      var a = document.createElement('a');
-      a.className = 'link-preview';
-      a.href = url;
-      a.target = '_blank';
-      a.rel = 'noopener';
-
-      var thumbDiv = document.createElement('div');
-      thumbDiv.className = 'link-preview-thumb-placeholder';
-      thumbDiv.textContent = icon;
-
-      var info = document.createElement('div');
-      info.className = 'link-preview-info';
-      info.innerHTML =
-        '<div class="link-preview-title">' + domain + '</div>' +
-        '<div class="link-preview-domain">' + domain + '</div>';
-
-      a.appendChild(thumbDiv);
-      a.appendChild(info);
-      containerEl.appendChild(a);
-
-      // Fetch thumbnail
-      if (ytId) {
-        // YouTube: direct thumbnail URL, no API needed
-        var img = document.createElement('img');
-        img.className = 'link-preview-thumb';
-        img.src = 'https://img.youtube.com/vi/' + ytId + '/hqdefault.jpg';
-        img.alt = '';
-        img.onload = function() { a.replaceChild(img, thumbDiv); };
-        img.onerror = function() { /* keep placeholder */ };
-      } else {
-        // Any other link: use microlink.io to fetch og:image + title
-        fetch('https://api.microlink.io/?url=' + encodeURIComponent(url) + '&screenshot=false')
-          .then(function(r) { return r.json(); })
-          .then(function(data) {
-            if (data && data.data) {
-              // Update title if available
-              if (data.data.title) {
-                info.querySelector('.link-preview-title').textContent = data.data.title;
-              }
-              // Update thumbnail if available
-              var imgUrl = data.data.image && data.data.image.url;
-              if (imgUrl) {
-                var img = document.createElement('img');
-                img.className = 'link-preview-thumb';
-                img.src = imgUrl;
-                img.alt = '';
-                img.onload = function() { a.replaceChild(img, thumbDiv); };
-                img.onerror = function() { /* keep placeholder */ };
-              }
-            }
-          })
-          .catch(function() { /* keep placeholder on error */ });
+    function renderText(text, type) {
+      if (type === 'Link' && isURL(text)) {
+        var domain = getDomain(text);
+        var icon = getLinkIcon(text);
+        return '<a class="link-card" href="' + text.trim() + '" target="_blank" rel="noopener">' +
+          '<span class="link-icon">' + icon + '</span>' +
+          '<span class="link-info">' +
+            '<span class="link-title">' + domain + '</span>' +
+            '<span class="link-url">' + text.trim() + '</span>' +
+          '</span>' +
+          '<span class="link-arrow">→</span>' +
+        '</a>';
       }
-    }
-
-    function renderText(text, type, cardEl) {
-      var cleanText = text.trim();
-
-      if (type === 'Link' && isURL(cleanText)) {
-        // Return placeholder div; thumbnail built async after render
-        if (cardEl) {
-          setTimeout(function() {
-            var ph = cardEl.querySelector('.link-preview-placeholder');
-            if (ph) buildLinkPreview(cleanText, ph.parentNode);
-          }, 0);
-        }
-        return '<div class="link-preview-placeholder" data-url="' + cleanText + '"></div>';
-      }
-
-      // For non-Link types, auto-linkify any URLs in the text
       return text.replace(/(https?:\/\/[^\s]+)/g, function(url) {
         return '<a class="link-card" href="' + url + '" target="_blank" rel="noopener" style="display:inline-flex;margin-top:6px;">' +
           '<span class="link-icon">🔗</span>' +
@@ -1147,14 +1024,16 @@
 
       list.innerHTML = filtered.map(function(w) {
         var cat = w.category || 'Work';
+        // Support both new Storage files and legacy base64 images
         var fileHTML = '';
         if (w.fileURL) {
           fileHTML = renderFileAttachment(w.fileURL, w.fileName, w.fileType);
         } else if (w.image) {
           fileHTML = '<img src="' + w.image + '" class="card-image" style="width:80px;height:80px;object-fit:cover;border-radius:4px;flex-shrink:0;">';
         }
+        // Images go to the right of the card; audio/docs go below the text
         var isImg = w.fileURL ? isImage(w.fileType, w.fileName) : !!w.image;
-        return '<div class="win-card ' + getCatClass(cat) + '" data-id="' + w.firestoreId + '">' +
+        return '<div class="win-card ' + getCatClass(cat) + '">' +
           '<div class="win-card-text">' +
             '<span class="category-badge ' + getBadgeClass(cat) + '">' + cat + '</span>' +
             '<div class="tag">' + w.type + (w.title ? ' · ' + w.title : '') + '</div>' +
@@ -1166,13 +1045,6 @@
           '<button class="edit" data-id="' + w.firestoreId + '">✏️</button>' +
         '</div>';
       }).join('');
-
-      // Wire up async link previews
-      document.querySelectorAll('.link-preview-placeholder').forEach(function(ph) {
-        var url = ph.getAttribute('data-url');
-        if (url) buildLinkPreview(url, ph.parentNode);
-        ph.remove();
-      });
 
       document.querySelectorAll('.delete').forEach(function(btn) {
         btn.addEventListener('click', function() { deleteWin(btn.getAttribute('data-id')); });
@@ -1207,13 +1079,6 @@
           '</div>' +
           imgHTML +
         '</div>';
-
-      // Wire up async link previews in spotlight
-      spotlight.querySelectorAll('.link-preview-placeholder').forEach(function(ph) {
-        var url = ph.getAttribute('data-url');
-        if (url) buildLinkPreview(url, ph.parentNode);
-        ph.remove();
-      });
     }
 
     // ── Event listeners ────────────────────────────────────
