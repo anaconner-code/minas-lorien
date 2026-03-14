@@ -15,6 +15,93 @@
       display: flex;
       flex-direction: column;
     }
+
+    /* ── Login overlay ── */
+    #login-overlay {
+      position: fixed;
+      inset: 0;
+      background: #1e2d3a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    #login-box {
+      background: #263340;
+      border-radius: 8px;
+      padding: 40px 32px;
+      width: 100%;
+      max-width: 360px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      text-align: center;
+    }
+    #login-box h2 {
+      font-family: 'Raleway', sans-serif;
+      font-weight: 300;
+      font-size: 1.5em;
+      letter-spacing: 0.15em;
+      color: #c8d8d0;
+      margin-bottom: 6px;
+    }
+    #login-box h2 span { color: #c9a84c; }
+    #login-box p {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      color: #7a9a8a;
+      font-size: 0.95em;
+      margin-bottom: 28px;
+    }
+    #login-password {
+      width: 100%;
+      padding: 12px 16px;
+      background: #1e2d3a;
+      border: 1px solid #3a5a6a;
+      border-radius: 4px;
+      color: #dde4e0;
+      font-family: 'EB Garamond', serif;
+      font-size: 1.1em;
+      text-align: center;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+    #login-password:focus { outline: none; border-color: #c9a84c; }
+    #login-btn {
+      width: 100%;
+      padding: 13px;
+      background: transparent;
+      color: #c9a84c;
+      border: 1px solid #c9a84c;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.8em;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    #login-btn:hover { background: #c9a84c; color: #1e2d3a; }
+    #login-error {
+      color: #cc6a6a;
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.9em;
+      margin-top: 12px;
+      min-height: 1.2em;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
+    .shake { animation: shake 0.4s ease; }
+
+    /* ── Main app (hidden until logged in) ── */
+    #app { display: none; flex-direction: column; flex: 1; }
+
     header {
       background: #1e2d3a;
       padding: 20px 30px;
@@ -74,10 +161,7 @@
       width: 100%;
       max-width: 400px;
     }
-    .surprise-btn:hover {
-      background: #c9a84c;
-      color: #1e2d3a;
-    }
+    .surprise-btn:hover { background: #c9a84c; color: #1e2d3a; }
     .category-filters {
       display: flex;
       gap: 8px;
@@ -313,10 +397,7 @@
       font-weight: 500;
       transition: all 0.2s;
     }
-    .add-form button:hover {
-      background: #c9a84c;
-      color: #1e2d3a;
-    }
+    .add-form button:hover { background: #c9a84c; color: #1e2d3a; }
     .image-upload-area {
       border: 1px dashed #3a5a6a;
       border-radius: 4px;
@@ -370,80 +451,95 @@
   </style>
 </head>
 <body>
-  <header>
-    <h1>🏰 Minas <span>Lórien</span></h1>
-    <p>Your tower of light and memory</p>
-  </header>
 
-  <div class="tabs">
-    <div class="tab active" id="btn-inspire">✨ Inspire Me</div>
-    <div class="tab" id="btn-vault">📁 My Vault</div>
-    <div class="tab" id="btn-add">➕ Add Entry</div>
+  <!-- Login overlay -->
+  <div id="login-overlay">
+    <div id="login-box">
+      <h2>🏰 Minas <span>Lórien</span></h2>
+      <p>Your tower of light and memory</p>
+      <input type="password" id="login-password" placeholder="Enter password" autocomplete="current-password">
+      <button id="login-btn">Enter the Tower</button>
+      <div id="login-error"></div>
+    </div>
   </div>
 
-  <div class="status-bar" id="status-bar">⏳ Connecting to your vault...</div>
+  <!-- Main app -->
+  <div id="app">
+    <header>
+      <h1>🏰 Minas <span>Lórien</span></h1>
+      <p>Your tower of light and memory</p>
+    </header>
 
-  <div class="content">
-
-    <div id="tab-inspire">
-      <div class="inspire-filters">
-        <button class="filter-btn active" data-cat="all">🏰 All</button>
-        <button class="filter-btn" data-cat="Work">💼 Work</button>
-        <button class="filter-btn" data-cat="Creativity">🎨 Creativity</button>
-        <button class="filter-btn" data-cat="Family">👨‍👩‍👧 Family</button>
-        <button class="filter-btn" data-cat="Inspiration">✨ Inspiration</button>
-      </div>
-      <button class="surprise-btn" id="surprise-btn">🎲 Show Me Something</button>
-      <div id="spotlight"></div>
+    <div class="tabs">
+      <div class="tab active" id="btn-inspire">✨ Inspire Me</div>
+      <div class="tab" id="btn-vault">📁 My Vault</div>
+      <div class="tab" id="btn-add">➕ Add Entry</div>
     </div>
 
-    <div id="tab-vault" style="display:none">
-      <div class="category-filters">
-        <button class="filter-btn active" data-filter="all">All <span class="count-badge" id="count-all">0</span></button>
-        <button class="filter-btn" data-filter="Work">💼 Work <span class="count-badge" id="count-work">0</span></button>
-        <button class="filter-btn" data-filter="Creativity">🎨 Creativity <span class="count-badge" id="count-creativity">0</span></button>
-        <button class="filter-btn" data-filter="Family">👨‍👩‍👧 Family <span class="count-badge" id="count-family">0</span></button>
-        <button class="filter-btn" data-filter="Inspiration">✨ Inspiration <span class="count-badge" id="count-inspiration">0</span></button>
-      </div>
-      <div id="vault-list"></div>
-    </div>
+    <div class="status-bar" id="status-bar">⏳ Connecting to your vault...</div>
 
-    <div id="tab-add" style="display:none">
-      <div class="add-form">
-        <h3 id="add-form-title">Add a New Entry</h3>
-        <div class="form-row">
-          <select id="win-category">
-            <option value="Work">💼 Work</option>
-            <option value="Creativity">🎨 Creativity</option>
-            <option value="Family">👨‍👩‍👧 Family</option>
-            <option value="Inspiration">✨ Inspiration</option>
-          </select>
-          <select id="win-type">
-            <option value="Feedback">💬 Feedback</option>
-            <option value="Review">⭐ Performance Review</option>
-            <option value="Achievement">🏅 Achievement</option>
-            <option value="Quote">💡 Quote</option>
-            <option value="Link">🔗 Link</option>
-            <option value="Note">📝 Note</option>
-            <option value="Memory">💛 Memory</option>
-          </select>
+    <div class="content">
+
+      <div id="tab-inspire">
+        <div class="inspire-filters">
+          <button class="filter-btn active" data-cat="all">🏰 All</button>
+          <button class="filter-btn" data-cat="Work">💼 Work</button>
+          <button class="filter-btn" data-cat="Creativity">🎨 Creativity</button>
+          <button class="filter-btn" data-cat="Family">👨‍👩‍👧 Family</button>
+          <button class="filter-btn" data-cat="Inspiration">✨ Inspiration</button>
         </div>
-        <input id="win-title" type="text" placeholder="Title (e.g. 'Inspiring video' or 'Q3 review from Sarah')">
-        <textarea id="win-text" placeholder="Paste your content here — feedback, a quote, a URL, a memory, anything!"></textarea>
-        <img id="image-preview" class="image-preview">
-        <div class="image-upload-area" id="upload-area">
-          📷 Click to attach an image (optional)
-        </div>
-        <input type="file" id="image-input" accept="image/*" style="display:none">
-        <button id="save-btn">Save to Minas Lórien ✨</button>
+        <button class="surprise-btn" id="surprise-btn">🎲 Show Me Something</button>
+        <div id="spotlight"></div>
       </div>
-    </div>
 
+      <div id="tab-vault" style="display:none">
+        <div class="category-filters">
+          <button class="filter-btn active" data-filter="all">All <span class="count-badge" id="count-all">0</span></button>
+          <button class="filter-btn" data-filter="Work">💼 Work <span class="count-badge" id="count-work">0</span></button>
+          <button class="filter-btn" data-filter="Creativity">🎨 Creativity <span class="count-badge" id="count-creativity">0</span></button>
+          <button class="filter-btn" data-filter="Family">👨‍👩‍👧 Family <span class="count-badge" id="count-family">0</span></button>
+          <button class="filter-btn" data-filter="Inspiration">✨ Inspiration <span class="count-badge" id="count-inspiration">0</span></button>
+        </div>
+        <div id="vault-list"></div>
+      </div>
+
+      <div id="tab-add" style="display:none">
+        <div class="add-form">
+          <h3 id="add-form-title">Add a New Entry</h3>
+          <div class="form-row">
+            <select id="win-category">
+              <option value="Work">💼 Work</option>
+              <option value="Creativity">🎨 Creativity</option>
+              <option value="Family">👨‍👩‍👧 Family</option>
+              <option value="Inspiration">✨ Inspiration</option>
+            </select>
+            <select id="win-type">
+              <option value="Feedback">💬 Feedback</option>
+              <option value="Review">⭐ Performance Review</option>
+              <option value="Achievement">🏅 Achievement</option>
+              <option value="Quote">💡 Quote</option>
+              <option value="Link">🔗 Link</option>
+              <option value="Note">📝 Note</option>
+              <option value="Memory">💛 Memory</option>
+            </select>
+          </div>
+          <input id="win-title" type="text" placeholder="Title (e.g. 'Inspiring video' or 'Q3 review from Sarah')">
+          <textarea id="win-text" placeholder="Paste your content here — feedback, a quote, a URL, a memory, anything!"></textarea>
+          <img id="image-preview" class="image-preview">
+          <div class="image-upload-area" id="upload-area">
+            📷 Click to attach an image (optional)
+          </div>
+          <input type="file" id="image-input" accept="image/*" style="display:none">
+          <button id="save-btn">Save to Minas Lórien ✨</button>
+        </div>
+      </div>
+
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyDi-jwSpGo0OWt5wcRp6wGSfYX0qAveO3k",
@@ -464,13 +560,51 @@
     var currentInspireFilter = 'all';
     var editingId = null;
 
+    // ── Login ──────────────────────────────────────────────
+    async function checkPassword() {
+      var entered = document.getElementById('login-password').value.trim();
+      if (!entered) return;
+      try {
+        var authDoc = await getDoc(doc(db, 'config', 'auth'));
+        if (authDoc.exists() && authDoc.data().password === entered) {
+          sessionStorage.setItem('ml-auth', 'true');
+          document.getElementById('login-overlay').style.display = 'none';
+          document.getElementById('app').style.display = 'flex';
+          loadWins();
+        } else {
+          var box = document.getElementById('login-box');
+          box.classList.remove('shake');
+          void box.offsetWidth; // reflow to restart animation
+          box.classList.add('shake');
+          document.getElementById('login-error').textContent = 'Incorrect password — try again.';
+          document.getElementById('login-password').value = '';
+          document.getElementById('login-password').focus();
+        }
+      } catch(e) {
+        document.getElementById('login-error').textContent = 'Could not connect — check your internet.';
+      }
+    }
+
+    // Skip login if already authenticated this session
+    if (sessionStorage.getItem('ml-auth') === 'true') {
+      document.getElementById('login-overlay').style.display = 'none';
+      document.getElementById('app').style.display = 'flex';
+      loadWins();
+    }
+
+    document.getElementById('login-btn').addEventListener('click', checkPassword);
+    document.getElementById('login-password').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkPassword();
+    });
+
+    // ── App logic ──────────────────────────────────────────
     function setStatus(msg, type) {
       var bar = document.getElementById('status-bar');
       bar.textContent = msg;
       bar.className = 'status-bar ' + (type || '');
     }
 
-  async function loadWins() {
+    async function loadWins() {
       try {
         setStatus('⏳ Loading your vault...', 'syncing');
         var snapshot = await getDocs(winsCollection);
@@ -710,8 +844,6 @@
     document.getElementById('btn-add').addEventListener('click', function() { showTab('add'); });
     document.getElementById('surprise-btn').addEventListener('click', showRandom);
     document.getElementById('save-btn').addEventListener('click', addWin);
-
-    loadWins();
   </script>
 </body>
 </html>
