@@ -4,76 +4,79 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Minas Lórien</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'EB Garamond', Georgia, serif;
-      background: #0d1f1a;
-      color: #f0ede6;
+      background: #2d3a3a;
+      color: #dde4e0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
     header {
-      background: #112920;
+      background: #1e2d3a;
       padding: 20px 30px;
-      border-bottom: 1px solid #2a5a45;
+      border-bottom: 1px solid #3a5a6a;
     }
     header h1 {
-      font-family: 'Cinzel', serif;
+      font-family: 'Raleway', sans-serif;
       font-size: 1.6em;
-      color: #c9a84c;
-      letter-spacing: 0.05em;
+      font-weight: 300;
+      color: #c8d8d0;
+      letter-spacing: 0.15em;
     }
+    header h1 span { color: #c9a84c; }
     header p {
       font-family: 'EB Garamond', serif;
       font-style: italic;
       font-size: 0.95em;
-      color: #7aab94;
-      margin-top: 2px;
+      color: #7a9a8a;
+      margin-top: 3px;
     }
     .tabs {
       display: flex;
-      background: #112920;
+      background: #1e2d3a;
       padding: 0 20px;
-      gap: 0;
-      border-bottom: 1px solid #2a5a45;
+      border-bottom: 1px solid #3a5a6a;
     }
     .tab {
       padding: 12px 20px;
       cursor: pointer;
-      border-bottom: 3px solid transparent;
-      color: #7aab94;
-      font-family: 'Cinzel', serif;
-      font-size: 0.75em;
-      letter-spacing: 0.08em;
+      border-bottom: 2px solid transparent;
+      color: #7a9a8a;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.8em;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
       transition: all 0.2s;
     }
-    .tab.active { border-bottom-color: #c9a84c; color: #c9a84c; }
-    .tab:hover { color: #e8f4f0; }
+    .tab.active { border-bottom-color: #c9a84c; color: #c8d8d0; }
+    .tab:hover { color: #c8d8d0; }
     .content { flex: 1; padding: 25px 20px; overflow-y: auto; }
     .surprise-btn {
       display: block;
       margin: 0 auto 30px;
       padding: 14px 40px;
-      background: linear-gradient(135deg, #c9a84c, #a8873a);
-      color: #0d1f1a;
-      border: none;
-      border-radius: 30px;
-      font-family: 'Cinzel', serif;
-      font-size: 0.95em;
-      letter-spacing: 0.08em;
+      background: transparent;
+      color: #c9a84c;
+      border: 1px solid #c9a84c;
+      border-radius: 4px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.85em;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
       cursor: pointer;
-      font-weight: 600;
-      transition: transform 0.1s, box-shadow 0.2s;
+      font-weight: 500;
+      transition: all 0.2s;
       width: 100%;
       max-width: 400px;
-      box-shadow: 0 4px 20px rgba(201, 168, 76, 0.3);
     }
     .surprise-btn:hover {
-      transform: scale(1.03);
-      box-shadow: 0 6px 25px rgba(201, 168, 76, 0.5);
+      background: #c9a84c;
+      color: #1e2d3a;
     }
     .category-filters {
       display: flex;
@@ -82,74 +85,75 @@
       flex-wrap: wrap;
     }
     .filter-btn {
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid #2a5a45;
+      padding: 5px 14px;
+      border-radius: 3px;
+      border: 1px solid #3a5a6a;
       background: transparent;
-      color: #7aab94;
+      color: #7a9a8a;
       cursor: pointer;
-      font-family: 'EB Garamond', serif;
-      font-size: 0.9em;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.75em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
       transition: all 0.2s;
     }
-    .filter-btn:hover { border-color: #c9a84c; color: #e8f4f0; }
+    .filter-btn:hover { border-color: #c9a84c; color: #c8d8d0; }
     .filter-btn.active {
       background: #c9a84c;
       border-color: #c9a84c;
-      color: #0d1f1a;
-      font-weight: bold;
+      color: #1e2d3a;
+      font-weight: 600;
     }
     .win-card {
-      background: #112920;
-      border-radius: 10px;
+      background: #263340;
+      border-radius: 6px;
       padding: 16px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       position: relative;
       display: flex;
       gap: 15px;
       align-items: flex-start;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
-      transition: box-shadow 0.2s;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.2);
     }
-    .win-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
-    .win-card.cat-work { border-left: 3px solid #4a9eff; }
-    .win-card.cat-creativity { border-left: 3px solid #c084fc; }
-    .win-card.cat-family { border-left: 3px solid #4ade80; }
+    .win-card.cat-work { border-left: 3px solid #6aaacc; }
+    .win-card.cat-creativity { border-left: 3px solid #a088cc; }
+    .win-card.cat-family { border-left: 3px solid #6aaa88; }
     .win-card.cat-inspiration { border-left: 3px solid #c9a84c; }
     .win-card-text { flex: 1; min-width: 0; }
     .win-card .category-badge {
       display: inline-block;
-      font-family: 'Cinzel', serif;
+      font-family: 'Raleway', sans-serif;
       font-size: 0.65em;
       text-transform: uppercase;
       padding: 2px 8px;
-      border-radius: 10px;
+      border-radius: 3px;
       margin-bottom: 6px;
       letter-spacing: 0.1em;
+      font-weight: 600;
     }
-    .badge-work { background: #0f2a40; color: #4a9eff; }
-    .badge-creativity { background: #1f1030; color: #c084fc; }
-    .badge-family { background: #0f2a1a; color: #4ade80; }
-    .badge-inspiration { background: #2a1f0a; color: #c9a84c; }
+    .badge-work { background: #1a3040; color: #6aaacc; }
+    .badge-creativity { background: #251a3a; color: #a088cc; }
+    .badge-family { background: #1a3028; color: #6aaa88; }
+    .badge-inspiration { background: #2a2010; color: #c9a84c; }
     .win-card .tag {
       font-family: 'EB Garamond', serif;
       font-style: italic;
       font-size: 0.85em;
-      color: #7aab94;
+      color: #7a9a8a;
       margin-bottom: 8px;
     }
     .win-card .text {
       font-family: 'EB Garamond', serif;
       font-size: 1em;
       line-height: 1.7;
-      color: #e8f4f0;
+      color: #dde4e0;
       word-break: break-word;
     }
     .win-card img {
       width: 80px;
       height: 80px;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 4px;
       flex-shrink: 0;
     }
     .win-card .delete {
@@ -157,19 +161,19 @@
       top: 8px; right: 8px;
       background: none;
       border: none;
-      color: #2a5a45;
+      color: #3a5a6a;
       cursor: pointer;
       font-size: 1em;
       padding: 4px;
       transition: color 0.2s;
     }
-    .win-card .delete:hover { color: #e94560; }
+    .win-card .delete:hover { color: #cc6a6a; }
     .win-card .edit {
       position: absolute;
       top: 8px; right: 30px;
       background: none;
       border: none;
-      color: #2a5a45;
+      color: #3a5a6a;
       cursor: pointer;
       font-size: 1em;
       padding: 4px;
@@ -180,58 +184,58 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      background: #0d2a20;
-      border: 1px solid #2a5a45;
-      border-radius: 8px;
-      padding: 12px 15px;
+      background: #1e2d3a;
+      border: 1px solid #3a5a6a;
+      border-radius: 4px;
+      padding: 10px 14px;
       margin-top: 8px;
       cursor: pointer;
       transition: all 0.2s;
       text-decoration: none;
     }
-    .link-card:hover { background: #112920; border-color: #c9a84c; }
-    .link-card .link-icon { font-size: 1.4em; flex-shrink: 0; }
+    .link-card:hover { border-color: #c9a84c; background: #263340; }
+    .link-card .link-icon { font-size: 1.3em; flex-shrink: 0; }
     .link-card .link-info { flex: 1; overflow: hidden; }
     .link-card .link-title {
-      font-family: 'EB Garamond', serif;
-      font-size: 0.95em;
-      color: #e8f4f0;
-      margin-bottom: 3px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.85em;
+      color: #c8d8d0;
+      margin-bottom: 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .link-card .link-url {
       font-size: 0.75em;
-      color: #4a9e8a;
+      color: #6aaacc;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .link-card .link-arrow { color: #7aab94; font-size: 1em; }
+    .link-card .link-arrow { color: #7a9a8a; }
     .spotlight {
-      background: #112920;
-      border-radius: 14px;
+      background: #263340;
+      border-radius: 8px;
       padding: 30px;
       max-width: 700px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
       gap: 20px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
     @media (min-width: 600px) {
       .spotlight { flex-direction: row; align-items: center; }
     }
-    .spotlight.cat-work { border: 1px solid #4a9eff; }
-    .spotlight.cat-creativity { border: 1px solid #c084fc; }
-    .spotlight.cat-family { border: 1px solid #4ade80; }
-    .spotlight.cat-inspiration { border: 1px solid #c9a84c; }
+    .spotlight.cat-work { border-top: 2px solid #6aaacc; }
+    .spotlight.cat-creativity { border-top: 2px solid #a088cc; }
+    .spotlight.cat-family { border-top: 2px solid #6aaa88; }
+    .spotlight.cat-inspiration { border-top: 2px solid #c9a84c; }
     .spotlight-text { flex: 1; }
     .spotlight .tag {
       font-family: 'EB Garamond', serif;
       font-style: italic;
-      color: #7aab94;
+      color: #7a9a8a;
       margin-bottom: 12px;
       font-size: 0.95em;
       display: block;
@@ -240,7 +244,7 @@
       font-family: 'EB Garamond', serif;
       font-size: 1.2em;
       line-height: 1.9;
-      color: #e8f4f0;
+      color: #dde4e0;
       word-break: break-word;
     }
     .spotlight img {
@@ -248,7 +252,7 @@
       max-width: 200px;
       height: 200px;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: 6px;
       flex-shrink: 0;
       align-self: center;
     }
@@ -260,18 +264,20 @@
       flex-wrap: wrap;
     }
     .add-form {
-      background: #112920;
-      border-radius: 10px;
+      background: #263340;
+      border-radius: 6px;
       padding: 24px;
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
     }
     .add-form h3 {
-      font-family: 'Cinzel', serif;
-      font-size: 1em;
-      letter-spacing: 0.08em;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.85em;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
       margin-bottom: 18px;
-      color: #c9a84c;
+      color: #c8d8d0;
     }
     .form-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
     .form-row select { flex: 1; min-width: 120px; margin-bottom: 0; }
@@ -279,10 +285,10 @@
       width: 100%;
       padding: 12px;
       margin-bottom: 12px;
-      background: #0d2a20;
-      border: 1px solid #2a5a45;
-      border-radius: 6px;
-      color: #e8f4f0;
+      background: #1e2d3a;
+      border: 1px solid #3a5a6a;
+      border-radius: 4px;
+      color: #dde4e0;
       font-family: 'EB Garamond', serif;
       font-size: 1em;
       transition: border-color 0.2s;
@@ -294,58 +300,58 @@
     .add-form textarea { height: 120px; resize: vertical; }
     .add-form button {
       width: 100%;
-      padding: 14px 25px;
-      background: linear-gradient(135deg, #c9a84c, #a8873a);
-      color: #0d1f1a;
-      border: none;
-      border-radius: 8px;
+      padding: 13px 25px;
+      background: transparent;
+      color: #c9a84c;
+      border: 1px solid #c9a84c;
+      border-radius: 4px;
       cursor: pointer;
-      font-family: 'Cinzel', serif;
-      font-size: 0.9em;
-      letter-spacing: 0.08em;
-      font-weight: 600;
-      box-shadow: 0 4px 15px rgba(201, 168, 76, 0.3);
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.8em;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
       transition: all 0.2s;
     }
     .add-form button:hover {
-      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.5);
-      transform: translateY(-1px);
+      background: #c9a84c;
+      color: #1e2d3a;
     }
     .image-upload-area {
-      border: 1px dashed #2a5a45;
-      border-radius: 8px;
+      border: 1px dashed #3a5a6a;
+      border-radius: 4px;
       padding: 20px;
       text-align: center;
       margin-bottom: 12px;
       cursor: pointer;
-      color: #7aab94;
+      color: #7a9a8a;
       font-family: 'EB Garamond', serif;
       font-style: italic;
       transition: all 0.2s;
     }
-    .image-upload-area:hover { border-color: #c9a84c; color: #e8f4f0; }
+    .image-upload-area:hover { border-color: #c9a84c; color: #dde4e0; }
     .image-preview {
       width: 100%;
       max-height: 200px;
       object-fit: contain;
-      border-radius: 8px;
+      border-radius: 4px;
       margin-bottom: 12px;
       display: none;
     }
     .empty {
       text-align: center;
-      color: #2a5a45;
+      color: #3a5a6a;
       padding: 40px;
       font-family: 'EB Garamond', serif;
       font-style: italic;
       font-size: 1.1em;
     }
     .count-badge {
-      background: #0d2a20;
-      color: #7aab94;
+      background: #1e2d3a;
+      color: #7a9a8a;
       font-size: 0.75em;
       padding: 2px 7px;
-      border-radius: 10px;
+      border-radius: 3px;
       margin-left: 6px;
     }
     .status-bar {
@@ -354,18 +360,18 @@
       font-style: italic;
       font-size: 0.85em;
       padding: 5px;
-      background: #0d2a20;
-      color: #7aab94;
-      border-bottom: 1px solid #2a5a45;
+      background: #1e2d3a;
+      color: #7a9a8a;
+      border-bottom: 1px solid #3a5a6a;
     }
-    .status-bar.synced { color: #4ade80; }
+    .status-bar.synced { color: #6aaa88; }
     .status-bar.syncing { color: #c9a84c; }
-    .status-bar.error { color: #e94560; }
+    .status-bar.error { color: #cc6a6a; }
   </style>
 </head>
 <body>
   <header>
-    <h1>🏰 Minas Lórien</h1>
+    <h1>🏰 Minas <span>Lórien</span></h1>
     <p>Your tower of light and memory</p>
   </header>
 
@@ -387,7 +393,7 @@
         <button class="filter-btn" data-cat="Family">👨‍👩‍👧 Family</button>
         <button class="filter-btn" data-cat="Inspiration">✨ Inspiration</button>
       </div>
-      <button class="surprise-btn" id="surprise-btn">🎲 Show Me Something!</button>
+      <button class="surprise-btn" id="surprise-btn">🎲 Show Me Something</button>
       <div id="spotlight"></div>
     </div>
 
@@ -617,7 +623,7 @@
       }
 
       list.innerHTML = filtered.map(function(w) {
-        var imgHtml = w.image ? '<img src="' + w.image + '" style="width:80px;height:80px;object-fit:cover;border-radius:8px;flex-shrink:0;">' : '';
+        var imgHtml = w.image ? '<img src="' + w.image + '" style="width:80px;height:80px;object-fit:cover;border-radius:4px;flex-shrink:0;">' : '';
         var cat = w.category || 'Work';
         return '<div class="win-card ' + getCatClass(cat) + '">' +
           '<div class="win-card-text">' +
@@ -710,5 +716,5 @@
 Save, close, then push to GitHub:
 ```
 git add .
-git commit -m "Lothlórien color palette and Cinzel/Garamond fonts"
+git commit -m "Refined palette - navy, silver, mossy green, gold accents"
 git push origin main
