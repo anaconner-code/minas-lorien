@@ -104,23 +104,18 @@
 
     header {
       background: #1e2d3a;
-      padding: 16px 30px;
+      padding: 20px 30px;
       border-bottom: 1px solid #3a5a6a;
-      display: flex;
-      align-items: center;
-      gap: 16px;
     }
-    .header-icon { flex-shrink: 0; }
-    .header-text h1 {
+    header h1 {
       font-family: 'Raleway', sans-serif;
       font-size: 1.6em;
       font-weight: 300;
       color: #c8d8d0;
       letter-spacing: 0.15em;
-      margin: 0;
     }
-    .header-text h1 span { color: #c9a84c; }
-    .header-text p {
+    header h1 span { color: #c9a84c; }
+    header p {
       font-family: 'EB Garamond', serif;
       font-style: italic;
       font-size: 0.95em;
@@ -588,66 +583,7 @@
   <!-- Login overlay -->
   <div id="login-overlay">
     <div id="login-box">
-      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:6px;">
-        <svg width="32" height="52" viewBox="0 0 100 160" style="flex-shrink:0;overflow:visible;">
-          <circle cx="8"  cy="14" r="1.2" fill="#c9a84c" opacity="0.8"/>
-          <circle cx="16" cy="30" r="0.7" fill="#dde8e4" opacity="0.5"/>
-          <circle cx="92" cy="10" r="1.0" fill="#dde8e4" opacity="0.6"/>
-          <circle cx="88" cy="28" r="0.7" fill="#c9a84c" opacity="0.7"/>
-          <circle cx="76" cy="18" r="0.9" fill="#c9a84c" opacity="0.5"/>
-          <circle cx="50" cy="4"  r="0.7" fill="#dde8e4" opacity="0.4"/>
-          <path d="M28,143 C22,135 10,128 8,118 C6,108 14,102 18,108 C22,114 16,120 12,118" fill="none" stroke="#6aaa88" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
-          <path d="M12,118 C10,116 11,113 14,114" fill="none" stroke="#6aaa88" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
-          <path d="M15,124 C10,120 9,114 13,115" fill="none" stroke="#6aaa88" stroke-width="0.55" stroke-linecap="round" opacity="0.5"/>
-          <path d="M72,143 C78,135 90,128 92,118 C94,108 86,102 82,108 C78,114 84,120 88,118" fill="none" stroke="#6aaa88" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
-          <path d="M88,118 C90,116 89,113 86,114" fill="none" stroke="#6aaa88" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
-          <path d="M85,124 C90,120 91,114 87,115" fill="none" stroke="#6aaa88" stroke-width="0.55" stroke-linecap="round" opacity="0.5"/>
-          <path d="M37,120 C32,112 30,100 34,92 C36,88 38,90 37,94 C36,98 33,96 34,92" fill="none" stroke="#6aaa88" stroke-width="0.6" stroke-linecap="round" opacity="0.45"/>
-          <rect x="14" y="145" width="72" height="5" rx="2.5" fill="none" stroke="#8aaaa0" stroke-width="0.6" opacity="0.5"/>
-          <rect x="22" y="139" width="56" height="6" rx="2" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.4"/>
-          <rect x="12" y="104" width="16" height="35" rx="2" fill="none" stroke="#8aaaa0" stroke-width="0.65"/>
-          <rect x="16" y="112" width="8" height="13" rx="4" fill="#c9a84c" opacity="0.4"/>
-          <rect x="10" y="97"  width="20" height="7" rx="1.5" fill="none" stroke="#8aaaa0" stroke-width="0.55" opacity="0.75"/>
-          <rect x="11" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
-          <rect x="18" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
-          <rect x="25" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
-          <rect x="16" y="72" width="8" height="20" rx="1.5" fill="none" stroke="#a8bfb8" stroke-width="0.55"/>
-          <rect x="18" y="77" width="4" height="8"  rx="2" fill="#c9a84c" opacity="0.35"/>
-          <polygon points="20,48 15,72 25,72" fill="none" stroke="#c8d8d0" stroke-width="0.7"/>
-          <circle cx="20" cy="48" r="2" fill="#c9a84c" opacity="0.75"/>
-          <circle cx="20" cy="48" r="0.8" fill="#fff" opacity="0.7"/>
-          <rect x="72" y="104" width="16" height="35" rx="2" fill="none" stroke="#8aaaa0" stroke-width="0.65"/>
-          <rect x="76" y="112" width="8" height="13" rx="4" fill="#c9a84c" opacity="0.4"/>
-          <rect x="70" y="97"  width="20" height="7" rx="1.5" fill="none" stroke="#8aaaa0" stroke-width="0.55" opacity="0.75"/>
-          <rect x="71" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
-          <rect x="78" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
-          <rect x="85" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
-          <rect x="76" y="72" width="8" height="20" rx="1.5" fill="none" stroke="#a8bfb8" stroke-width="0.55"/>
-          <rect x="78" y="77" width="4" height="8"  rx="2" fill="#c9a84c" opacity="0.35"/>
-          <polygon points="80,48 75,72 85,72" fill="none" stroke="#c8d8d0" stroke-width="0.7"/>
-          <circle cx="80" cy="48" r="2" fill="#c9a84c" opacity="0.75"/>
-          <circle cx="80" cy="48" r="0.8" fill="#fff" opacity="0.7"/>
-          <rect x="37" y="88" width="26" height="51" rx="2.5" fill="none" stroke="#dde8e4" stroke-width="0.9"/>
-          <rect x="43" y="96" width="14" height="20" rx="7" fill="#c9a84c" opacity="0.6"/>
-          <rect x="44" y="122" width="12" height="12" rx="6" fill="#c9a84c" opacity="0.3"/>
-          <rect x="33" y="80" width="34" height="8" rx="2" fill="none" stroke="#dde8e4" stroke-width="0.8" opacity="0.85"/>
-          <rect x="34" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="42" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="50" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="58" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="66" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="42" y="48" width="16" height="26" rx="2" fill="none" stroke="#dde8e4" stroke-width="0.75"/>
-          <rect x="46" y="55" width="8" height="12" rx="4" fill="#c9a84c" opacity="0.75"/>
-          <polygon points="50,10 44,48 56,48" fill="none" stroke="#dde8e4" stroke-width="0.85"/>
-          <circle cx="50" cy="10" r="3.2" fill="#c9a84c"/>
-          <circle cx="50" cy="10" r="1.5" fill="#fff" opacity="0.95"/>
-          <path d="M50,6 L51.2,9.5 L50,13 L48.8,9.5 Z" fill="#fff" opacity="0.5"/>
-          <path d="M46.5,10 L50,8.8 L53.5,10 L50,11.2 Z" fill="#fff" opacity="0.5"/>
-          <line x1="28" y1="132" x2="37" y2="132" stroke="#6a8a80" stroke-width="0.5" opacity="0.4"/>
-          <line x1="63" y1="132" x2="72" y2="132" stroke="#6a8a80" stroke-width="0.5" opacity="0.4"/>
-        </svg>
-        <h2>Minas <span>Lórien</span></h2>
-      </div>
+      <h2>🏰 Minas <span>Lórien</span></h2>
       <p>Your tower of light and memory</p>
       <input type="password" id="login-password" placeholder="Enter password" autocomplete="current-password">
       <button id="login-btn">Enter the Tower</button>
@@ -658,74 +594,8 @@
   <!-- Main app -->
   <div id="app">
     <header>
-      <div class="header-icon">
-        <svg width="36" height="58" viewBox="0 0 100 160" style="overflow:visible;">
-          <circle cx="8"  cy="14" r="1.2" fill="#c9a84c" opacity="0.8"/>
-          <circle cx="16" cy="30" r="0.7" fill="#dde8e4" opacity="0.5"/>
-          <circle cx="4"  cy="52" r="0.9" fill="#c8d8d0" opacity="0.45"/>
-          <circle cx="92" cy="10" r="1.0" fill="#dde8e4" opacity="0.6"/>
-          <circle cx="88" cy="28" r="0.7" fill="#c9a84c" opacity="0.7"/>
-          <circle cx="76" cy="18" r="0.9" fill="#c9a84c" opacity="0.5"/>
-          <circle cx="50" cy="4"  r="0.7" fill="#dde8e4" opacity="0.4"/>
-          <circle cx="12" cy="70" r="0.6" fill="#c9a84c" opacity="0.4"/>
-          <circle cx="84" cy="68" r="0.6" fill="#dde8e4" opacity="0.35"/>
-          <path d="M19,46 L20.5,48.5 L19,51 L17.5,48.5 Z" fill="#c9a84c" opacity="0.7"/>
-          <path d="M81,46 L82.5,48.5 L81,51 L79.5,48.5 Z" fill="#c9a84c" opacity="0.7"/>
-          <path d="M28,143 C22,135 10,128 8,118 C6,108 14,102 18,108 C22,114 16,120 12,118" fill="none" stroke="#6aaa88" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
-          <path d="M12,118 C10,116 11,113 14,114" fill="none" stroke="#6aaa88" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
-          <path d="M15,124 C10,120 9,114 13,115" fill="none" stroke="#6aaa88" stroke-width="0.55" stroke-linecap="round" opacity="0.5"/>
-          <path d="M72,143 C78,135 90,128 92,118 C94,108 86,102 82,108 C78,114 84,120 88,118" fill="none" stroke="#6aaa88" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
-          <path d="M88,118 C90,116 89,113 86,114" fill="none" stroke="#6aaa88" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
-          <path d="M85,124 C90,120 91,114 87,115" fill="none" stroke="#6aaa88" stroke-width="0.55" stroke-linecap="round" opacity="0.5"/>
-          <path d="M37,120 C32,112 30,100 34,92 C36,88 38,90 37,94 C36,98 33,96 34,92" fill="none" stroke="#6aaa88" stroke-width="0.6" stroke-linecap="round" opacity="0.45"/>
-          <rect x="14" y="145" width="72" height="5" rx="2.5" fill="none" stroke="#8aaaa0" stroke-width="0.6" opacity="0.5"/>
-          <rect x="22" y="139" width="56" height="6" rx="2" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.4"/>
-          <rect x="12" y="104" width="16" height="35" rx="2" fill="none" stroke="#8aaaa0" stroke-width="0.65"/>
-          <rect x="16" y="112" width="8" height="13" rx="4" fill="#c9a84c" opacity="0.4"/>
-          <rect x="10" y="97"  width="20" height="7" rx="1.5" fill="none" stroke="#8aaaa0" stroke-width="0.55" opacity="0.75"/>
-          <rect x="11" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
-          <rect x="18" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
-          <rect x="25" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
-          <rect x="16" y="72" width="8" height="20" rx="1.5" fill="none" stroke="#a8bfb8" stroke-width="0.55"/>
-          <rect x="18" y="77" width="4" height="8"  rx="2" fill="#c9a84c" opacity="0.35"/>
-          <polygon points="20,48 15,72 25,72" fill="none" stroke="#c8d8d0" stroke-width="0.7"/>
-          <circle cx="20" cy="48" r="2" fill="#c9a84c" opacity="0.75"/>
-          <circle cx="20" cy="48" r="0.8" fill="#fff" opacity="0.7"/>
-          <rect x="72" y="104" width="16" height="35" rx="2" fill="none" stroke="#8aaaa0" stroke-width="0.65"/>
-          <rect x="76" y="112" width="8" height="13" rx="4" fill="#c9a84c" opacity="0.4"/>
-          <rect x="70" y="97"  width="20" height="7" rx="1.5" fill="none" stroke="#8aaaa0" stroke-width="0.55" opacity="0.75"/>
-          <rect x="71" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
-          <rect x="78" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
-          <rect x="85" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
-          <rect x="76" y="72" width="8" height="20" rx="1.5" fill="none" stroke="#a8bfb8" stroke-width="0.55"/>
-          <rect x="78" y="77" width="4" height="8"  rx="2" fill="#c9a84c" opacity="0.35"/>
-          <polygon points="80,48 75,72 85,72" fill="none" stroke="#c8d8d0" stroke-width="0.7"/>
-          <circle cx="80" cy="48" r="2" fill="#c9a84c" opacity="0.75"/>
-          <circle cx="80" cy="48" r="0.8" fill="#fff" opacity="0.7"/>
-          <rect x="37" y="88" width="26" height="51" rx="2.5" fill="none" stroke="#dde8e4" stroke-width="0.9"/>
-          <rect x="43" y="96" width="14" height="20" rx="7" fill="#c9a84c" opacity="0.6"/>
-          <rect x="44" y="122" width="12" height="12" rx="6" fill="#c9a84c" opacity="0.3"/>
-          <rect x="33" y="80" width="34" height="8" rx="2" fill="none" stroke="#dde8e4" stroke-width="0.8" opacity="0.85"/>
-          <rect x="34" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="42" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="50" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="58" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="66" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="42" y="48" width="16" height="26" rx="2" fill="none" stroke="#dde8e4" stroke-width="0.75"/>
-          <rect x="46" y="55" width="8" height="12" rx="4" fill="#c9a84c" opacity="0.75"/>
-          <polygon points="50,10 44,48 56,48" fill="none" stroke="#dde8e4" stroke-width="0.85"/>
-          <circle cx="50" cy="10" r="3.2" fill="#c9a84c"/>
-          <circle cx="50" cy="10" r="1.5" fill="#fff" opacity="0.95"/>
-          <path d="M50,6 L51.2,9.5 L50,13 L48.8,9.5 Z" fill="#fff" opacity="0.5"/>
-          <path d="M46.5,10 L50,8.8 L53.5,10 L50,11.2 Z" fill="#fff" opacity="0.5"/>
-          <line x1="28" y1="132" x2="37" y2="132" stroke="#6a8a80" stroke-width="0.5" opacity="0.4"/>
-          <line x1="63" y1="132" x2="72" y2="132" stroke="#6a8a80" stroke-width="0.5" opacity="0.4"/>
-        </svg>
-      </div>
-      <div class="header-text">
-        <h1>Minas <span>Lórien</span></h1>
-        <p>Your tower of light and memory</p>
-      </div>
+      <h1>🏰 Minas <span>Lórien</span></h1>
+      <p>Your tower of light and memory</p>
     </header>
 
     <div class="tabs">
@@ -740,7 +610,7 @@
 
       <div id="tab-inspire">
         <div class="inspire-filters">
-          <button class="filter-btn active" data-cat="all">✦ All</button>
+          <button class="filter-btn active" data-cat="all">🏰 All</button>
           <button class="filter-btn" data-cat="Work">💼 Work</button>
           <button class="filter-btn" data-cat="Creativity">🎨 Creativity</button>
           <button class="filter-btn" data-cat="Family">👨‍👩‍👧 Family</button>
@@ -1322,37 +1192,20 @@
       }
       var win = pool[Math.floor(Math.random() * pool.length)];
       var cat = win.category || 'Work';
-
-      // Build file attachment HTML for all types
-      var attachHTML = '';
-      if (win.fileURL) {
-        if (isImage(win.fileType, win.fileName)) {
-          attachHTML = '<img src="' + win.fileURL + '" style="width:100%;max-width:200px;height:200px;object-fit:cover;border-radius:6px;flex-shrink:0;align-self:center;">';
-        } else if (isAudio(win.fileType, win.fileName)) {
-          attachHTML = '<div class="audio-player" style="width:100%;">' +
-            '<div class="audio-label">' + getFileIcon(win.fileType, win.fileName) + ' ' + (win.fileName || 'Audio') + '</div>' +
-            '<audio controls src="' + win.fileURL + '"></audio>' +
-          '</div>';
-        } else {
-          attachHTML = '<a class="file-attachment" href="' + win.fileURL + '" target="_blank" rel="noopener">' +
-            '<span class="file-icon">' + getFileIcon(win.fileType, win.fileName) + '</span>' +
-            '<span class="file-name">' + (win.fileName || 'Download file') + '</span>' +
-            '<span class="file-arrow">↗</span>' +
-          '</a>';
-        }
+      var imgHTML = '';
+      if (win.fileURL && isImage(win.fileType, win.fileName)) {
+        imgHTML = '<img src="' + win.fileURL + '">';
       } else if (win.image) {
-        attachHTML = '<img src="' + win.image + '" style="width:100%;max-width:200px;height:200px;object-fit:cover;border-radius:6px;flex-shrink:0;align-self:center;">';
+        imgHTML = '<img src="' + win.image + '">';
       }
-
       spotlight.innerHTML =
         '<div class="spotlight ' + getCatClass(cat) + '">' +
           '<div class="spotlight-text">' +
             '<span class="category-badge ' + getBadgeClass(cat) + '">' + cat + '</span>' +
             '<div class="tag">' + win.type + (win.title ? ' · ' + win.title : '') + '</div>' +
             '<div class="text">' + renderText(win.text, win.type) + '</div>' +
-            (attachHTML && !isImage(win.fileType, win.fileName) && !win.image ? attachHTML : '') +
           '</div>' +
-          ((isImage(win.fileType, win.fileName) || win.image) ? attachHTML : '') +
+          imgHTML +
         '</div>';
 
       // Wire up async link previews in spotlight
