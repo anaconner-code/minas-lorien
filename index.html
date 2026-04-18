@@ -323,6 +323,33 @@
       gap: 6px;
     }
 
+    /* ── Video player ── NEW */
+    .video-player {
+      margin-top: 8px;
+      width: 100%;
+    }
+    .video-player video {
+      width: 100%;
+      max-height: 400px;        /* prevent giant videos swallowing the card */
+      border-radius: 6px;
+      background: #1e2d3a;     /* dark background while loading */
+      display: block;
+      accent-color: #c9a84c;
+    }
+    .video-label {
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.75em;
+      color: #7a9a8a;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    /* In the spotlight (Inspire tab), give the video a bit more room */
+    .spotlight .video-player video {
+      max-height: 500px;
+    }
+
     .link-card {
       display: flex;
       align-items: center;
@@ -904,6 +931,15 @@
       return mt.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp|svg)$/.test(fn);
     }
 
+    // ── NEW: video type detection ──────────────────────────
+    // Returns true for .mp4, .mov, .webm and any video/* mime type.
+    // This mirrors the pattern used by isAudio and isImage above.
+    function isVideo(mimeType, fileName) {
+      var mt = (mimeType || '').toLowerCase();
+      var fn = (fileName || '').toLowerCase();
+      return mt.startsWith('video/') || fn.endsWith('.mp4') || fn.endsWith('.mov') || fn.endsWith('.webm');
+    }
+
     function isURL(str) {
       return /^(https?:\/\/)[^\s]+/.test(str.trim());
     }
@@ -976,6 +1012,7 @@
         };
         reader.readAsDataURL(file);
       } else {
+        // For video, audio, etc. — no preview in the form, just show the filename
         preview.style.display = 'none';
       }
 
@@ -986,15 +1023,32 @@
     // ── Render file attachment in cards ───────────────────
     function renderFileAttachment(fileURL, fileName, fileType) {
       if (!fileURL) return '';
+
+      // Images: shown as a thumbnail beside the card text
       if (isImage(fileType, fileName)) {
         return '<img src="' + fileURL + '" class="card-image" style="width:80px;height:80px;object-fit:cover;border-radius:4px;flex-shrink:0;">';
       }
+
+      // Audio: inline HTML5 audio player
       if (isAudio(fileType, fileName)) {
         return '<div class="audio-player">' +
           '<div class="audio-label">' + getFileIcon(fileType, fileName) + ' ' + (fileName || 'Audio') + '</div>' +
           '<audio controls src="' + fileURL + '"></audio>' +
         '</div>';
       }
+
+      // ── NEW: Video — inline HTML5 video player ──────────
+      // The `controls` attribute gives the user play/pause/scrub/fullscreen.
+      // `preload="metadata"` loads just enough to show a thumbnail frame
+      // without downloading the whole file up front (good for large TikToks).
+      if (isVideo(fileType, fileName)) {
+        return '<div class="video-player">' +
+          '<div class="video-label">' + getFileIcon(fileType, fileName) + ' ' + (fileName || 'Video') + '</div>' +
+          '<video controls preload="metadata" src="' + fileURL + '"></video>' +
+        '</div>';
+      }
+
+      // Everything else: a download link
       var icon = getFileIcon(fileType, fileName);
       var name = fileName || 'Download file';
       return '<a class="file-attachment" href="' + fileURL + '" target="_blank" rel="noopener">' +
@@ -1288,6 +1342,7 @@
         } else if (w.image) {
           fileHTML = '<img src="' + w.image + '" class="card-image" style="width:80px;height:80px;object-fit:cover;border-radius:4px;flex-shrink:0;">';
         }
+        // Images sit beside the card text; everything else goes below it
         var isImg = w.fileURL ? isImage(w.fileType, w.fileName) : !!w.image;
         return '<div class="win-card ' + getCatClass(cat) + '" data-id="' + w.firestoreId + '">' +
           '<div class="win-card-text">' +
@@ -1332,11 +1387,20 @@
       var attachHTML = '';
       if (win.fileURL) {
         if (isImage(win.fileType, win.fileName)) {
+          // Images go beside the text in a 200×200 thumbnail
           attachHTML = '<img src="' + win.fileURL + '" style="width:100%;max-width:200px;height:200px;object-fit:cover;border-radius:6px;flex-shrink:0;align-self:center;">';
         } else if (isAudio(win.fileType, win.fileName)) {
           attachHTML = '<div class="audio-player" style="width:100%;">' +
             '<div class="audio-label">' + getFileIcon(win.fileType, win.fileName) + ' ' + (win.fileName || 'Audio') + '</div>' +
             '<audio controls src="' + win.fileURL + '"></audio>' +
+          '</div>';
+        } else if (isVideo(win.fileType, win.fileName)) {
+          // ── NEW: video in the spotlight ─────────────────
+          // Full-width player so it's nice and big in the Inspire tab.
+          // preload="metadata" avoids auto-downloading the whole file.
+          attachHTML = '<div class="video-player" style="width:100%;">' +
+            '<div class="video-label">' + getFileIcon(win.fileType, win.fileName) + ' ' + (win.fileName || 'Video') + '</div>' +
+            '<video controls preload="metadata" src="' + win.fileURL + '"></video>' +
           '</div>';
         } else {
           attachHTML = '<a class="file-attachment" href="' + win.fileURL + '" target="_blank" rel="noopener">' +
@@ -1349,15 +1413,19 @@
         attachHTML = '<img src="' + win.image + '" style="width:100%;max-width:200px;height:200px;object-fit:cover;border-radius:6px;flex-shrink:0;align-self:center;">';
       }
 
+      // For images, attach goes outside spotlight-text (beside it on desktop).
+      // For everything else (audio, video, link), it goes inside the text column.
+      var isImg = win.fileURL ? isImage(win.fileType, win.fileName) : !!win.image;
+
       spotlight.innerHTML =
         '<div class="spotlight ' + getCatClass(cat) + '">' +
           '<div class="spotlight-text">' +
             '<span class="category-badge ' + getBadgeClass(cat) + '">' + cat + '</span>' +
             '<div class="tag">' + win.type + (win.title ? ' · ' + win.title : '') + '</div>' +
             '<div class="text">' + renderText(win.text, win.type) + '</div>' +
-            (attachHTML && !isImage(win.fileType, win.fileName) && !win.image ? attachHTML : '') +
+            (!isImg ? attachHTML : '') +
           '</div>' +
-          ((isImage(win.fileType, win.fileName) || win.image) ? attachHTML : '') +
+          (isImg ? attachHTML : '') +
         '</div>';
 
       // Wire up async link previews in spotlight
