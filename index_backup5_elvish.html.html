@@ -2,23 +2,20 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" href="/icon-192.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Minas Lórien">
-  <meta name="theme-color" content="#1a1a18">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Minas Lórien">
+<meta name="theme-color" content="#1B2838">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Minas Lórien</title>
-  <!-- Newsreader replaces EB Garamond for body text — warmer, slightly more modern -->
-  <!-- Raleway stays for all UI chrome (labels, tabs, buttons) -->
-  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&family=Newsreader:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
-      font-family: 'Newsreader', Georgia, serif;
-      background: #1a1a18;
-      color: #d8d2c4;
+      font-family: 'EB Garamond', Georgia, serif;
+      background: #2d3a3a;
+      color: #dde4e0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -28,93 +25,71 @@
     #login-overlay {
       position: fixed;
       inset: 0;
-      background: #141412;
+      background: #1e2d3a;
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 999;
     }
     #login-box {
-      background: #1f1f1c;
-      border-radius: 4px;
+      background: #263340;
+      border-radius: 8px;
       padding: 40px 32px;
       width: 100%;
       max-width: 360px;
-      /* Subtle corner ornaments on login box */
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
       text-align: center;
-      position: relative;
-    }
-    /* Top-left corner ornament */
-    #login-box::before {
-      content: '';
-      position: absolute;
-      top: 12px; left: 12px;
-      width: 20px; height: 20px;
-      border-top: 1px solid #a58a5c55;
-      border-left: 1px solid #a58a5c55;
-    }
-    /* Bottom-right corner ornament */
-    #login-box::after {
-      content: '';
-      position: absolute;
-      bottom: 12px; right: 12px;
-      width: 20px; height: 20px;
-      border-bottom: 1px solid #a58a5c55;
-      border-right: 1px solid #a58a5c55;
     }
     #login-box h2 {
       font-family: 'Raleway', sans-serif;
       font-weight: 300;
-      font-size: 1.4em;
-      letter-spacing: 0.2em;
-      color: #c8c0b0;
-      text-transform: uppercase;
+      font-size: 1.5em;
+      letter-spacing: 0.15em;
+      color: #c8d8d0;
       margin-bottom: 6px;
     }
-    #login-box h2 span { color: #a58a5c; }
-    /* Tagline lives only on the login screen */
+    #login-box h2 span { color: #c9a84c; }
     #login-box p {
-      font-family: 'Newsreader', serif;
+      font-family: 'EB Garamond', serif;
       font-style: italic;
-      color: #5a5a52;
+      color: #7a9a8a;
       font-size: 0.95em;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
     #login-password {
       width: 100%;
       padding: 12px 16px;
-      background: #141412;
-      border: 1px solid #2a2a26;
-      border-radius: 2px;
-      color: #d8d2c4;
-      font-family: 'Newsreader', serif;
+      background: #1e2d3a;
+      border: 1px solid #3a5a6a;
+      border-radius: 4px;
+      color: #dde4e0;
+      font-family: 'EB Garamond', serif;
       font-size: 1.1em;
       text-align: center;
       letter-spacing: 0.1em;
       margin-bottom: 12px;
       transition: border-color 0.2s;
     }
-    #login-password:focus { outline: none; border-color: #a58a5c; }
+    #login-password:focus { outline: none; border-color: #c9a84c; }
     #login-btn {
       width: 100%;
       padding: 13px;
       background: transparent;
-      color: #a58a5c;
-      border: 1px solid #a58a5c;
-      border-radius: 2px;
+      color: #c9a84c;
+      border: 1px solid #c9a84c;
+      border-radius: 4px;
       cursor: pointer;
       font-family: 'Raleway', sans-serif;
-      font-size: 0.75em;
-      letter-spacing: 0.2em;
+      font-size: 0.8em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       font-weight: 500;
       transition: all 0.2s;
     }
-    #login-btn:hover { background: #a58a5c; color: #141412; }
+    #login-btn:hover { background: #c9a84c; color: #1e2d3a; }
     #login-error {
-      color: #aa5a5a;
-      font-family: 'Newsreader', serif;
+      color: #cc6a6a;
+      font-family: 'EB Garamond', serif;
       font-style: italic;
       font-size: 0.9em;
       margin-top: 12px;
@@ -132,164 +107,147 @@
     /* ── Main app ── */
     #app { display: none; flex-direction: column; flex: 1; }
 
-    /* ── Header ── no tagline, just title + icon ── */
     header {
-      background: #141412;
-      padding: 16px 28px;
-      border-bottom: 1px solid #2a2a26;
+      background: #1e2d3a;
+      padding: 16px 30px;
+      border-bottom: 1px solid #3a5a6a;
       display: flex;
       align-items: center;
-      gap: 14px;
-      /* Faint brass hairline below header */
-      position: relative;
-    }
-    header::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 28px;
-      right: 28px;
-      height: 1px;
-      background: linear-gradient(to right, transparent, #a58a5c44, #a58a5c66, #a58a5c44, transparent);
-      pointer-events: none;
+      gap: 16px;
     }
     .header-icon { flex-shrink: 0; }
     .header-text h1 {
       font-family: 'Raleway', sans-serif;
-      font-size: 1.3em;
+      font-size: 1.6em;
       font-weight: 300;
-      color: #c8c0b0;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+      color: #c8d8d0;
+      letter-spacing: 0.15em;
       margin: 0;
     }
-    .header-text h1 span { color: #a58a5c; }
-
-    /* ── Tabs ── */
+    .header-text h1 span { color: #c9a84c; }
+    .header-text p {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.95em;
+      color: #7a9a8a;
+      margin-top: 3px;
+    }
     .tabs {
       display: flex;
-      background: #141412;
+      background: #1e2d3a;
       padding: 0 20px;
-      border-bottom: 1px solid #2a2a26;
-      margin-top: 4px;
+      border-bottom: 1px solid #3a5a6a;
     }
     .tab {
-      padding: 11px 18px;
+      padding: 12px 20px;
       cursor: pointer;
-      border-bottom: 1px solid transparent;
-      color: #6a6a62;
+      border-bottom: 2px solid transparent;
+      color: #7a9a8a;
       font-family: 'Raleway', sans-serif;
-      font-size: 0.72em;
-      font-weight: 400;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      transition: all 0.2s;
-    }
-    .tab.active { border-bottom-color: #a58a5c; color: #c8c0b0; }
-    .tab:hover:not(.active) { color: #a8a098; }
-
-    .content { flex: 1; padding: 28px 24px; overflow-y: auto; }
-
-    /* ── "Show me something" button ── */
-    .surprise-btn {
-      display: block;
-      margin: 0 auto 32px;
-      padding: 11px 0;
-      background: transparent;
-      color: #6a6a62;
-      border: 1px solid #2e2e28;
-      border-radius: 2px;
-      font-family: 'Raleway', sans-serif;
-      font-size: 0.72em;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      cursor: pointer;
-      font-weight: 400;
-      transition: all 0.2s;
-      width: 100%;
-      max-width: 380px;
-    }
-    .surprise-btn:hover { border-color: #a58a5c; color: #a58a5c; }
-
-    /* ── Filter buttons ── */
-    .category-filters {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
-    .filter-btn {
-      padding: 4px 14px;
-      border-radius: 2px;
-      border: 1px solid #2e2e28;
-      background: transparent;
-      color: #6a6a62;
-      cursor: pointer;
-      font-family: 'Raleway', sans-serif;
-      font-size: 0.7em;
+      font-size: 0.8em;
+      font-weight: 500;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       transition: all 0.2s;
     }
-    .filter-btn:hover:not(.active) { border-color: #4a4a42; color: #a8a098; }
-    .filter-btn.active {
-      border-color: #a58a5c;
-      color: #a58a5c;
-      background: rgba(165,138,92,0.08);
+    .tab.active { border-bottom-color: #c9a84c; color: #c8d8d0; }
+    .tab:hover { color: #c8d8d0; }
+    .content { flex: 1; padding: 25px 20px; overflow-y: auto; }
+    .surprise-btn {
+      display: block;
+      margin: 0 auto 30px;
+      padding: 14px 40px;
+      background: transparent;
+      color: #c9a84c;
+      border: 1px solid #c9a84c;
+      border-radius: 4px;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.85em;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+      width: 100%;
+      max-width: 400px;
     }
-
-    /* ── Chevron SVG helper — used inline in JS-generated HTML ── */
-    /* The SVG is injected as a string; these styles support it */
-    .chevron-mark {
-      display: inline-flex;
-      align-items: center;
-      flex-shrink: 0;
-      vertical-align: middle;
-      margin-right: 6px;
+    .surprise-btn:hover { background: #c9a84c; color: #1e2d3a; }
+    .category-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
     }
-
-    /* ── Win cards ── */
-    .win-card {
-      background: #1f1f1c;
+    .filter-btn {
+      padding: 5px 14px;
       border-radius: 3px;
-      padding: 16px 18px;
-      margin-bottom: 10px;
+      border: 1px solid #3a5a6a;
+      background: transparent;
+      color: #7a9a8a;
+      cursor: pointer;
+      font-family: 'Raleway', sans-serif;
+      font-size: 0.75em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: #c9a84c; color: #c8d8d0; }
+    .filter-btn.active {
+      background: #c9a84c;
+      border-color: #c9a84c;
+      color: #1e2d3a;
+      font-weight: 600;
+    }
+    .win-card {
+      background: #263340;
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 12px;
       position: relative;
       display: flex;
       gap: 15px;
       align-items: flex-start;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.2);
     }
-    /* Category accent — left border */
-    .win-card.cat-work        { border-left: 2px solid #5a8aaa; }
-    .win-card.cat-creativity  { border-left: 2px solid #8870aa; }
-    .win-card.cat-family      { border-left: 2px solid #5a8a70; }
-    .win-card.cat-inspiration { border-left: 2px solid #a58a5c; }
-
+    .win-card.cat-work { border-left: 3px solid #6aaacc; }
+    .win-card.cat-creativity { border-left: 3px solid #a088cc; }
+    .win-card.cat-family { border-left: 3px solid #6aaa88; }
+    .win-card.cat-inspiration { border-left: 3px solid #c9a84c; }
     .win-card-text { flex: 1; min-width: 0; }
-
-    /* Category + type meta line — replaces old badge + italic tag */
-    .win-card .card-meta {
+    .win-card .category-badge {
+      display: inline-block;
       font-family: 'Raleway', sans-serif;
-      font-size: 0.68em;
-      letter-spacing: 0.12em;
+      font-size: 0.65em;
       text-transform: uppercase;
-      color: #5a5a52;
+      padding: 2px 8px;
+      border-radius: 3px;
+      margin-bottom: 6px;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+    }
+    .badge-work { background: #1a3040; color: #6aaacc; }
+    .badge-creativity { background: #251a3a; color: #a088cc; }
+    .badge-family { background: #1a3028; color: #6aaa88; }
+    .badge-inspiration { background: #2a2010; color: #c9a84c; }
+    .win-card .tag {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.85em;
+      color: #7a9a8a;
       margin-bottom: 8px;
-      display: flex;
-      align-items: center;
     }
     .win-card .text {
-      font-family: 'Newsreader', serif;
+      font-family: 'EB Garamond', serif;
       font-size: 1em;
-      line-height: 1.75;
-      color: #c8c0b0;
+      line-height: 1.7;
+      color: #dde4e0;
       word-break: break-word;
     }
     .win-card .card-image {
       width: 80px;
       height: 80px;
       object-fit: cover;
-      border-radius: 3px;
+      border-radius: 4px;
       flex-shrink: 0;
     }
     .win-card .delete {
@@ -297,41 +255,34 @@
       top: 8px; right: 8px;
       background: none;
       border: none;
-      color: #3a3a32;
+      color: #3a5a6a;
       cursor: pointer;
-      font-size: 0.85em;
-      font-family: 'Raleway', sans-serif;
-      padding: 4px 6px;
+      font-size: 1em;
+      padding: 4px;
       transition: color 0.2s;
-      opacity: 0;
     }
+    .win-card .delete:hover { color: #cc6a6a; }
     .win-card .edit {
       position: absolute;
-      top: 8px; right: 42px;
+      top: 8px; right: 30px;
       background: none;
       border: none;
-      color: #3a3a32;
+      color: #3a5a6a;
       cursor: pointer;
-      font-size: 0.75em;
-      font-family: 'Raleway', sans-serif;
-      letter-spacing: 0.06em;
-      padding: 4px 6px;
+      font-size: 1em;
+      padding: 4px;
       transition: color 0.2s;
-      opacity: 0;
     }
-    .win-card:hover .delete,
-    .win-card:hover .edit { opacity: 1; }
-    .win-card .delete:hover { color: #aa5a5a; }
-    .win-card .edit:hover   { color: #a58a5c; }
+    .win-card .edit:hover { color: #c9a84c; }
 
     /* ── File attachment display ── */
     .file-attachment {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: #141412;
-      border: 1px solid #2a2a26;
-      border-radius: 2px;
+      background: #1e2d3a;
+      border: 1px solid #3a5a6a;
+      border-radius: 4px;
       padding: 7px 12px;
       margin-top: 8px;
       cursor: pointer;
@@ -339,122 +290,136 @@
       transition: all 0.2s;
       max-width: 100%;
     }
-    .file-attachment:hover { border-color: #a58a5c; }
-    .file-attachment .file-icon { font-size: 1.1em; flex-shrink: 0; }
+    .file-attachment:hover { border-color: #c9a84c; background: #263340; }
+    .file-attachment .file-icon { font-size: 1.2em; flex-shrink: 0; }
     .file-attachment .file-name {
       font-family: 'Raleway', sans-serif;
-      font-size: 0.78em;
-      color: #c8c0b0;
+      font-size: 0.8em;
+      color: #c8d8d0;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       max-width: 200px;
     }
-    .file-attachment .file-arrow { color: #5a5a52; font-size: 0.9em; flex-shrink: 0; }
+    .file-attachment .file-arrow { color: #7a9a8a; font-size: 0.9em; flex-shrink: 0; }
 
     /* ── Audio player ── */
-    .audio-player { margin-top: 8px; width: 100%; }
-    .audio-player audio { width: 100%; height: 32px; accent-color: #a58a5c; }
+    .audio-player {
+      margin-top: 8px;
+      width: 100%;
+    }
+    .audio-player audio {
+      width: 100%;
+      height: 32px;
+      accent-color: #c9a84c;
+    }
     .audio-label {
       font-family: 'Raleway', sans-serif;
-      font-size: 0.72em;
-      letter-spacing: 0.08em;
-      color: #5a5a52;
+      font-size: 0.75em;
+      color: #7a9a8a;
       margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    /* ── Video player ── */
-    .video-player { margin-top: 8px; width: 100%; }
+    /* ── Video player ── NEW */
+    .video-player {
+      margin-top: 8px;
+      width: 100%;
+    }
     .video-player video {
       width: 100%;
-      max-height: 400px;
-      border-radius: 3px;
-      background: #141412;
+      max-height: 400px;        /* prevent giant videos swallowing the card */
+      border-radius: 6px;
+      background: #1e2d3a;     /* dark background while loading */
       display: block;
-      accent-color: #a58a5c;
+      accent-color: #c9a84c;
     }
     .video-label {
       font-family: 'Raleway', sans-serif;
-      font-size: 0.72em;
-      letter-spacing: 0.08em;
-      color: #5a5a52;
+      font-size: 0.75em;
+      color: #7a9a8a;
       margin-bottom: 4px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
-    .spotlight .video-player video { max-height: 500px; }
+    /* In the spotlight (Inspire tab), give the video a bit more room */
+    .spotlight .video-player video {
+      max-height: 500px;
+    }
 
-    /* ── Link cards ── */
     .link-card {
       display: flex;
       align-items: center;
       gap: 12px;
-      background: #141412;
-      border: 1px solid #2a2a26;
-      border-radius: 2px;
+      background: #1e2d3a;
+      border: 1px solid #3a5a6a;
+      border-radius: 4px;
       padding: 10px 14px;
       margin-top: 8px;
       cursor: pointer;
       transition: all 0.2s;
       text-decoration: none;
     }
-    .link-card:hover { border-color: #a58a5c; }
-    .link-card .link-icon { font-size: 1.2em; flex-shrink: 0; }
+    .link-card:hover { border-color: #c9a84c; background: #263340; }
+    .link-card .link-icon { font-size: 1.3em; flex-shrink: 0; }
     .link-card .link-info { flex: 1; overflow: hidden; }
     .link-card .link-title {
       font-family: 'Raleway', sans-serif;
-      font-size: 0.82em;
-      color: #c8c0b0;
+      font-size: 0.85em;
+      color: #c8d8d0;
       margin-bottom: 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
     .link-card .link-url {
-      font-size: 0.72em;
-      color: #5a8aaa;
+      font-size: 0.75em;
+      color: #6aaacc;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .link-card .link-arrow { color: #5a5a52; }
+    .link-card .link-arrow { color: #7a9a8a; }
 
     /* ── Link preview card (large) ── */
     .link-preview {
       display: block;
-      background: #141412;
-      border: 1px solid #2a2a26;
-      border-radius: 3px;
+      background: #1e2d3a;
+      border: 1px solid #3a5a6a;
+      border-radius: 6px;
       margin-top: 10px;
       overflow: hidden;
       text-decoration: none;
       transition: all 0.2s;
     }
-    .link-preview:hover { border-color: #a58a5c; }
+    .link-preview:hover { border-color: #c9a84c; background: #263340; }
     .link-preview-thumb {
-      width: 100%; height: 160px;
+      width: 100%;
+      height: 160px;
       object-fit: cover;
       display: block;
-      background: #1f1f1c;
+      background: #263340;
     }
     .link-preview-thumb-placeholder {
-      width: 100%; height: 160px;
-      background: #1f1f1c;
+      width: 100%;
+      height: 160px;
+      background: #263340;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 2.5em;
     }
-    .link-preview-info { padding: 10px 14px 12px; }
+    .link-preview-info {
+      padding: 10px 14px 12px;
+    }
     .link-preview-title {
       font-family: 'Raleway', sans-serif;
-      font-size: 0.85em;
+      font-size: 0.9em;
       font-weight: 500;
-      color: #c8c0b0;
+      color: #c8d8d0;
       margin-bottom: 3px;
       overflow: hidden;
       display: -webkit-box;
@@ -462,323 +427,259 @@
       -webkit-box-orient: vertical;
     }
     .link-preview-domain {
-      font-size: 0.72em;
-      color: #5a8aaa;
+      font-size: 0.75em;
+      color: #6aaacc;
       font-family: 'Raleway', sans-serif;
     }
 
-    /* ── Spotlight (Inspire tab) ── */
     .spotlight {
-      background: #1f1f1c;
-      border-radius: 3px;
-      padding: 36px 32px;
+      background: #263340;
+      border-radius: 8px;
+      padding: 30px;
       max-width: 700px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
       gap: 20px;
-      position: relative;
-    }
-    /* Corner bracket ornaments — top-left and bottom-right */
-    .spotlight::before {
-      content: '';
-      position: absolute;
-      top: 12px; left: 12px;
-      width: 20px; height: 20px;
-      border-top: 1px solid #a58a5c44;
-      border-left: 1px solid #a58a5c44;
-    }
-    .spotlight::after {
-      content: '';
-      position: absolute;
-      bottom: 12px; right: 12px;
-      width: 20px; height: 20px;
-      border-bottom: 1px solid #a58a5c44;
-      border-right: 1px solid #a58a5c44;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
     @media (min-width: 600px) {
       .spotlight { flex-direction: row; align-items: center; }
     }
-    /* Category-coloured top border on spotlight */
-    .spotlight.cat-work        { border-top: 1px solid #5a8aaa66; }
-    .spotlight.cat-creativity  { border-top: 1px solid #8870aa66; }
-    .spotlight.cat-family      { border-top: 1px solid #5a8a7066; }
-    .spotlight.cat-inspiration { border-top: 1px solid #a58a5c88; }
-
+    .spotlight.cat-work { border-top: 2px solid #6aaacc; }
+    .spotlight.cat-creativity { border-top: 2px solid #a088cc; }
+    .spotlight.cat-family { border-top: 2px solid #6aaa88; }
+    .spotlight.cat-inspiration { border-top: 2px solid #c9a84c; }
     .spotlight-text { flex: 1; }
-    .spotlight .card-meta {
-      font-family: 'Raleway', sans-serif;
-      font-size: 0.68em;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: #5a5a52;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
+    .spotlight .tag {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      color: #7a9a8a;
+      margin-bottom: 12px;
+      font-size: 0.95em;
+      display: block;
     }
     .spotlight .text {
-      font-family: 'Newsreader', serif;
+      font-family: 'EB Garamond', serif;
       font-size: 1.2em;
       line-height: 1.9;
-      color: #d8d2c4;
-      font-style: italic;
+      color: #dde4e0;
       word-break: break-word;
-    }
-    /* Decorative rule below spotlight text */
-    .spotlight-rule {
-      margin-top: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .spotlight-rule::before,
-    .spotlight-rule::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #2a2a26;
-    }
-    .spotlight-rule-mark {
-      color: #3a3a32;
-      font-size: 0.7em;
-      letter-spacing: 0.1em;
     }
     .spotlight img {
       width: 100%;
       max-width: 200px;
       height: 200px;
       object-fit: cover;
-      border-radius: 3px;
+      border-radius: 6px;
       flex-shrink: 0;
       align-self: center;
     }
-
-    /* ── Inspire tab filters ── */
     .inspire-filters {
       display: flex;
-      gap: 6px;
-      margin-bottom: 28px;
+      gap: 8px;
+      margin-bottom: 25px;
       justify-content: center;
       flex-wrap: wrap;
     }
-
-    /* ── Add / Edit form ── */
     .add-form {
-      background: #1f1f1c;
-      border-radius: 3px;
+      background: #263340;
+      border-radius: 6px;
       padding: 24px;
       margin-bottom: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
     }
     .add-form h3 {
       font-family: 'Raleway', sans-serif;
-      font-size: 0.75em;
+      font-size: 0.85em;
       font-weight: 500;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      margin-bottom: 20px;
-      color: #c8c0b0;
+      margin-bottom: 18px;
+      color: #c8d8d0;
     }
     .form-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
-    .form-row > * { flex: 1; min-width: 120px; margin-bottom: 0; }
-
-    /* Form field label style */
-    .form-label {
-      font-family: 'Raleway', sans-serif;
-      font-size: 0.67em;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #5a5a52;
-      display: block;
-      margin-bottom: 5px;
-    }
-    .form-group { margin-bottom: 12px; }
-
-    .add-form select,
-    .add-form input,
-    .add-form textarea {
+    .form-row select { flex: 1; min-width: 120px; margin-bottom: 0; }
+    .add-form select, .add-form input, .add-form textarea {
       width: 100%;
-      padding: 11px 14px;
-      background: #141412;
-      border: 1px solid #2a2a26;
-      border-radius: 2px;
-      color: #d8d2c4;
-      font-family: 'Newsreader', serif;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: #1e2d3a;
+      border: 1px solid #3a5a6a;
+      border-radius: 4px;
+      color: #dde4e0;
+      font-family: 'EB Garamond', serif;
       font-size: 1em;
       transition: border-color 0.2s;
     }
-    .add-form select:focus,
-    .add-form input:focus,
-    .add-form textarea:focus { outline: none; border-color: #a58a5c; }
+    .add-form select:focus, .add-form input:focus, .add-form textarea:focus {
+      outline: none;
+      border-color: #c9a84c;
+    }
     .add-form textarea { height: 120px; resize: vertical; }
-
     .add-form button {
       width: 100%;
       padding: 13px 25px;
       background: transparent;
-      color: #a58a5c;
-      border: 1px solid #a58a5c;
-      border-radius: 2px;
+      color: #c9a84c;
+      border: 1px solid #c9a84c;
+      border-radius: 4px;
       cursor: pointer;
       font-family: 'Raleway', sans-serif;
-      font-size: 0.75em;
-      letter-spacing: 0.2em;
+      font-size: 0.8em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       font-weight: 500;
       transition: all 0.2s;
     }
-    .add-form button:hover { background: #a58a5c; color: #141412; }
+    .add-form button:hover { background: #c9a84c; color: #1e2d3a; }
 
     /* ── File upload area ── */
     .file-upload-area {
-      border: 1px dashed #2a2a26;
-      border-radius: 2px;
-      padding: 18px;
+      border: 1px dashed #3a5a6a;
+      border-radius: 4px;
+      padding: 20px;
       text-align: center;
       margin-bottom: 12px;
       cursor: pointer;
-      color: #4a4a42;
-      font-family: 'Raleway', sans-serif;
-      font-size: 0.72em;
-      letter-spacing: 0.08em;
+      color: #7a9a8a;
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
       transition: all 0.2s;
     }
-    .file-upload-area:hover { border-color: #a58a5c; color: #c8c0b0; }
-    .file-upload-area.has-file { border-color: #5a8a70; color: #5a8a70; border-style: solid; }
+    .file-upload-area:hover { border-color: #c9a84c; color: #dde4e0; }
+    .file-upload-area.has-file { border-color: #6aaa88; color: #6aaa88; border-style: solid; }
     .image-preview {
       width: 100%;
       max-height: 200px;
       object-fit: contain;
-      border-radius: 3px;
+      border-radius: 4px;
       margin-bottom: 12px;
       display: none;
     }
 
     /* ── Upload progress ── */
-    .upload-progress { display: none; margin-bottom: 12px; }
+    .upload-progress {
+      display: none;
+      margin-bottom: 12px;
+    }
     .upload-progress-bar-wrap {
-      background: #141412;
-      border-radius: 2px;
-      height: 4px;
+      background: #1e2d3a;
+      border-radius: 4px;
+      height: 6px;
       overflow: hidden;
       margin-top: 6px;
     }
     .upload-progress-bar {
       height: 100%;
-      background: #a58a5c;
-      border-radius: 2px;
+      background: #c9a84c;
+      border-radius: 4px;
       transition: width 0.2s;
       width: 0%;
     }
     .upload-progress-label {
-      font-family: 'Newsreader', serif;
+      font-family: 'EB Garamond', serif;
       font-style: italic;
       font-size: 0.85em;
-      color: #a58a5c;
+      color: #c9a84c;
     }
 
-    /* ── Empty state ── */
     .empty {
       text-align: center;
-      color: #3a3a32;
+      color: #3a5a6a;
       padding: 40px;
-      font-family: 'Newsreader', serif;
+      font-family: 'EB Garamond', serif;
       font-style: italic;
       font-size: 1.1em;
     }
-
-    /* ── Count badge in vault filters ── */
     .count-badge {
-      background: #141412;
-      color: #3a3a32;
-      font-size: 0.85em;
-      padding: 1px 6px;
-      border-radius: 2px;
-      margin-left: 4px;
+      background: #1e2d3a;
+      color: #7a9a8a;
+      font-size: 0.75em;
+      padding: 2px 7px;
+      border-radius: 3px;
+      margin-left: 6px;
     }
-
-    /* ── Status bar ── */
     .status-bar {
       text-align: center;
-      font-family: 'Raleway', sans-serif;
-      font-size: 0.65em;
-      letter-spacing: 0.1em;
-      padding: 6px;
-      background: #141412;
-      color: #3a3a32;
-      border-bottom: 1px solid #2a2a26;
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.85em;
+      padding: 5px;
+      background: #1e2d3a;
+      color: #7a9a8a;
+      border-bottom: 1px solid #3a5a6a;
     }
-    .status-bar.synced  { color: #5a8a70; }
-    .status-bar.syncing { color: #a58a5c; }
-    .status-bar.error   { color: #aa5a5a; }
+    .status-bar.synced { color: #6aaa88; }
+    .status-bar.syncing { color: #c9a84c; }
+    .status-bar.error { color: #cc6a6a; }
   </style>
 </head>
 <body>
 
-  <!-- ── Login overlay ── -->
+  <!-- Login overlay -->
   <div id="login-overlay">
     <div id="login-box">
-      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px;">
-        <!-- Tower SVG — same as original, colours adjusted to brass palette -->
-        <svg width="32" height="52" viewBox="0 0 100 160" style="flex-shrink:0;overflow:visible;opacity:0.85;">
-          <circle cx="8"  cy="14" r="1.2" fill="#a58a5c" opacity="0.8"/>
-          <circle cx="16" cy="30" r="0.7" fill="#d8d2c4" opacity="0.5"/>
-          <circle cx="92" cy="10" r="1.0" fill="#d8d2c4" opacity="0.6"/>
-          <circle cx="88" cy="28" r="0.7" fill="#a58a5c" opacity="0.7"/>
-          <circle cx="76" cy="18" r="0.9" fill="#a58a5c" opacity="0.5"/>
-          <circle cx="50" cy="4"  r="0.7" fill="#d8d2c4" opacity="0.4"/>
-          <path d="M28,143 C22,135 10,128 8,118 C6,108 14,102 18,108 C22,114 16,120 12,118" fill="none" stroke="#4a6a58" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
-          <path d="M12,118 C10,116 11,113 14,114" fill="none" stroke="#4a6a58" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
-          <path d="M15,124 C10,120 9,114 13,115" fill="none" stroke="#4a6a58" stroke-width="0.55" stroke-linecap="round" opacity="0.5"/>
-          <path d="M72,143 C78,135 90,128 92,118 C94,108 86,102 82,108 C78,114 84,120 88,118" fill="none" stroke="#4a6a58" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
-          <path d="M88,118 C90,116 89,113 86,114" fill="none" stroke="#4a6a58" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
-          <path d="M85,124 C90,120 91,114 87,115" fill="none" stroke="#4a6a58" stroke-width="0.55" stroke-linecap="round" opacity="0.5"/>
-          <path d="M37,120 C32,112 30,100 34,92 C36,88 38,90 37,94 C36,98 33,96 34,92" fill="none" stroke="#4a6a58" stroke-width="0.6" stroke-linecap="round" opacity="0.45"/>
-          <rect x="14" y="145" width="72" height="5" rx="2.5" fill="none" stroke="#5a6a62" stroke-width="0.6" opacity="0.5"/>
-          <rect x="22" y="139" width="56" height="6" rx="2" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.4"/>
-          <rect x="12" y="104" width="16" height="35" rx="2" fill="none" stroke="#5a6a62" stroke-width="0.65"/>
-          <rect x="16" y="112" width="8" height="13" rx="4" fill="#a58a5c" opacity="0.4"/>
-          <rect x="10" y="97"  width="20" height="7" rx="1.5" fill="none" stroke="#5a6a62" stroke-width="0.55" opacity="0.75"/>
-          <rect x="11" y="91" width="4" height="7" rx="1" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.55"/>
-          <rect x="18" y="91" width="4" height="7" rx="1" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.55"/>
-          <rect x="25" y="91" width="4" height="7" rx="1" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.55"/>
-          <rect x="16" y="72" width="8" height="20" rx="1.5" fill="none" stroke="#8a9f98" stroke-width="0.55"/>
-          <rect x="18" y="77" width="4" height="8"  rx="2" fill="#a58a5c" opacity="0.35"/>
-          <polygon points="20,48 15,72 25,72" fill="none" stroke="#c8c0b0" stroke-width="0.7"/>
-          <circle cx="20" cy="48" r="2" fill="#a58a5c" opacity="0.75"/>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:6px;">
+        <svg width="32" height="52" viewBox="0 0 100 160" style="flex-shrink:0;overflow:visible;">
+          <circle cx="8"  cy="14" r="1.2" fill="#c9a84c" opacity="0.8"/>
+          <circle cx="16" cy="30" r="0.7" fill="#dde8e4" opacity="0.5"/>
+          <circle cx="92" cy="10" r="1.0" fill="#dde8e4" opacity="0.6"/>
+          <circle cx="88" cy="28" r="0.7" fill="#c9a84c" opacity="0.7"/>
+          <circle cx="76" cy="18" r="0.9" fill="#c9a84c" opacity="0.5"/>
+          <circle cx="50" cy="4"  r="0.7" fill="#dde8e4" opacity="0.4"/>
+          <path d="M28,143 C22,135 10,128 8,118 C6,108 14,102 18,108 C22,114 16,120 12,118" fill="none" stroke="#6aaa88" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
+          <path d="M12,118 C10,116 11,113 14,114" fill="none" stroke="#6aaa88" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+          <path d="M15,124 C10,120 9,114 13,115" fill="none" stroke="#6aaa88" stroke-width="0.55" stroke-linecap="round" opacity="0.5"/>
+          <path d="M72,143 C78,135 90,128 92,118 C94,108 86,102 82,108 C78,114 84,120 88,118" fill="none" stroke="#6aaa88" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
+          <path d="M88,118 C90,116 89,113 86,114" fill="none" stroke="#6aaa88" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+          <path d="M85,124 C90,120 91,114 87,115" fill="none" stroke="#6aaa88" stroke-width="0.55" stroke-linecap="round" opacity="0.5"/>
+          <path d="M37,120 C32,112 30,100 34,92 C36,88 38,90 37,94 C36,98 33,96 34,92" fill="none" stroke="#6aaa88" stroke-width="0.6" stroke-linecap="round" opacity="0.45"/>
+          <rect x="14" y="145" width="72" height="5" rx="2.5" fill="none" stroke="#8aaaa0" stroke-width="0.6" opacity="0.5"/>
+          <rect x="22" y="139" width="56" height="6" rx="2" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.4"/>
+          <rect x="12" y="104" width="16" height="35" rx="2" fill="none" stroke="#8aaaa0" stroke-width="0.65"/>
+          <rect x="16" y="112" width="8" height="13" rx="4" fill="#c9a84c" opacity="0.4"/>
+          <rect x="10" y="97"  width="20" height="7" rx="1.5" fill="none" stroke="#8aaaa0" stroke-width="0.55" opacity="0.75"/>
+          <rect x="11" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
+          <rect x="18" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
+          <rect x="25" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
+          <rect x="16" y="72" width="8" height="20" rx="1.5" fill="none" stroke="#a8bfb8" stroke-width="0.55"/>
+          <rect x="18" y="77" width="4" height="8"  rx="2" fill="#c9a84c" opacity="0.35"/>
+          <polygon points="20,48 15,72 25,72" fill="none" stroke="#c8d8d0" stroke-width="0.7"/>
+          <circle cx="20" cy="48" r="2" fill="#c9a84c" opacity="0.75"/>
           <circle cx="20" cy="48" r="0.8" fill="#fff" opacity="0.7"/>
-          <rect x="72" y="104" width="16" height="35" rx="2" fill="none" stroke="#5a6a62" stroke-width="0.65"/>
-          <rect x="76" y="112" width="8" height="13" rx="4" fill="#a58a5c" opacity="0.4"/>
-          <rect x="70" y="97"  width="20" height="7" rx="1.5" fill="none" stroke="#5a6a62" stroke-width="0.55" opacity="0.75"/>
-          <rect x="71" y="91" width="4" height="7" rx="1" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.55"/>
-          <rect x="78" y="91" width="4" height="7" rx="1" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.55"/>
-          <rect x="85" y="91" width="4" height="7" rx="1" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.55"/>
-          <rect x="76" y="72" width="8" height="20" rx="1.5" fill="none" stroke="#8a9f98" stroke-width="0.55"/>
-          <rect x="78" y="77" width="4" height="8"  rx="2" fill="#a58a5c" opacity="0.35"/>
-          <polygon points="80,48 75,72 85,72" fill="none" stroke="#c8c0b0" stroke-width="0.7"/>
-          <circle cx="80" cy="48" r="2" fill="#a58a5c" opacity="0.75"/>
+          <rect x="72" y="104" width="16" height="35" rx="2" fill="none" stroke="#8aaaa0" stroke-width="0.65"/>
+          <rect x="76" y="112" width="8" height="13" rx="4" fill="#c9a84c" opacity="0.4"/>
+          <rect x="70" y="97"  width="20" height="7" rx="1.5" fill="none" stroke="#8aaaa0" stroke-width="0.55" opacity="0.75"/>
+          <rect x="71" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
+          <rect x="78" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
+          <rect x="85" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
+          <rect x="76" y="72" width="8" height="20" rx="1.5" fill="none" stroke="#a8bfb8" stroke-width="0.55"/>
+          <rect x="78" y="77" width="4" height="8"  rx="2" fill="#c9a84c" opacity="0.35"/>
+          <polygon points="80,48 75,72 85,72" fill="none" stroke="#c8d8d0" stroke-width="0.7"/>
+          <circle cx="80" cy="48" r="2" fill="#c9a84c" opacity="0.75"/>
           <circle cx="80" cy="48" r="0.8" fill="#fff" opacity="0.7"/>
-          <rect x="37" y="88" width="26" height="51" rx="2.5" fill="none" stroke="#d8d2c4" stroke-width="0.9"/>
-          <rect x="43" y="96" width="14" height="20" rx="7" fill="#a58a5c" opacity="0.6"/>
-          <rect x="44" y="122" width="12" height="12" rx="6" fill="#a58a5c" opacity="0.3"/>
-          <rect x="33" y="80" width="34" height="8" rx="2" fill="none" stroke="#d8d2c4" stroke-width="0.8" opacity="0.85"/>
-          <rect x="34" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#d8d2c4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="42" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#d8d2c4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="50" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#d8d2c4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="58" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#d8d2c4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="66" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#d8d2c4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="42" y="48" width="16" height="26" rx="2" fill="none" stroke="#d8d2c4" stroke-width="0.75"/>
-          <rect x="46" y="55" width="8" height="12" rx="4" fill="#a58a5c" opacity="0.75"/>
-          <polygon points="50,10 44,48 56,48" fill="none" stroke="#d8d2c4" stroke-width="0.85"/>
-          <circle cx="50" cy="10" r="3.2" fill="#a58a5c"/>
+          <rect x="37" y="88" width="26" height="51" rx="2.5" fill="none" stroke="#dde8e4" stroke-width="0.9"/>
+          <rect x="43" y="96" width="14" height="20" rx="7" fill="#c9a84c" opacity="0.6"/>
+          <rect x="44" y="122" width="12" height="12" rx="6" fill="#c9a84c" opacity="0.3"/>
+          <rect x="33" y="80" width="34" height="8" rx="2" fill="none" stroke="#dde8e4" stroke-width="0.8" opacity="0.85"/>
+          <rect x="34" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
+          <rect x="42" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
+          <rect x="50" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
+          <rect x="58" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
+          <rect x="66" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
+          <rect x="42" y="48" width="16" height="26" rx="2" fill="none" stroke="#dde8e4" stroke-width="0.75"/>
+          <rect x="46" y="55" width="8" height="12" rx="4" fill="#c9a84c" opacity="0.75"/>
+          <polygon points="50,10 44,48 56,48" fill="none" stroke="#dde8e4" stroke-width="0.85"/>
+          <circle cx="50" cy="10" r="3.2" fill="#c9a84c"/>
           <circle cx="50" cy="10" r="1.5" fill="#fff" opacity="0.95"/>
           <path d="M50,6 L51.2,9.5 L50,13 L48.8,9.5 Z" fill="#fff" opacity="0.5"/>
           <path d="M46.5,10 L50,8.8 L53.5,10 L50,11.2 Z" fill="#fff" opacity="0.5"/>
-          <line x1="28" y1="132" x2="37" y2="132" stroke="#5a7a70" stroke-width="0.5" opacity="0.4"/>
-          <line x1="63" y1="132" x2="72" y2="132" stroke="#5a7a70" stroke-width="0.5" opacity="0.4"/>
+          <line x1="28" y1="132" x2="37" y2="132" stroke="#6a8a80" stroke-width="0.5" opacity="0.4"/>
+          <line x1="63" y1="132" x2="72" y2="132" stroke="#6a8a80" stroke-width="0.5" opacity="0.4"/>
         </svg>
         <h2>Minas <span>Lórien</span></h2>
       </div>
-      <!-- Tagline lives only here, on the threshold -->
       <p>Your tower of light and memory</p>
       <input type="password" id="login-password" placeholder="Enter password" autocomplete="current-password">
       <button id="login-btn">Enter the Tower</button>
@@ -786,140 +687,138 @@
     </div>
   </div>
 
-  <!-- ── Main app ── -->
+  <!-- Main app -->
   <div id="app">
     <header>
       <div class="header-icon">
-        <!-- Same tower SVG, slightly larger for the header -->
-        <svg width="36" height="58" viewBox="0 0 100 160" style="overflow:visible;opacity:0.85;">
-          <circle cx="8"  cy="14" r="1.2" fill="#a58a5c" opacity="0.8"/>
-          <circle cx="16" cy="30" r="0.7" fill="#d8d2c4" opacity="0.5"/>
-          <circle cx="4"  cy="52" r="0.9" fill="#c8c0b0" opacity="0.45"/>
-          <circle cx="92" cy="10" r="1.0" fill="#d8d2c4" opacity="0.6"/>
-          <circle cx="88" cy="28" r="0.7" fill="#a58a5c" opacity="0.7"/>
-          <circle cx="76" cy="18" r="0.9" fill="#a58a5c" opacity="0.5"/>
-          <circle cx="50" cy="4"  r="0.7" fill="#d8d2c4" opacity="0.4"/>
-          <circle cx="12" cy="70" r="0.6" fill="#a58a5c" opacity="0.4"/>
-          <circle cx="84" cy="68" r="0.6" fill="#d8d2c4" opacity="0.35"/>
-          <path d="M28,143 C22,135 10,128 8,118 C6,108 14,102 18,108 C22,114 16,120 12,118" fill="none" stroke="#4a6a58" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
-          <path d="M12,118 C10,116 11,113 14,114" fill="none" stroke="#4a6a58" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
-          <path d="M15,124 C10,120 9,114 13,115" fill="none" stroke="#4a6a58" stroke-width="0.55" stroke-linecap="round" opacity="0.5"/>
-          <path d="M72,143 C78,135 90,128 92,118 C94,108 86,102 82,108 C78,114 84,120 88,118" fill="none" stroke="#4a6a58" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
-          <path d="M88,118 C90,116 89,113 86,114" fill="none" stroke="#4a6a58" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
-          <path d="M85,124 C90,120 91,114 87,115" fill="none" stroke="#4a6a58" stroke-width="0.55" stroke-linecap="round" opacity="0.5"/>
-          <path d="M37,120 C32,112 30,100 34,92 C36,88 38,90 37,94 C36,98 33,96 34,92" fill="none" stroke="#4a6a58" stroke-width="0.6" stroke-linecap="round" opacity="0.45"/>
-          <rect x="14" y="145" width="72" height="5" rx="2.5" fill="none" stroke="#5a6a62" stroke-width="0.6" opacity="0.5"/>
-          <rect x="22" y="139" width="56" height="6" rx="2" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.4"/>
-          <rect x="12" y="104" width="16" height="35" rx="2" fill="none" stroke="#5a6a62" stroke-width="0.65"/>
-          <rect x="16" y="112" width="8" height="13" rx="4" fill="#a58a5c" opacity="0.4"/>
-          <rect x="10" y="97"  width="20" height="7" rx="1.5" fill="none" stroke="#5a6a62" stroke-width="0.55" opacity="0.75"/>
-          <rect x="11" y="91" width="4" height="7" rx="1" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.55"/>
-          <rect x="18" y="91" width="4" height="7" rx="1" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.55"/>
-          <rect x="25" y="91" width="4" height="7" rx="1" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.55"/>
-          <rect x="16" y="72" width="8" height="20" rx="1.5" fill="none" stroke="#8a9f98" stroke-width="0.55"/>
-          <rect x="18" y="77" width="4" height="8"  rx="2" fill="#a58a5c" opacity="0.35"/>
-          <polygon points="20,48 15,72 25,72" fill="none" stroke="#c8c0b0" stroke-width="0.7"/>
-          <circle cx="20" cy="48" r="2" fill="#a58a5c" opacity="0.75"/>
+        <svg width="36" height="58" viewBox="0 0 100 160" style="overflow:visible;">
+          <circle cx="8"  cy="14" r="1.2" fill="#c9a84c" opacity="0.8"/>
+          <circle cx="16" cy="30" r="0.7" fill="#dde8e4" opacity="0.5"/>
+          <circle cx="4"  cy="52" r="0.9" fill="#c8d8d0" opacity="0.45"/>
+          <circle cx="92" cy="10" r="1.0" fill="#dde8e4" opacity="0.6"/>
+          <circle cx="88" cy="28" r="0.7" fill="#c9a84c" opacity="0.7"/>
+          <circle cx="76" cy="18" r="0.9" fill="#c9a84c" opacity="0.5"/>
+          <circle cx="50" cy="4"  r="0.7" fill="#dde8e4" opacity="0.4"/>
+          <circle cx="12" cy="70" r="0.6" fill="#c9a84c" opacity="0.4"/>
+          <circle cx="84" cy="68" r="0.6" fill="#dde8e4" opacity="0.35"/>
+          <path d="M19,46 L20.5,48.5 L19,51 L17.5,48.5 Z" fill="#c9a84c" opacity="0.7"/>
+          <path d="M81,46 L82.5,48.5 L81,51 L79.5,48.5 Z" fill="#c9a84c" opacity="0.7"/>
+          <path d="M28,143 C22,135 10,128 8,118 C6,108 14,102 18,108 C22,114 16,120 12,118" fill="none" stroke="#6aaa88" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
+          <path d="M12,118 C10,116 11,113 14,114" fill="none" stroke="#6aaa88" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+          <path d="M15,124 C10,120 9,114 13,115" fill="none" stroke="#6aaa88" stroke-width="0.55" stroke-linecap="round" opacity="0.5"/>
+          <path d="M72,143 C78,135 90,128 92,118 C94,108 86,102 82,108 C78,114 84,120 88,118" fill="none" stroke="#6aaa88" stroke-width="0.9" stroke-linecap="round" opacity="0.7"/>
+          <path d="M88,118 C90,116 89,113 86,114" fill="none" stroke="#6aaa88" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+          <path d="M85,124 C90,120 91,114 87,115" fill="none" stroke="#6aaa88" stroke-width="0.55" stroke-linecap="round" opacity="0.5"/>
+          <path d="M37,120 C32,112 30,100 34,92 C36,88 38,90 37,94 C36,98 33,96 34,92" fill="none" stroke="#6aaa88" stroke-width="0.6" stroke-linecap="round" opacity="0.45"/>
+          <rect x="14" y="145" width="72" height="5" rx="2.5" fill="none" stroke="#8aaaa0" stroke-width="0.6" opacity="0.5"/>
+          <rect x="22" y="139" width="56" height="6" rx="2" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.4"/>
+          <rect x="12" y="104" width="16" height="35" rx="2" fill="none" stroke="#8aaaa0" stroke-width="0.65"/>
+          <rect x="16" y="112" width="8" height="13" rx="4" fill="#c9a84c" opacity="0.4"/>
+          <rect x="10" y="97"  width="20" height="7" rx="1.5" fill="none" stroke="#8aaaa0" stroke-width="0.55" opacity="0.75"/>
+          <rect x="11" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
+          <rect x="18" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
+          <rect x="25" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
+          <rect x="16" y="72" width="8" height="20" rx="1.5" fill="none" stroke="#a8bfb8" stroke-width="0.55"/>
+          <rect x="18" y="77" width="4" height="8"  rx="2" fill="#c9a84c" opacity="0.35"/>
+          <polygon points="20,48 15,72 25,72" fill="none" stroke="#c8d8d0" stroke-width="0.7"/>
+          <circle cx="20" cy="48" r="2" fill="#c9a84c" opacity="0.75"/>
           <circle cx="20" cy="48" r="0.8" fill="#fff" opacity="0.7"/>
-          <rect x="72" y="104" width="16" height="35" rx="2" fill="none" stroke="#5a6a62" stroke-width="0.65"/>
-          <rect x="76" y="112" width="8" height="13" rx="4" fill="#a58a5c" opacity="0.4"/>
-          <rect x="70" y="97"  width="20" height="7" rx="1.5" fill="none" stroke="#5a6a62" stroke-width="0.55" opacity="0.75"/>
-          <rect x="71" y="91" width="4" height="7" rx="1" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.55"/>
-          <rect x="78" y="91" width="4" height="7" rx="1" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.55"/>
-          <rect x="85" y="91" width="4" height="7" rx="1" fill="none" stroke="#5a6a62" stroke-width="0.5" opacity="0.55"/>
-          <rect x="76" y="72" width="8" height="20" rx="1.5" fill="none" stroke="#8a9f98" stroke-width="0.55"/>
-          <rect x="78" y="77" width="4" height="8"  rx="2" fill="#a58a5c" opacity="0.35"/>
-          <polygon points="80,48 75,72 85,72" fill="none" stroke="#c8c0b0" stroke-width="0.7"/>
-          <circle cx="80" cy="48" r="2" fill="#a58a5c" opacity="0.75"/>
+          <rect x="72" y="104" width="16" height="35" rx="2" fill="none" stroke="#8aaaa0" stroke-width="0.65"/>
+          <rect x="76" y="112" width="8" height="13" rx="4" fill="#c9a84c" opacity="0.4"/>
+          <rect x="70" y="97"  width="20" height="7" rx="1.5" fill="none" stroke="#8aaaa0" stroke-width="0.55" opacity="0.75"/>
+          <rect x="71" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
+          <rect x="78" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
+          <rect x="85" y="91" width="4" height="7" rx="1" fill="none" stroke="#8aaaa0" stroke-width="0.5" opacity="0.55"/>
+          <rect x="76" y="72" width="8" height="20" rx="1.5" fill="none" stroke="#a8bfb8" stroke-width="0.55"/>
+          <rect x="78" y="77" width="4" height="8"  rx="2" fill="#c9a84c" opacity="0.35"/>
+          <polygon points="80,48 75,72 85,72" fill="none" stroke="#c8d8d0" stroke-width="0.7"/>
+          <circle cx="80" cy="48" r="2" fill="#c9a84c" opacity="0.75"/>
           <circle cx="80" cy="48" r="0.8" fill="#fff" opacity="0.7"/>
-          <rect x="37" y="88" width="26" height="51" rx="2.5" fill="none" stroke="#d8d2c4" stroke-width="0.9"/>
-          <rect x="43" y="96" width="14" height="20" rx="7" fill="#a58a5c" opacity="0.6"/>
-          <rect x="44" y="122" width="12" height="12" rx="6" fill="#a58a5c" opacity="0.3"/>
-          <rect x="33" y="80" width="34" height="8" rx="2" fill="none" stroke="#d8d2c4" stroke-width="0.8" opacity="0.85"/>
-          <rect x="34" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#d8d2c4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="42" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#d8d2c4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="50" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#d8d2c4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="58" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#d8d2c4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="66" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#d8d2c4" stroke-width="0.65" opacity="0.7"/>
-          <rect x="42" y="48" width="16" height="26" rx="2" fill="none" stroke="#d8d2c4" stroke-width="0.75"/>
-          <rect x="46" y="55" width="8" height="12" rx="4" fill="#a58a5c" opacity="0.75"/>
-          <polygon points="50,10 44,48 56,48" fill="none" stroke="#d8d2c4" stroke-width="0.85"/>
-          <circle cx="50" cy="10" r="3.2" fill="#a58a5c"/>
+          <rect x="37" y="88" width="26" height="51" rx="2.5" fill="none" stroke="#dde8e4" stroke-width="0.9"/>
+          <rect x="43" y="96" width="14" height="20" rx="7" fill="#c9a84c" opacity="0.6"/>
+          <rect x="44" y="122" width="12" height="12" rx="6" fill="#c9a84c" opacity="0.3"/>
+          <rect x="33" y="80" width="34" height="8" rx="2" fill="none" stroke="#dde8e4" stroke-width="0.8" opacity="0.85"/>
+          <rect x="34" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
+          <rect x="42" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
+          <rect x="50" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
+          <rect x="58" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
+          <rect x="66" y="72" width="5" height="9" rx="1.5" fill="none" stroke="#dde8e4" stroke-width="0.65" opacity="0.7"/>
+          <rect x="42" y="48" width="16" height="26" rx="2" fill="none" stroke="#dde8e4" stroke-width="0.75"/>
+          <rect x="46" y="55" width="8" height="12" rx="4" fill="#c9a84c" opacity="0.75"/>
+          <polygon points="50,10 44,48 56,48" fill="none" stroke="#dde8e4" stroke-width="0.85"/>
+          <circle cx="50" cy="10" r="3.2" fill="#c9a84c"/>
           <circle cx="50" cy="10" r="1.5" fill="#fff" opacity="0.95"/>
           <path d="M50,6 L51.2,9.5 L50,13 L48.8,9.5 Z" fill="#fff" opacity="0.5"/>
           <path d="M46.5,10 L50,8.8 L53.5,10 L50,11.2 Z" fill="#fff" opacity="0.5"/>
-          <line x1="28" y1="132" x2="37" y2="132" stroke="#5a7a70" stroke-width="0.5" opacity="0.4"/>
-          <line x1="63" y1="132" x2="72" y2="132" stroke="#5a7a70" stroke-width="0.5" opacity="0.4"/>
+          <line x1="28" y1="132" x2="37" y2="132" stroke="#6a8a80" stroke-width="0.5" opacity="0.4"/>
+          <line x1="63" y1="132" x2="72" y2="132" stroke="#6a8a80" stroke-width="0.5" opacity="0.4"/>
         </svg>
       </div>
       <div class="header-text">
-        <!-- No tagline here — just the name -->
         <h1>Minas <span>Lórien</span></h1>
+        <p>Your tower of light and memory</p>
       </div>
     </header>
 
     <div class="tabs">
-      <div class="tab active" id="btn-inspire">Inspire</div>
-      <div class="tab" id="btn-vault">Vault</div>
-      <div class="tab" id="btn-add">Add</div>
+      <div class="tab active" id="btn-inspire">✨ Inspire Me</div>
+      <div class="tab" id="btn-vault">📁 My Vault</div>
+      <div class="tab" id="btn-add">➕ Add Entry</div>
     </div>
 
-    <div class="status-bar" id="status-bar">Connecting to your vault...</div>
+    <div class="status-bar" id="status-bar">⏳ Connecting to your vault...</div>
 
     <div class="content">
 
-      <!-- ── Inspire tab ── -->
       <div id="tab-inspire">
         <div class="inspire-filters">
-          <button class="filter-btn active" data-cat="all">All</button>
-          <button class="filter-btn" data-cat="Work">Work</button>
-          <button class="filter-btn" data-cat="Creativity">Creativity</button>
-          <button class="filter-btn" data-cat="Family">Family</button>
-          <button class="filter-btn" data-cat="Inspiration">Inspiration</button>
+          <button class="filter-btn active" data-cat="all">✦ All</button>
+          <button class="filter-btn" data-cat="Work">💼 Work</button>
+          <button class="filter-btn" data-cat="Creativity">🎨 Creativity</button>
+          <button class="filter-btn" data-cat="Family">👨‍👩‍👧 Family</button>
+          <button class="filter-btn" data-cat="Inspiration">✨ Inspiration</button>
         </div>
-        <button class="surprise-btn" id="surprise-btn">Show me something</button>
+        <button class="surprise-btn" id="surprise-btn">🎲 Show Me Something</button>
         <div id="spotlight"></div>
       </div>
 
-      <!-- ── Vault tab ── -->
       <div id="tab-vault" style="display:none">
         <div class="category-filters">
           <button class="filter-btn active" data-filter="all">All <span class="count-badge" id="count-all">0</span></button>
-          <button class="filter-btn" data-filter="Work">Work <span class="count-badge" id="count-work">0</span></button>
-          <button class="filter-btn" data-filter="Creativity">Creativity <span class="count-badge" id="count-creativity">0</span></button>
-          <button class="filter-btn" data-filter="Family">Family <span class="count-badge" id="count-family">0</span></button>
-          <button class="filter-btn" data-filter="Inspiration">Inspiration <span class="count-badge" id="count-inspiration">0</span></button>
+          <button class="filter-btn" data-filter="Work">💼 Work <span class="count-badge" id="count-work">0</span></button>
+          <button class="filter-btn" data-filter="Creativity">🎨 Creativity <span class="count-badge" id="count-creativity">0</span></button>
+          <button class="filter-btn" data-filter="Family">👨‍👩‍👧 Family <span class="count-badge" id="count-family">0</span></button>
+          <button class="filter-btn" data-filter="Inspiration">✨ Inspiration <span class="count-badge" id="count-inspiration">0</span></button>
         </div>
         <div id="vault-list"></div>
       </div>
 
-      <!-- ── Add / Edit tab ── -->
       <div id="tab-add" style="display:none">
         <div class="add-form">
           <h3 id="add-form-title">Add a New Entry</h3>
           <div class="form-row">
             <select id="win-category">
-              <option value="Work">Work</option>
-              <option value="Creativity">Creativity</option>
-              <option value="Family">Family</option>
-              <option value="Inspiration">Inspiration</option>
+              <option value="Work">💼 Work</option>
+              <option value="Creativity">🎨 Creativity</option>
+              <option value="Family">👨‍👩‍👧 Family</option>
+              <option value="Inspiration">✨ Inspiration</option>
             </select>
             <select id="win-type">
-              <option value="Feedback">Feedback</option>
-              <option value="Review">Performance Review</option>
-              <option value="Achievement">Achievement</option>
-              <option value="Quote">Quote</option>
-              <option value="Link">Link</option>
-              <option value="Note">Note</option>
-              <option value="Memory">Memory</option>
+              <option value="Feedback">💬 Feedback</option>
+              <option value="Review">⭐ Performance Review</option>
+              <option value="Achievement">🏅 Achievement</option>
+              <option value="Quote">💡 Quote</option>
+              <option value="Link">🔗 Link</option>
+              <option value="Note">📝 Note</option>
+              <option value="Memory">💛 Memory</option>
             </select>
           </div>
-          <input id="win-title" type="text" placeholder="Title — e.g. Q3 review from Sarah">
-          <textarea id="win-text" placeholder="Paste your content here — feedback, a quote, a URL, a memory, anything."></textarea>
+          <input id="win-title" type="text" placeholder="Title (e.g. 'Inspiring video' or 'Q3 review from Sarah')">
+          <textarea id="win-text" placeholder="Paste your content here — feedback, a quote, a URL, a memory, anything!"></textarea>
 
           <img id="image-preview" class="image-preview">
           <div class="file-upload-area" id="upload-area">
-            Click to attach a file — image, PDF, Word doc, audio, or video (optional)
+            📎 Click to attach a file — image, PDF, Word doc, audio, or video (optional)
           </div>
           <input type="file" id="file-input" accept="image/*,.pdf,.doc,.docx,.mp3,.wav,.m4a,.ogg,.mp4,.mov,.webm" style="display:none">
 
@@ -930,7 +829,7 @@
             </div>
           </div>
 
-          <button id="save-btn">Save to vault</button>
+          <button id="save-btn">Save to Minas Lórien ✨</button>
         </div>
       </div>
 
@@ -964,28 +863,6 @@
     var currentVaultFilter = 'all';
     var currentInspireFilter = 'all';
     var editingId = null;
-
-    // ── Chevron SVG helper ─────────────────────────────────
-    // Returns an inline SVG chevron in the given colour.
-    // Used in card meta lines and spotlight meta.
-    function chevronSVG(color) {
-      return '<svg width="9" height="12" viewBox="0 0 9 12" style="display:inline-block;vertical-align:middle;margin-right:7px;flex-shrink:0;">' +
-        '<polyline points="1,1 4.5,6 1,11" fill="none" stroke="' + color + '" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>' +
-        '<polyline points="4.5,1 8,6 4.5,11" fill="none" stroke="' + color + '" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>' +
-      '</svg>';
-    }
-
-    // Map category name → accent colour
-    var CAT_COLORS = {
-      'Work':        '#5a8aaa',
-      'Creativity':  '#8870aa',
-      'Family':      '#5a8a70',
-      'Inspiration': '#a58a5c'
-    };
-
-    function catColor(cat) {
-      return CAT_COLORS[cat] || '#a58a5c';
-    }
 
     // ── Login ──────────────────────────────────────────────
     async function checkPassword() {
@@ -1023,14 +900,13 @@
       if (e.key === 'Enter') checkPassword();
     });
 
-    // ── Status bar ─────────────────────────────────────────
+    // ── Helpers ────────────────────────────────────────────
     function setStatus(msg, type) {
       var bar = document.getElementById('status-bar');
       bar.textContent = msg;
       bar.className = 'status-bar ' + (type || '');
     }
 
-    // ── File type helpers ──────────────────────────────────
     function getFileIcon(mimeType, fileName) {
       if (!mimeType && !fileName) return '📎';
       var mt = (mimeType || '').toLowerCase();
@@ -1055,6 +931,9 @@
       return mt.startsWith('image/') || /\.(jpg|jpeg|png|gif|webp|svg)$/.test(fn);
     }
 
+    // ── NEW: video type detection ──────────────────────────
+    // Returns true for .mp4, .mov, .webm and any video/* mime type.
+    // This mirrors the pattern used by isAudio and isImage above.
     function isVideo(mimeType, fileName) {
       var mt = (mimeType || '').toLowerCase();
       var fn = (fileName || '').toLowerCase();
@@ -1133,6 +1012,7 @@
         };
         reader.readAsDataURL(file);
       } else {
+        // For video, audio, etc. — no preview in the form, just show the filename
         preview.style.display = 'none';
       }
 
@@ -1144,10 +1024,12 @@
     function renderFileAttachment(fileURL, fileName, fileType) {
       if (!fileURL) return '';
 
+      // Images: shown as a thumbnail beside the card text
       if (isImage(fileType, fileName)) {
-        return '<img src="' + fileURL + '" class="card-image" style="width:80px;height:80px;object-fit:cover;border-radius:3px;flex-shrink:0;">';
+        return '<img src="' + fileURL + '" class="card-image" style="width:80px;height:80px;object-fit:cover;border-radius:4px;flex-shrink:0;">';
       }
 
+      // Audio: inline HTML5 audio player
       if (isAudio(fileType, fileName)) {
         return '<div class="audio-player">' +
           '<div class="audio-label">' + getFileIcon(fileType, fileName) + ' ' + (fileName || 'Audio') + '</div>' +
@@ -1155,6 +1037,10 @@
         '</div>';
       }
 
+      // ── NEW: Video — inline HTML5 video player ──────────
+      // The `controls` attribute gives the user play/pause/scrub/fullscreen.
+      // `preload="metadata"` loads just enough to show a thumbnail frame
+      // without downloading the whole file up front (good for large TikToks).
       if (isVideo(fileType, fileName)) {
         return '<div class="video-player">' +
           '<div class="video-label">' + getFileIcon(fileType, fileName) + ' ' + (fileName || 'Video') + '</div>' +
@@ -1162,6 +1048,7 @@
         '</div>';
       }
 
+      // Everything else: a download link
       var icon = getFileIcon(fileType, fileName);
       var name = fileName || 'Download file';
       return '<a class="file-attachment" href="' + fileURL + '" target="_blank" rel="noopener">' +
@@ -1177,11 +1064,17 @@
       return m ? m[1] : null;
     }
 
+    function isYouTube(url) {
+      return !!(url && (url.includes('youtube.com') || url.includes('youtu.be')));
+    }
+
+    // Build a preview card element and inject thumbnail async
     function buildLinkPreview(url, containerEl) {
       var domain = getDomain(url);
       var icon = getLinkIcon(url);
       var ytId = getYouTubeID(url);
 
+      // Create the card skeleton
       var a = document.createElement('a');
       a.className = 'link-preview';
       a.href = url;
@@ -1202,20 +1095,26 @@
       a.appendChild(info);
       containerEl.appendChild(a);
 
+      // Fetch thumbnail
       if (ytId) {
+        // YouTube: direct thumbnail URL, no API needed
         var img = document.createElement('img');
         img.className = 'link-preview-thumb';
         img.src = 'https://img.youtube.com/vi/' + ytId + '/hqdefault.jpg';
         img.alt = '';
         img.onload = function() { a.replaceChild(img, thumbDiv); };
+        img.onerror = function() { /* keep placeholder */ };
       } else {
+        // Any other link: use microlink.io to fetch og:image + title
         fetch('https://api.microlink.io/?url=' + encodeURIComponent(url) + '&screenshot=false')
           .then(function(r) { return r.json(); })
           .then(function(data) {
             if (data && data.data) {
+              // Update title if available
               if (data.data.title) {
                 info.querySelector('.link-preview-title').textContent = data.data.title;
               }
+              // Update thumbnail if available
               var imgUrl = data.data.image && data.data.image.url;
               if (imgUrl) {
                 var img = document.createElement('img');
@@ -1223,10 +1122,11 @@
                 img.src = imgUrl;
                 img.alt = '';
                 img.onload = function() { a.replaceChild(img, thumbDiv); };
+                img.onerror = function() { /* keep placeholder */ };
               }
             }
           })
-          .catch(function() {});
+          .catch(function() { /* keep placeholder on error */ });
       }
     }
 
@@ -1234,6 +1134,7 @@
       var cleanText = text.trim();
 
       if (type === 'Link' && isURL(cleanText)) {
+        // Return placeholder div; thumbnail built async after render
         if (cardEl) {
           setTimeout(function() {
             var ph = cardEl.querySelector('.link-preview-placeholder');
@@ -1243,6 +1144,7 @@
         return '<div class="link-preview-placeholder" data-url="' + cleanText + '"></div>';
       }
 
+      // For non-Link types, auto-linkify any URLs in the text
       return text.replace(/(https?:\/\/[^\s]+)/g, function(url) {
         return '<a class="link-card" href="' + url + '" target="_blank" rel="noopener" style="display:inline-flex;margin-top:6px;">' +
           '<span class="link-icon">🔗</span>' +
@@ -1265,16 +1167,16 @@
     // ── Load wins ──────────────────────────────────────────
     async function loadWins() {
       try {
-        setStatus('Loading your vault...', 'syncing');
+        setStatus('⏳ Loading your vault...', 'syncing');
         var snapshot = await getDocs(winsCollection);
         wins = [];
         snapshot.forEach(function(docSnap) {
           wins.push(Object.assign({ firestoreId: docSnap.id }, docSnap.data()));
         });
-        setStatus('Vault synced · ' + wins.length + ' entries', 'synced');
+        setStatus('✅ Vault synced · ' + wins.length + ' entries', 'synced');
         renderVault();
       } catch(e) {
-        setStatus('Could not connect — check your internet', 'error');
+        setStatus('⚠️ Could not connect — check your internet', 'error');
         console.error('Firebase error:', e);
       }
     }
@@ -1293,8 +1195,9 @@
       var storagePath = null;
 
       try {
-        setStatus('Saving...', 'syncing');
+        setStatus('⏳ Saving...', 'syncing');
 
+        // Upload new file if one was selected
         if (currentFile) {
           var uploaded = await uploadFile(currentFile);
           fileURL = uploaded.url;
@@ -1322,12 +1225,12 @@
           await addDoc(winsCollection, entry);
         }
 
-        setStatus('Saved', 'synced');
+        setStatus('✅ Saved!', 'synced');
         resetForm();
         await loadWins();
         showTab('vault');
       } catch(e) {
-        setStatus('Could not save — ' + e.message, 'error');
+        setStatus('⚠️ Could not save — ' + e.message, 'error');
       }
     }
 
@@ -1335,11 +1238,11 @@
       document.getElementById('win-title').value = '';
       document.getElementById('win-text').value = '';
       document.getElementById('image-preview').style.display = 'none';
-      document.getElementById('upload-area').textContent = 'Click to attach a file — image, PDF, Word doc, audio, or video (optional)';
+      document.getElementById('upload-area').textContent = '📎 Click to attach a file — image, PDF, Word doc, audio, or video (optional)';
       document.getElementById('upload-area').classList.remove('has-file');
       document.getElementById('file-input').value = '';
       document.getElementById('add-form-title').textContent = 'Add a New Entry';
-      document.getElementById('save-btn').textContent = 'Save to vault';
+      document.getElementById('save-btn').textContent = 'Save to Minas Lórien ✨';
       currentFile = null;
       currentFileURL = null;
       currentFileName = null;
@@ -1350,15 +1253,16 @@
     async function deleteWin(firestoreId) {
       var win = wins.find(function(w) { return w.firestoreId === firestoreId; });
       try {
-        setStatus('Deleting...', 'syncing');
+        setStatus('⏳ Deleting...', 'syncing');
+        // Delete file from Storage if it exists
         if (win && win.storagePath) {
-          try { await deleteObject(ref(storage, win.storagePath)); } catch(e) {}
+          try { await deleteObject(ref(storage, win.storagePath)); } catch(e) { /* ignore if already gone */ }
         }
         await deleteDoc(doc(db, 'wins', firestoreId));
         await loadWins();
-        setStatus('Deleted', 'synced');
+        setStatus('✅ Deleted', 'synced');
       } catch(e) {
-        setStatus('Could not delete', 'error');
+        setStatus('⚠️ Could not delete', 'error');
       }
     }
 
@@ -1388,6 +1292,7 @@
         area.textContent = icon + ' ' + (win.fileName || 'File attached') + ' — click to change';
         area.classList.add('has-file');
       } else {
+        // Legacy: handle old base64 image entries
         if (win.image) {
           preview.src = win.image;
           preview.style.display = 'block';
@@ -1395,7 +1300,7 @@
           area.classList.add('has-file');
         } else {
           preview.style.display = 'none';
-          area.textContent = 'Click to attach a file — image, PDF, Word doc, audio, or video (optional)';
+          area.textContent = '📎 Click to attach a file — image, PDF, Word doc, audio, or video (optional)';
           area.classList.remove('has-file');
         }
         currentFileURL = null;
@@ -1406,12 +1311,13 @@
       currentFile = null;
       editingId = firestoreId;
       document.getElementById('add-form-title').textContent = 'Edit Entry';
-      document.getElementById('save-btn').textContent = 'Update entry';
+      document.getElementById('save-btn').textContent = 'Update Entry ✨';
       showTab('add');
     }
 
     // ── Render vault ───────────────────────────────────────
     function getCatClass(cat) { return 'cat-' + cat.toLowerCase(); }
+    function getBadgeClass(cat) { return 'badge-' + cat.toLowerCase(); }
 
     function renderVault() {
       var list = document.getElementById('vault-list');
@@ -1424,33 +1330,30 @@
       document.getElementById('count-inspiration').textContent = wins.filter(function(w){ return w.category === 'Inspiration'; }).length;
 
       if (filtered.length === 0) {
-        list.innerHTML = '<div class="empty">Nothing here yet — go add some.</div>';
+        list.innerHTML = '<div class="empty">Nothing here yet — go add some! 💪</div>';
         return;
       }
 
       list.innerHTML = filtered.map(function(w) {
         var cat = w.category || 'Work';
-        var color = catColor(cat);
         var fileHTML = '';
         if (w.fileURL) {
           fileHTML = renderFileAttachment(w.fileURL, w.fileName, w.fileType);
         } else if (w.image) {
-          fileHTML = '<img src="' + w.image + '" class="card-image" style="width:80px;height:80px;object-fit:cover;border-radius:3px;flex-shrink:0;">';
+          fileHTML = '<img src="' + w.image + '" class="card-image" style="width:80px;height:80px;object-fit:cover;border-radius:4px;flex-shrink:0;">';
         }
+        // Images sit beside the card text; everything else goes below it
         var isImg = w.fileURL ? isImage(w.fileType, w.fileName) : !!w.image;
-
         return '<div class="win-card ' + getCatClass(cat) + '" data-id="' + w.firestoreId + '">' +
           '<div class="win-card-text">' +
-            '<div class="card-meta">' +
-              chevronSVG(color) +
-              cat + (w.type ? ' · ' + w.type : '') + (w.title ? ' · ' + w.title : '') +
-            '</div>' +
+            '<span class="category-badge ' + getBadgeClass(cat) + '">' + cat + '</span>' +
+            '<div class="tag">' + w.type + (w.title ? ' · ' + w.title : '') + '</div>' +
             '<div class="text">' + renderText(w.text, w.type) + '</div>' +
             (!isImg ? fileHTML : '') +
           '</div>' +
           (isImg ? fileHTML : '') +
           '<button class="delete" data-id="' + w.firestoreId + '">✕</button>' +
-          '<button class="edit" data-id="' + w.firestoreId + '">Edit</button>' +
+          '<button class="edit" data-id="' + w.firestoreId + '">✏️</button>' +
         '</div>';
       }).join('');
 
@@ -1474,23 +1377,27 @@
       var spotlight = document.getElementById('spotlight');
       var pool = currentInspireFilter === 'all' ? wins : wins.filter(function(w) { return w.category === currentInspireFilter; });
       if (pool.length === 0) {
-        spotlight.innerHTML = '<div class="empty">Nothing here yet — go add some.</div>';
+        spotlight.innerHTML = '<div class="empty">Nothing here yet — go add some! 💪</div>';
         return;
       }
       var win = pool[Math.floor(Math.random() * pool.length)];
       var cat = win.category || 'Work';
-      var color = catColor(cat);
 
+      // Build file attachment HTML for all types
       var attachHTML = '';
       if (win.fileURL) {
         if (isImage(win.fileType, win.fileName)) {
-          attachHTML = '<img src="' + win.fileURL + '" style="width:100%;max-width:200px;height:200px;object-fit:cover;border-radius:3px;flex-shrink:0;align-self:center;">';
+          // Images go beside the text in a 200×200 thumbnail
+          attachHTML = '<img src="' + win.fileURL + '" style="width:100%;max-width:200px;height:200px;object-fit:cover;border-radius:6px;flex-shrink:0;align-self:center;">';
         } else if (isAudio(win.fileType, win.fileName)) {
           attachHTML = '<div class="audio-player" style="width:100%;">' +
             '<div class="audio-label">' + getFileIcon(win.fileType, win.fileName) + ' ' + (win.fileName || 'Audio') + '</div>' +
             '<audio controls src="' + win.fileURL + '"></audio>' +
           '</div>';
         } else if (isVideo(win.fileType, win.fileName)) {
+          // ── NEW: video in the spotlight ─────────────────
+          // Full-width player so it's nice and big in the Inspire tab.
+          // preload="metadata" avoids auto-downloading the whole file.
           attachHTML = '<div class="video-player" style="width:100%;">' +
             '<div class="video-label">' + getFileIcon(win.fileType, win.fileName) + ' ' + (win.fileName || 'Video') + '</div>' +
             '<video controls preload="metadata" src="' + win.fileURL + '"></video>' +
@@ -1503,25 +1410,25 @@
           '</a>';
         }
       } else if (win.image) {
-        attachHTML = '<img src="' + win.image + '" style="width:100%;max-width:200px;height:200px;object-fit:cover;border-radius:3px;flex-shrink:0;align-self:center;">';
+        attachHTML = '<img src="' + win.image + '" style="width:100%;max-width:200px;height:200px;object-fit:cover;border-radius:6px;flex-shrink:0;align-self:center;">';
       }
 
+      // For images, attach goes outside spotlight-text (beside it on desktop).
+      // For everything else (audio, video, link), it goes inside the text column.
       var isImg = win.fileURL ? isImage(win.fileType, win.fileName) : !!win.image;
 
       spotlight.innerHTML =
         '<div class="spotlight ' + getCatClass(cat) + '">' +
           '<div class="spotlight-text">' +
-            '<div class="card-meta">' +
-              chevronSVG(color) +
-              cat + (win.type ? ' · ' + win.type : '') + (win.title ? ' · ' + win.title : '') +
-            '</div>' +
+            '<span class="category-badge ' + getBadgeClass(cat) + '">' + cat + '</span>' +
+            '<div class="tag">' + win.type + (win.title ? ' · ' + win.title : '') + '</div>' +
             '<div class="text">' + renderText(win.text, win.type) + '</div>' +
-            '<div class="spotlight-rule"><span class="spotlight-rule-mark">· · ·</span></div>' +
             (!isImg ? attachHTML : '') +
           '</div>' +
           (isImg ? attachHTML : '') +
         '</div>';
 
+      // Wire up async link previews in spotlight
       spotlight.querySelectorAll('.link-preview-placeholder').forEach(function(ph) {
         var url = ph.getAttribute('data-url');
         if (url) buildLinkPreview(url, ph.parentNode);
