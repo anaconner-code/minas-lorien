@@ -1,1 +1,5 @@
 node_modules/
+sk-ant-*
+Vercel Recovery Codes*
+*.key
+*.secret
