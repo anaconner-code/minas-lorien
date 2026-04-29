@@ -1,0 +1,301 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Minas Lórien — Web App UI Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&family=Newsreader:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Newsreader', Georgia, serif;
+    background:#1a1a18;
+    color:#d8d2c4;
+    min-height:100vh;
+    display:flex; flex-direction:column;
+  }
+  #app { display:flex; flex-direction:column; min-height:100vh; }
+
+  /* Header */
+  .ml-header {
+    background:#141412; padding:16px 28px;
+    border-bottom:1px solid #2a2a26;
+    display:flex; align-items:center; gap:14px;
+    position:relative;
+  }
+  .ml-header::after {
+    content:''; position:absolute; bottom:-4px; left:28px; right:28px; height:1px;
+    background:linear-gradient(to right,transparent,#a58a5c44,#a58a5c66,#a58a5c44,transparent);
+  }
+  .ml-h1 {
+    font-family:'Raleway',sans-serif; font-weight:300; font-size:1.3em;
+    letter-spacing:0.2em; text-transform:uppercase; color:#c8c0b0;
+  }
+  .ml-h1 .ml-accent { color:#a58a5c; }
+
+  /* Tabs */
+  .ml-tabs { display:flex; background:#141412; padding:0 20px; border-bottom:1px solid #2a2a26; margin-top:4px; }
+  .ml-tab {
+    padding:11px 18px; cursor:pointer; border-bottom:1px solid transparent;
+    color:#6a6a62; font-family:'Raleway',sans-serif; font-size:0.72em;
+    letter-spacing:0.14em; text-transform:uppercase; transition:all .2s;
+  }
+  .ml-tab--active { border-bottom-color:#a58a5c; color:#c8c0b0; }
+  .ml-tab:hover:not(.ml-tab--active){ color:#a8a098; }
+
+  /* Status */
+  .ml-status {
+    text-align:center; font-family:'Raleway',sans-serif; font-size:0.65em;
+    letter-spacing:0.1em; padding:6px; background:#141412; color:#3a3a32;
+    border-bottom:1px solid #2a2a26; text-transform:uppercase;
+  }
+  .ml-status--ok{color:#5a8a70;}
+  .ml-status--syncing{color:#a58a5c;}
+  .ml-status--error{color:#aa5a5a;}
+
+  .ml-content { flex:1; padding:28px 24px; overflow-y:auto; max-width:760px; width:100%; margin:0 auto; }
+
+  /* Filters */
+  .ml-filters { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:24px; }
+  .ml-filters--inspire { justify-content:center; margin-bottom:28px; }
+  .ml-chip {
+    padding:4px 14px; border-radius:2px; border:1px solid #2e2e28;
+    background:transparent; color:#6a6a62; cursor:pointer;
+    font-family:'Raleway',sans-serif; font-size:0.7em;
+    letter-spacing:0.1em; text-transform:uppercase; transition:all .2s;
+  }
+  .ml-chip:hover:not(.ml-chip--active){ border-color:#4a4a42; color:#a8a098; }
+  .ml-chip--active { border-color:#a58a5c; color:#a58a5c; background:rgba(165,138,92,0.08); }
+  .ml-chip-badge {
+    background:#141412; color:#3a3a32; font-size:0.85em;
+    padding:1px 6px; border-radius:2px; margin-left:4px;
+  }
+  .ml-chip--active .ml-chip-badge{ color:#a58a5c; }
+
+  /* Surprise btn */
+  .ml-surprise {
+    display:block; margin:0 auto 32px; padding:11px 0;
+    background:transparent; color:#6a6a62; border:1px solid #2e2e28; border-radius:2px;
+    font-family:'Raleway',sans-serif; font-size:0.72em;
+    letter-spacing:0.18em; text-transform:uppercase; cursor:pointer;
+    width:100%; max-width:380px; transition:all .2s;
+  }
+  .ml-surprise:hover { border-color:#a58a5c; color:#a58a5c; }
+
+  /* Spotlight */
+  .ml-spotlight {
+    background:#1f1f1c; border-radius:3px; padding:36px 32px;
+    max-width:700px; margin:0 auto; position:relative;
+    display:flex; flex-direction:column; gap:20px;
+  }
+  .ml-spotlight::before { content:''; position:absolute; top:12px; left:12px; width:20px; height:20px; border-top:1px solid #a58a5c44; border-left:1px solid #a58a5c44; }
+  .ml-spotlight::after { content:''; position:absolute; bottom:12px; right:12px; width:20px; height:20px; border-bottom:1px solid #a58a5c44; border-right:1px solid #a58a5c44; }
+  .ml-spotlight--work        { border-top:2px solid #5a8aaa; }
+  .ml-spotlight--creativity  { border-top:2px solid #8870aa; }
+  .ml-spotlight--family      { border-top:2px solid #5a8a70; }
+  .ml-spotlight--inspiration { border-top:2px solid #a58a5c; }
+  .ml-spotlight-body { flex:1; }
+  .ml-spotlight-text {
+    font-family:'Newsreader',serif; font-size:1.2em; line-height:1.9;
+    color:#d8d2c4; font-style:italic;
+  }
+  .ml-spotlight-rule { margin-top:20px; display:flex; align-items:center; gap:10px; }
+  .ml-spotlight-rule::before, .ml-spotlight-rule::after { content:''; flex:1; height:1px; background:#2a2a26; }
+  .ml-rule-mark { color:#3a3a32; font-size:0.7em; letter-spacing:0.1em; }
+
+  /* Meta */
+  .ml-meta {
+    font-family:'Raleway',sans-serif; font-size:0.68em;
+    letter-spacing:0.12em; text-transform:uppercase;
+    color:#5a5a52; margin-bottom:8px; display:flex; align-items:center;
+  }
+  .ml-spotlight .ml-meta { font-size:0.68em; letter-spacing:0.14em; margin-bottom:16px; }
+
+  /* Cards */
+  .ml-card {
+    background:#1f1f1c; border-radius:3px; padding:16px 18px;
+    margin-bottom:10px; position:relative;
+    display:flex; gap:15px; align-items:flex-start;
+  }
+  .ml-card--work        { border-left:2px solid #5a8aaa; }
+  .ml-card--creativity  { border-left:2px solid #8870aa; }
+  .ml-card--family      { border-left:2px solid #5a8a70; }
+  .ml-card--inspiration { border-left:2px solid #a58a5c; }
+  .ml-card-body { flex:1; min-width:0; }
+  .ml-card-text { font-family:'Newsreader',serif; font-size:1em; line-height:1.75; color:#c8c0b0; }
+  .ml-card-edit, .ml-card-delete {
+    position:absolute; top:8px; background:none; border:none;
+    color:#3a3a32; cursor:pointer; font-family:'Raleway',sans-serif;
+    padding:4px 6px; transition:color .2s; opacity:0;
+  }
+  .ml-card-edit { right:42px; font-size:0.75em; letter-spacing:0.06em; }
+  .ml-card-delete { right:8px; font-size:0.85em; }
+  .ml-card:hover .ml-card-edit, .ml-card:hover .ml-card-delete { opacity:1; }
+  .ml-card-edit:hover { color:#a58a5c; }
+  .ml-card-delete:hover { color:#aa5a5a; }
+
+  /* Empty */
+  .ml-empty {
+    text-align:center; color:#3a3a32; padding:40px;
+    font-family:'Newsreader',serif; font-style:italic; font-size:1.1em;
+  }
+
+  /* Form */
+  .ml-form {
+    background:#1f1f1c; border-radius:3px; padding:24px;
+    max-width:600px; margin:0 auto;
+  }
+  .ml-h3 {
+    font-family:'Raleway',sans-serif; font-weight:500; font-size:0.75em;
+    letter-spacing:0.16em; text-transform:uppercase; color:#c8c0b0; margin-bottom:20px;
+  }
+  .ml-form-row { display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
+  .ml-form-row > * { flex:1; min-width:120px; }
+  .ml-input {
+    width:100%; padding:11px 14px; background:#141412;
+    border:1px solid #2a2a26; border-radius:2px; color:#d8d2c4;
+    font-family:'Newsreader',serif; font-size:1em;
+    transition:border-color .2s; margin-bottom:12px;
+  }
+  .ml-input:focus { outline:none; border-color:#a58a5c; }
+  .ml-textarea { height:120px; resize:vertical; }
+  .ml-upload {
+    border:1px dashed #2a2a26; border-radius:2px; padding:18px;
+    text-align:center; margin-bottom:12px; cursor:pointer;
+    color:#4a4a42; font-family:'Raleway',sans-serif; font-size:0.72em;
+    letter-spacing:0.08em; transition:all .2s;
+  }
+  .ml-upload:hover { border-color:#a58a5c; color:#c8c0b0; }
+  .ml-upload--has { border-color:#5a8a70; color:#5a8a70; border-style:solid; }
+  .ml-btn {
+    width:100%; padding:13px 25px; background:transparent;
+    color:#a58a5c; border:1px solid #a58a5c; border-radius:2px;
+    cursor:pointer; font-family:'Raleway',sans-serif; font-size:0.75em;
+    letter-spacing:0.2em; text-transform:uppercase; font-weight:500;
+    transition:all .2s;
+  }
+  .ml-btn:hover { background:#a58a5c; color:#141412; }
+
+  /* Login overlay */
+  .ml-login-overlay {
+    position:fixed; inset:0; background:#141412;
+    display:flex; align-items:center; justify-content:center; z-index:999;
+  }
+  .ml-login-box {
+    background:#1f1f1c; border-radius:4px; padding:40px 32px;
+    width:100%; max-width:360px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.5);
+    text-align:center; position:relative;
+  }
+  .ml-login-box::before { content:''; position:absolute; top:12px; left:12px; width:20px; height:20px; border-top:1px solid #a58a5c55; border-left:1px solid #a58a5c55; }
+  .ml-login-box::after  { content:''; position:absolute; bottom:12px; right:12px; width:20px; height:20px; border-bottom:1px solid #a58a5c55; border-right:1px solid #a58a5c55; }
+  .ml-login-mark { display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:8px; }
+  .ml-login-tag {
+    font-family:'Newsreader',serif; font-style:italic;
+    color:#5a5a52; font-size:0.95em; margin-bottom:32px;
+  }
+  .ml-login-input {
+    width:100%; padding:12px 16px; background:#141412;
+    border:1px solid #2a2a26; border-radius:2px; color:#d8d2c4;
+    font-family:'Newsreader',serif; font-size:1.1em;
+    text-align:center; letter-spacing:0.1em; margin-bottom:12px;
+  }
+  .ml-login-input:focus { outline:none; border-color:#a58a5c; }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script src="data.js"></script>
+<script type="text/babel" src="TowerMark.jsx"></script>
+<script type="text/babel" src="Header.jsx"></script>
+<script type="text/babel" src="Tabs.jsx"></script>
+<script type="text/babel" src="StatusBar.jsx"></script>
+<script type="text/babel" src="FilterChips.jsx"></script>
+<script type="text/babel" src="WinCard.jsx"></script>
+<script type="text/babel" src="Spotlight.jsx"></script>
+<script type="text/babel" src="AddForm.jsx"></script>
+
+<script type="text/babel">
+const App = () => {
+  const [authed, setAuthed] = React.useState(true); // skip login for kit; toggle below
+  const [showLogin, setShowLogin] = React.useState(false);
+  const [tab, setTab] = React.useState('inspire');
+  const [wins, setWins] = React.useState(window.SAMPLE_WINS);
+  const [vaultFilter, setVaultFilter] = React.useState('all');
+  const [inspireFilter, setInspireFilter] = React.useState('all');
+  const [spotIdx, setSpotIdx] = React.useState(1); // index 1 = inspiration quote
+  const [status] = React.useState('synced');
+
+  const counts = React.useMemo(() => {
+    const c = { all: wins.length, Work:0, Creativity:0, Family:0, Inspiration:0 };
+    wins.forEach(w => { c[w.category] = (c[w.category]||0) + 1; });
+    return c;
+  }, [wins]);
+
+  const filteredVault = vaultFilter === 'all' ? wins : wins.filter(w => w.category === vaultFilter);
+  const inspirePool = inspireFilter === 'all' ? wins : wins.filter(w => w.category === inspireFilter);
+  const spotlight = inspirePool[spotIdx % (inspirePool.length || 1)] || null;
+
+  const surprise = () => setSpotIdx(i => (i + 1));
+
+  const handleSave = (win) => {
+    setWins(ws => [win, ...ws]);
+    setTab('vault');
+  };
+  const handleDelete = (win) => setWins(ws => ws.filter(w => w.id !== win.id));
+
+  return (
+    <React.Fragment>
+      {showLogin && (
+        <div className="ml-login-overlay" onClick={() => setShowLogin(false)}>
+          <div className="ml-login-box" onClick={e => e.stopPropagation()}>
+            <div className="ml-login-mark">
+              <TowerMark size={32}/>
+              <h2 className="ml-h1" style={{fontSize:'1.4em'}}>Minas <span className="ml-accent">Lórien</span></h2>
+            </div>
+            <p className="ml-login-tag">Your tower of light and memory</p>
+            <input className="ml-login-input" type="password" placeholder="Enter password"/>
+            <button className="ml-btn" onClick={() => setShowLogin(false)}>Enter the Tower</button>
+          </div>
+        </div>
+      )}
+      <Header/>
+      <Tabs active={tab} onChange={setTab}/>
+      <StatusBar state={status} count={wins.length}/>
+      <div className="ml-content">
+        {tab === 'inspire' && (
+          <React.Fragment>
+            <FilterChips value={inspireFilter} onChange={(v) => { setInspireFilter(v); setSpotIdx(0); }}/>
+            <button className="ml-surprise" onClick={surprise}>Show me something</button>
+            <Spotlight win={spotlight}/>
+          </React.Fragment>
+        )}
+        {tab === 'vault' && (
+          <React.Fragment>
+            <FilterChips value={vaultFilter} onChange={setVaultFilter} counts={counts} withCounts/>
+            <div>
+              {filteredVault.length === 0
+                ? <div className="ml-empty">Nothing here yet — go add some.</div>
+                : filteredVault.map(w => <WinCard key={w.id} win={w} onDelete={handleDelete}/>)}
+            </div>
+          </React.Fragment>
+        )}
+        {tab === 'add' && <AddForm onSave={handleSave}/>}
+      </div>
+      <div style={{textAlign:'center',padding:'12px',fontFamily:'Newsreader,serif',fontStyle:'italic',fontSize:'0.78em',color:'#3a3a32',borderTop:'1px solid #2a2a26'}}>
+        <a onClick={() => setShowLogin(true)} style={{color:'#5a5a52',cursor:'pointer'}}>Preview the threshold →</a>
+      </div>
+    </React.Fragment>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('app')).render(<App/>);
+</script>
+
+</body>
+</html>

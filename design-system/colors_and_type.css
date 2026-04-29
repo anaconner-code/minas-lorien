@@ -1,0 +1,230 @@
+/* ─────────────────────────────────────────────────────────────
+   Minas Lórien — Colors & Type
+   "Your tower of light and memory"
+   A quiet, candle-lit elven study. Dark warm parchment,
+   brass-gold accents, serif body, sparse uppercase chrome.
+   ───────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600&family=Newsreader:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
+
+:root {
+  /* ─── Surface (deepest → lightest) ─── */
+  --ml-surface-deepest:  #141412;  /* page / login background, status bar, inputs */
+  --ml-surface-base:     #1a1a18;  /* body background */
+  --ml-surface-raised:   #1f1f1c;  /* cards, spotlight, forms */
+  --ml-surface-line:     #2a2a26;  /* hairline borders, dividers */
+  --ml-surface-line-2:   #2e2e28;  /* slightly stronger borders (filter chips) */
+
+  /* ─── Foreground (parchment scale) ─── */
+  --ml-fg-1:    #d8d2c4;  /* primary body text on dark — warm parchment */
+  --ml-fg-2:    #c8c0b0;  /* secondary text, headings, card body */
+  --ml-fg-3:    #a8a098;  /* tab hover */
+  --ml-fg-4:    #6a6a62;  /* muted, inactive tab, button label */
+  --ml-fg-5:    #5a5a52;  /* meta text, count badge */
+  --ml-fg-6:    #4a4a42;  /* placeholder, dashed border hint */
+  --ml-fg-7:    #3a3a32;  /* deepest mute — empty state, count text, delete idle */
+
+  /* ─── Brass accent (the candlelight) ─── */
+  --ml-brass:        #a58a5c;  /* primary accent — borders, buttons, brand mark */
+  --ml-brass-soft:   #a58a5c66;
+  --ml-brass-faint:  #a58a5c44;
+  --ml-brass-glow:   rgba(165,138,92,0.08); /* active filter background */
+
+  /* ─── Category accents ─── */
+  --ml-cat-work:        #5a8aaa;  /* slate-blue */
+  --ml-cat-creativity:  #8870aa;  /* dusk-violet */
+  --ml-cat-family:      #5a8a70;  /* moss-green */
+  --ml-cat-inspiration: #a58a5c;  /* brass (same as primary) */
+
+  /* ─── Semantic / status ─── */
+  --ml-status-ok:    #5a8a70;  /* synced */
+  --ml-status-warn:  #a58a5c;  /* syncing — same as brass */
+  --ml-status-error: #aa5a5a;  /* error / login error */
+  --ml-link:         #5a8aaa;  /* link colour, link card url */
+
+  /* ─── Botanical / SVG-only (used in tower mark) ─── */
+  --ml-botanical-stem: #4a6a58;   /* vine strokes */
+  --ml-botanical-leaf: #5a7a70;
+  --ml-stone:          #5a6a62;   /* tower stonework */
+  --ml-window-rim:     #8a9f98;   /* window framing */
+
+  /* ─── Type families ─── */
+  --ml-font-serif:  'Newsreader', Georgia, 'Times New Roman', serif;  /* body, quotes, content */
+  --ml-font-sans:   'Raleway', system-ui, -apple-system, sans-serif;   /* UI chrome, labels, buttons, tabs */
+  --ml-font-mono:   ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* ─── Type weights ─── */
+  --ml-w-light:    300;  /* H1, H2, page-level headings */
+  --ml-w-regular:  400;  /* default body & most UI */
+  --ml-w-medium:   500;  /* form headings, buttons, link-preview titles */
+
+  /* ─── Letter-spacing scale (the brand's unmistakable signature) ─── */
+  --ml-track-tight:   0.06em;  /* edit button label */
+  --ml-track-medium:  0.08em;  /* audio label, file-attachment */
+  --ml-track-wide:    0.10em;  /* count badge, filter-btn, surprise-btn */
+  --ml-track-wider:   0.12em;  /* form labels, card-meta */
+  --ml-track-widest:  0.14em;  /* tabs, spotlight meta */
+  --ml-track-display: 0.16em;  /* form section heading */
+  --ml-track-brand:   0.18em;  /* surprise-btn, save button */
+  --ml-track-mark:    0.20em;  /* H1, primary CTA — the wordmark */
+
+  /* ─── Type size scale ─── */
+  --ml-fs-overline:  0.65em;   /* status-bar */
+  --ml-fs-meta:      0.68em;   /* card-meta, form-label */
+  --ml-fs-chip:      0.70em;   /* filter-btn, spotlight-rule-mark */
+  --ml-fs-label:     0.72em;   /* tab, surprise-btn, audio-label */
+  --ml-fs-form-h:    0.75em;   /* form section heading, save button */
+  --ml-fs-link:      0.78em;   /* file-name */
+  --ml-fs-body-sm:   0.85em;   /* small body, login error */
+  --ml-fs-body:      1.00em;   /* primary body — Newsreader 16px */
+  --ml-fs-headline:  1.20em;   /* spotlight body text — italic serif */
+  --ml-fs-h2:        1.30em;   /* header H1 */
+  --ml-fs-h1:        1.40em;   /* login H2 wordmark */
+
+  /* ─── Spacing (loose, generous, monastic) ─── */
+  --ml-space-1:   4px;
+  --ml-space-2:   6px;
+  --ml-space-3:   8px;
+  --ml-space-4:   10px;
+  --ml-space-5:   12px;
+  --ml-space-6:   16px;
+  --ml-space-7:   20px;
+  --ml-space-8:   24px;
+  --ml-space-9:   28px;
+  --ml-space-10:  32px;
+  --ml-space-12:  40px;
+
+  /* ─── Radius — almost-square; never bubbly ─── */
+  --ml-radius-sm:   2px;   /* inputs, buttons, filter chips */
+  --ml-radius-md:   3px;   /* cards, spotlight, image thumbs */
+  --ml-radius-lg:   4px;   /* login box */
+
+  /* ─── Borders ─── */
+  --ml-border-hairline: 1px solid var(--ml-surface-line);
+  --ml-border-chip:     1px solid var(--ml-surface-line-2);
+  --ml-border-accent:   1px solid var(--ml-brass);
+  --ml-border-faint:    1px solid var(--ml-brass-faint);
+
+  /* ─── Shadows — used sparingly; only the login box gets a real one ─── */
+  --ml-shadow-altar: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+  /* ─── Motion ─── */
+  --ml-ease:        cubic-bezier(.4, 0, .2, 1);
+  --ml-dur-quick:   0.2s;     /* default — colour, border swaps */
+  --ml-dur-shake:   0.4s;     /* error feedback */
+
+  /* ─── Decorative gradient — the brass hairline below header ─── */
+  --ml-brass-rule:
+    linear-gradient(to right,
+      transparent,
+      var(--ml-brass-faint),
+      var(--ml-brass-soft),
+      var(--ml-brass-faint),
+      transparent);
+}
+
+/* ──────────────────────────────────────────────
+   Semantic element styles — apply by tag where
+   it makes sense. Override per component.
+   ────────────────────────────────────────────── */
+
+html, body {
+  background: var(--ml-surface-base);
+  color: var(--ml-fg-1);
+  font-family: var(--ml-font-serif);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Headings — Raleway 300, generously tracked, UPPERCASE.
+   This is the brand's voice. */
+.ml-h1, .ml-wordmark {
+  font-family: var(--ml-font-sans);
+  font-weight: var(--ml-w-light);
+  font-size: var(--ml-fs-h1);
+  letter-spacing: var(--ml-track-mark);
+  text-transform: uppercase;
+  color: var(--ml-fg-2);
+  margin: 0;
+}
+.ml-h1 .ml-accent, .ml-wordmark .ml-accent { color: var(--ml-brass); }
+
+.ml-h2 {
+  font-family: var(--ml-font-sans);
+  font-weight: var(--ml-w-light);
+  font-size: var(--ml-fs-h2);
+  letter-spacing: var(--ml-track-mark);
+  text-transform: uppercase;
+  color: var(--ml-fg-2);
+  margin: 0;
+}
+
+.ml-h3 {
+  font-family: var(--ml-font-sans);
+  font-weight: var(--ml-w-medium);
+  font-size: var(--ml-fs-form-h);
+  letter-spacing: var(--ml-track-display);
+  text-transform: uppercase;
+  color: var(--ml-fg-2);
+  margin: 0;
+}
+
+/* Overline / meta / form-label — small uppercase chrome */
+.ml-overline,
+.ml-meta {
+  font-family: var(--ml-font-sans);
+  font-size: var(--ml-fs-meta);
+  font-weight: var(--ml-w-regular);
+  letter-spacing: var(--ml-track-wider);
+  text-transform: uppercase;
+  color: var(--ml-fg-5);
+}
+
+/* Body — Newsreader serif, the warm parchment of the tower */
+.ml-body {
+  font-family: var(--ml-font-serif);
+  font-size: var(--ml-fs-body);
+  line-height: 1.75;
+  color: var(--ml-fg-2);
+}
+
+/* Quote / spotlight — italic, looser line-height */
+.ml-quote {
+  font-family: var(--ml-font-serif);
+  font-style: italic;
+  font-size: var(--ml-fs-headline);
+  line-height: 1.9;
+  color: var(--ml-fg-1);
+}
+
+/* Tagline — italic muted serif (login screen flavor) */
+.ml-tagline {
+  font-family: var(--ml-font-serif);
+  font-style: italic;
+  font-size: var(--ml-fs-body-sm);
+  color: var(--ml-fg-5);
+}
+
+/* Empty state — italic muted */
+.ml-empty {
+  font-family: var(--ml-font-serif);
+  font-style: italic;
+  color: var(--ml-fg-7);
+}
+
+/* Code (rare in this product, but included for completeness) */
+code, .ml-code {
+  font-family: var(--ml-font-mono);
+  font-size: 0.9em;
+  background: var(--ml-surface-deepest);
+  padding: 2px 6px;
+  border-radius: var(--ml-radius-sm);
+  color: var(--ml-fg-2);
+}
+
+/* Links — the slate-blue accent */
+a, .ml-link {
+  color: var(--ml-link);
+  text-decoration: none;
+}
+a:hover, .ml-link:hover { color: var(--ml-brass); }

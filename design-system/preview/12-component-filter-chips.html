@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:24px;background:var(--ml-surface-base);font-family:'Raleway',sans-serif;}
+  .row{display:flex;gap:6px;flex-wrap:wrap;}
+  .chip{padding:4px 14px;border-radius:2px;border:1px solid #2e2e28;background:transparent;color:#6a6a62;font-size:0.7em;letter-spacing:0.10em;text-transform:uppercase;}
+  .chip.active{border-color:#a58a5c;color:#a58a5c;background:rgba(165,138,92,0.08);}
+  .chip .badge{background:#141412;color:#3a3a32;font-size:0.85em;padding:1px 6px;border-radius:2px;margin-left:4px;}
+  .chip.active .badge{color:#a58a5c;}
+  .lbl{font-family:'Newsreader',serif;font-style:italic;font-size:0.75em;color:#5a5a52;margin-top:14px;}
+</style></head><body>
+<div class="row">
+  <button class="chip active">All <span class="badge">12</span></button>
+  <button class="chip">Work <span class="badge">3</span></button>
+  <button class="chip">Creativity <span class="badge">2</span></button>
+  <button class="chip">Family <span class="badge">4</span></button>
+  <button class="chip">Inspiration <span class="badge">3</span></button>
+</div>
+<div class="lbl">filter chips with count badges — vault tab</div>
+</body></html>
