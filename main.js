@@ -5,8 +5,12 @@ function createWindow() {
     width: 1000,
     height: 700,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
+      // Hardened: the page uses no Node APIs (everything runs over HTTPS via
+      // the Firebase web SDK), so Node access in the renderer stays off. This
+      // means an attacker who slipped HTML into an entry can't run code on
+      // your machine.
+      nodeIntegration: false,
+      contextIsolation: true
     }
   })
 

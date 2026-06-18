@@ -941,6 +941,7 @@
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
     import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
     import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js';
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyDi-jwSpGo0OWt5wcRp6wGSfYX0qAveO3k",
@@ -954,6 +955,11 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const storage = getStorage(app);
+    const auth = getAuth(app);
+    // The single password you type is the password for ONE fixed account.
+    // Firebase verifies it on Google's servers — it is never stored in your
+    // database, and only this signed-in account can read or write your vault.
+    const LOGIN_EMAIL = "ana.coreas@gmail.com";
     const winsCollection = collection(db, 'wins');
 
     var wins = [];
@@ -975,6 +981,19 @@
       '</svg>';
     }
 
+    // ── Escape user text before inserting as HTML ─────────
+    // Stored content (notes, titles, filenames) must never be treated as
+    // live HTML/script when rendered into cards. Always wrap such values
+    // in esc() inside innerHTML strings.
+    function esc(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     // Map category name → accent colour
     var CAT_COLORS = {
       'Work':        '#5a8aaa',
@@ -991,32 +1010,51 @@
     async function checkPassword() {
       var entered = document.getElementById('login-password').value.trim();
       if (!entered) return;
+      var errEl = document.getElementById('login-error');
+      var btn = document.getElementById('login-btn');
+      errEl.textContent = '';
+      btn.disabled = true;
       try {
-        var authDoc = await getDoc(doc(db, 'config', 'auth'));
-        if (authDoc.exists() && authDoc.data().password === entered) {
-          sessionStorage.setItem('ml-auth', 'true');
-          document.getElementById('login-overlay').style.display = 'none';
-          document.getElementById('app').style.display = 'flex';
-          loadWins();
-        } else {
-          var box = document.getElementById('login-box');
-          box.classList.remove('shake');
-          void box.offsetWidth;
-          box.classList.add('shake');
-          document.getElementById('login-error').textContent = 'Incorrect password — try again.';
-          document.getElementById('login-password').value = '';
-          document.getElementById('login-password').focus();
-        }
+        // Verified by Firebase Authentication, not by a doc in our database.
+        await signInWithEmailAndPassword(auth, LOGIN_EMAIL, entered);
+        // onAuthStateChanged (below) reveals the app and loads your wins.
+        document.getElementById('login-password').value = '';
       } catch(e) {
-        document.getElementById('login-error').textContent = 'Could not connect — check your internet.';
+        var box = document.getElementById('login-box');
+        box.classList.remove('shake');
+        void box.offsetWidth;
+        box.classList.add('shake');
+        var code = e && e.code ? e.code : '';
+        if (code === 'auth/wrong-password' || code === 'auth/invalid-credential' ||
+            code === 'auth/invalid-login-credentials' || code === 'auth/user-not-found') {
+          errEl.textContent = 'Incorrect password — try again.';
+        } else if (code === 'auth/network-request-failed') {
+          errEl.textContent = 'Could not connect — check your internet.';
+        } else if (code === 'auth/too-many-requests') {
+          errEl.textContent = 'Too many attempts — please wait a moment and try again.';
+        } else {
+          errEl.textContent = 'Could not sign in — please try again.';
+        }
+        document.getElementById('login-password').value = '';
+        document.getElementById('login-password').focus();
+      } finally {
+        btn.disabled = false;
       }
     }
 
-    if (sessionStorage.getItem('ml-auth') === 'true') {
-      document.getElementById('login-overlay').style.display = 'none';
-      document.getElementById('app').style.display = 'flex';
-      loadWins();
-    }
+    // Firebase remembers your session across reloads and app restarts, so you
+    // stay signed in until you sign out or clear data. This fires once on load
+    // and again whenever you sign in or out.
+    onAuthStateChanged(auth, function(user) {
+      if (user) {
+        document.getElementById('login-overlay').style.display = 'none';
+        document.getElementById('app').style.display = 'flex';
+        loadWins();
+      } else {
+        document.getElementById('login-overlay').style.display = 'flex';
+        document.getElementById('app').style.display = 'none';
+      }
+    });
 
     document.getElementById('login-btn').addEventListener('click', checkPassword);
     document.getElementById('login-password').addEventListener('keydown', function(e) {
@@ -1143,6 +1181,8 @@
     // ── Render file attachment in cards ───────────────────
     function renderFileAttachment(fileURL, fileName, fileType) {
       if (!fileURL) return '';
+      fileURL = esc(fileURL);
+      fileName = esc(fileName);
 
       if (isImage(fileType, fileName)) {
         return '<img src="' + fileURL + '" class="card-image" style="width:80px;height:80px;object-fit:cover;border-radius:3px;flex-shrink:0;">';
@@ -1240,10 +1280,11 @@
             if (ph) buildLinkPreview(cleanText, ph.parentNode);
           }, 0);
         }
-        return '<div class="link-preview-placeholder" data-url="' + cleanText + '"></div>';
+        return '<div class="link-preview-placeholder" data-url="' + esc(cleanText) + '"></div>';
       }
 
-      return text.replace(/(https?:\/\/[^\s]+)/g, function(url) {
+      // Escape first so notes can never inject HTML, then linkify URLs.
+      return esc(text).replace(/(https?:\/\/[^\s]+)/g, function(url) {
         return '<a class="link-card" href="' + url + '" target="_blank" rel="noopener" style="display:inline-flex;margin-top:6px;">' +
           '<span class="link-icon">🔗</span>' +
           '<span class="link-info"><span class="link-url">' + url + '</span></span>' +
@@ -1303,6 +1344,11 @@
           storagePath = uploaded.storagePath;
         }
 
+        // When editing, keep the original creation date and the existing
+        // storage reference, so editing doesn't reset the date and the old
+        // file can still be cleaned up on delete.
+        var existing = editingId ? wins.find(function(w) { return w.firestoreId === editingId; }) : null;
+
         var entry = {
           category: category,
           type: type,
@@ -1311,8 +1357,9 @@
           fileURL: fileURL,
           fileName: fileName,
           fileType: fileType,
-          storagePath: storagePath,
-          createdAt: Date.now()
+          storagePath: storagePath || (existing && existing.storagePath) || null,
+          createdAt: (existing && existing.createdAt) ? existing.createdAt : Date.now(),
+          updatedAt: Date.now()
         };
 
         if (editingId) {
@@ -1349,6 +1396,8 @@
     // ── Delete win ─────────────────────────────────────────
     async function deleteWin(firestoreId) {
       var win = wins.find(function(w) { return w.firestoreId === firestoreId; });
+      var label = (win && win.title) ? '“' + win.title + '”' : 'this entry';
+      if (!window.confirm('Delete ' + label + '? This can’t be undone.')) return;
       try {
         setStatus('Deleting...', 'syncing');
         if (win && win.storagePath) {
@@ -1435,7 +1484,7 @@
         if (w.fileURL) {
           fileHTML = renderFileAttachment(w.fileURL, w.fileName, w.fileType);
         } else if (w.image) {
-          fileHTML = '<img src="' + w.image + '" class="card-image" style="width:80px;height:80px;object-fit:cover;border-radius:3px;flex-shrink:0;">';
+          fileHTML = '<img src="' + esc(w.image) + '" class="card-image" style="width:80px;height:80px;object-fit:cover;border-radius:3px;flex-shrink:0;">';
         }
         var isImg = w.fileURL ? isImage(w.fileType, w.fileName) : !!w.image;
 
@@ -1443,7 +1492,7 @@
           '<div class="win-card-text">' +
             '<div class="card-meta">' +
               chevronSVG(color) +
-              cat + (w.type ? ' · ' + w.type : '') + (w.title ? ' · ' + w.title : '') +
+              esc(cat) + (w.type ? ' · ' + esc(w.type) : '') + (w.title ? ' · ' + esc(w.title) : '') +
             '</div>' +
             '<div class="text">' + renderText(w.text, w.type) + '</div>' +
             (!isImg ? fileHTML : '') +
@@ -1484,26 +1533,26 @@
       var attachHTML = '';
       if (win.fileURL) {
         if (isImage(win.fileType, win.fileName)) {
-          attachHTML = '<img src="' + win.fileURL + '" style="width:100%;max-width:200px;height:200px;object-fit:cover;border-radius:3px;flex-shrink:0;align-self:center;">';
+          attachHTML = '<img src="' + esc(win.fileURL) + '" style="width:100%;max-width:200px;height:200px;object-fit:cover;border-radius:3px;flex-shrink:0;align-self:center;">';
         } else if (isAudio(win.fileType, win.fileName)) {
           attachHTML = '<div class="audio-player" style="width:100%;">' +
-            '<div class="audio-label">' + getFileIcon(win.fileType, win.fileName) + ' ' + (win.fileName || 'Audio') + '</div>' +
-            '<audio controls src="' + win.fileURL + '"></audio>' +
+            '<div class="audio-label">' + getFileIcon(win.fileType, win.fileName) + ' ' + (esc(win.fileName) || 'Audio') + '</div>' +
+            '<audio controls src="' + esc(win.fileURL) + '"></audio>' +
           '</div>';
         } else if (isVideo(win.fileType, win.fileName)) {
           attachHTML = '<div class="video-player" style="width:100%;">' +
-            '<div class="video-label">' + getFileIcon(win.fileType, win.fileName) + ' ' + (win.fileName || 'Video') + '</div>' +
-            '<video controls preload="metadata" src="' + win.fileURL + '"></video>' +
+            '<div class="video-label">' + getFileIcon(win.fileType, win.fileName) + ' ' + (esc(win.fileName) || 'Video') + '</div>' +
+            '<video controls preload="metadata" src="' + esc(win.fileURL) + '"></video>' +
           '</div>';
         } else {
-          attachHTML = '<a class="file-attachment" href="' + win.fileURL + '" target="_blank" rel="noopener">' +
+          attachHTML = '<a class="file-attachment" href="' + esc(win.fileURL) + '" target="_blank" rel="noopener">' +
             '<span class="file-icon">' + getFileIcon(win.fileType, win.fileName) + '</span>' +
-            '<span class="file-name">' + (win.fileName || 'Download file') + '</span>' +
+            '<span class="file-name">' + (esc(win.fileName) || 'Download file') + '</span>' +
             '<span class="file-arrow">↗</span>' +
           '</a>';
         }
       } else if (win.image) {
-        attachHTML = '<img src="' + win.image + '" style="width:100%;max-width:200px;height:200px;object-fit:cover;border-radius:3px;flex-shrink:0;align-self:center;">';
+        attachHTML = '<img src="' + esc(win.image) + '" style="width:100%;max-width:200px;height:200px;object-fit:cover;border-radius:3px;flex-shrink:0;align-self:center;">';
       }
 
       var isImg = win.fileURL ? isImage(win.fileType, win.fileName) : !!win.image;
@@ -1513,7 +1562,7 @@
           '<div class="spotlight-text">' +
             '<div class="card-meta">' +
               chevronSVG(color) +
-              cat + (win.type ? ' · ' + win.type : '') + (win.title ? ' · ' + win.title : '') +
+              esc(cat) + (win.type ? ' · ' + esc(win.type) : '') + (win.title ? ' · ' + esc(win.title) : '') +
             '</div>' +
             '<div class="text">' + renderText(win.text, win.type) + '</div>' +
             '<div class="spotlight-rule"><span class="spotlight-rule-mark">· · ·</span></div>' +
