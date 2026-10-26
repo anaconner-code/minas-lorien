@@ -16,10 +16,6 @@ A living list of what's next for the wins vault. Check things off as they ship.
 - [ ] **Icon refinements** — ongoing elvish icon polish
 - [ ] **Replace the microlink.io link-preview call** — it sends every saved URL to a third-party service (privacy + reliability)
 
-## 🧹 Cleanup (from the June 2026 security pass)
-
-- [ ] Delete the old `config/auth` doc in Firestore (unused now)
-
 ## ✅ Done — June 2026 security overhaul
 
 - [x] Real login via Firebase Authentication (kept the single-password feel)
@@ -35,3 +31,4 @@ A living list of what's next for the wins vault. Check things off as they ship.
 - [x] Fixed local git — `git push` works from my machine again
 - [x] Readability pass — bigger text, higher contrast, larger tap targets, A−/A+ control
 - [x] Removed `migrate.html` and the old `index_backup*.html.html` files from the repo
+- [x] Deleted the old plaintext-password `config/auth` doc from Firestore
