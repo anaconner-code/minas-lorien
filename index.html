@@ -194,7 +194,7 @@
     /* ── "Show me something" button ── */
     .surprise-btn {
       display: block;
-      margin: 0 auto 32px;
+      margin: 24px auto 24px;
       padding: 14px 0;
       background: transparent;
       color: #8a8a80;
@@ -612,7 +612,15 @@
     .add-form textarea:focus { outline: none; border-color: #a58a5c; }
     .add-form textarea { height: 120px; resize: vertical; }
 
-    .add-form button {
+    /* Category chips in the Add form */
+    .cat-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    #save-btn {
       width: 100%;
       padding: 13px 25px;
       background: transparent;
@@ -627,7 +635,7 @@
       font-weight: 500;
       transition: all 0.2s;
     }
-    .add-form button:hover { background: #a58a5c; color: #141412; }
+    #save-btn:hover { background: #a58a5c; color: #141412; }
 
     /* ── File upload area ── */
     .file-upload-area {
@@ -706,7 +714,7 @@
       padding: 6px;
       background: #141412;
       color: #6a6a62;
-      border-bottom: 1px solid #2a2a26;
+      border-top: 1px solid #2a2a26;
     }
     .status-bar.synced  { color: #5a8a70; }
     .status-bar.syncing { color: #a58a5c; }
@@ -906,12 +914,12 @@
       <div class="tab" id="btn-add">Add</div>
     </div>
 
-    <div class="status-bar" id="status-bar">Connecting to your vault...</div>
-
     <div class="content">
 
-      <!-- ── Inspire tab ── -->
+      <!-- ── Inspire tab ── an entry is shown as soon as the vault loads -->
       <div id="tab-inspire">
+        <div id="spotlight"></div>
+        <button class="surprise-btn" id="surprise-btn">Show me another</button>
         <div class="inspire-filters">
           <button class="filter-btn active" data-cat="all">All</button>
           <button class="filter-btn" data-cat="Work">Work</button>
@@ -919,8 +927,6 @@
           <button class="filter-btn" data-cat="Family">Family</button>
           <button class="filter-btn" data-cat="Inspiration">Inspiration</button>
         </div>
-        <button class="surprise-btn" id="surprise-btn">Show me something</button>
-        <div id="spotlight"></div>
       </div>
 
       <!-- ── Vault tab ── -->
@@ -939,29 +945,21 @@
       <div id="tab-add" style="display:none">
         <div class="add-form">
           <h3 id="add-form-title">Add a New Entry</h3>
-          <div class="form-row">
-            <select id="win-category">
-              <option value="Work">Work</option>
-              <option value="Creativity">Creativity</option>
-              <option value="Family">Family</option>
-              <option value="Inspiration">Inspiration</option>
-            </select>
-            <select id="win-type">
-              <option value="Feedback">Feedback</option>
-              <option value="Review">Performance Review</option>
-              <option value="Achievement">Achievement</option>
-              <option value="Quote">Quote</option>
-              <option value="Link">Link</option>
-              <option value="Note">Note</option>
-              <option value="Memory">Memory</option>
-            </select>
+          <div class="form-group">
+            <textarea id="win-text" placeholder="Paste anything — feedback, a quote, a link, a memory."></textarea>
           </div>
-          <input id="win-title" type="text" placeholder="Title — e.g. Q3 review from Sarah">
-          <textarea id="win-text" placeholder="Paste your content here — feedback, a quote, a URL, a memory, anything."></textarea>
+
+          <div class="cat-chips" id="cat-chips">
+            <button type="button" class="filter-btn" data-pick="Work">Work</button>
+            <button type="button" class="filter-btn" data-pick="Creativity">Creativity</button>
+            <button type="button" class="filter-btn" data-pick="Family">Family</button>
+            <button type="button" class="filter-btn" data-pick="Inspiration">Inspiration</button>
+          </div>
+          <input type="hidden" id="win-category" value="Work">
 
           <img id="image-preview" class="image-preview">
           <div class="file-upload-area" id="upload-area">
-            Click to attach a file — image, PDF, Word doc, audio, or video (optional)
+            Add a photo or file — optional
           </div>
           <input type="file" id="file-input" accept="image/*,.pdf,.doc,.docx,.mp3,.wav,.m4a,.ogg,.mp4,.mov,.webm" style="display:none">
 
@@ -972,11 +970,28 @@
             </div>
           </div>
 
+          <!-- Both optional: type is worked out on save if left on Auto -->
+          <div class="form-row">
+            <input id="win-title" type="text" placeholder="Title — optional">
+            <select id="win-type">
+              <option value="">Type — auto</option>
+              <option value="Feedback">Feedback</option>
+              <option value="Review">Performance Review</option>
+              <option value="Achievement">Achievement</option>
+              <option value="Quote">Quote</option>
+              <option value="Link">Link</option>
+              <option value="Note">Note</option>
+              <option value="Memory">Memory</option>
+            </select>
+          </div>
+
           <button id="save-btn">Save to vault</button>
         </div>
       </div>
 
     </div>
+
+    <div class="status-bar" id="status-bar">Connecting to your vault...</div>
   </div>
 
   <script>
@@ -1018,6 +1033,7 @@
     var currentVaultFilter = 'all';
     var currentInspireFilter = 'all';
     var editingId = null;
+    var currentSpotlightId = null; // entry currently shown on the Inspire tab
 
     // ── Chevron SVG helper ─────────────────────────────────
     // Returns an inline SVG chevron in the given colour.
@@ -1349,7 +1365,45 @@
       document.getElementById('tab-' + name).style.display = 'block';
       document.getElementById('btn-' + name).classList.add('active');
       if (name === 'vault') renderVault();
+      if (name === 'add' && !editingId) {
+        // A fresh question each visit, and the cursor already in the box.
+        var box = document.getElementById('win-text');
+        box.placeholder = ADD_PROMPTS[Math.floor(Math.random() * ADD_PROMPTS.length)];
+        box.focus();
+      }
     }
+
+    var UPLOAD_HINT = 'Add a photo or file — optional';
+    var ADD_PROMPTS = [
+      'Paste anything — feedback, a quote, a link, a memory.',
+      'What did someone say lately that you want to keep?',
+      'What went better than you expected this week?',
+      'A line you read that stayed with you.',
+      'Something you made, finished, or fixed.',
+      'A moment with family worth keeping.'
+    ];
+
+    // ── Category chips (Add form) ──────────────────────────
+    function readStore(key) {
+      try { return localStorage.getItem(key); } catch(e) { return null; }
+    }
+    function writeStore(key, value) {
+      try { localStorage.setItem(key, value); } catch(e) {}
+    }
+    function setCategory(cat) {
+      if (!CAT_COLORS[cat]) cat = 'Work';
+      document.getElementById('win-category').value = cat;
+      document.querySelectorAll('[data-pick]').forEach(function(b) {
+        b.classList.toggle('active', b.getAttribute('data-pick') === cat);
+      });
+    }
+    document.querySelectorAll('[data-pick]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        setCategory(btn.getAttribute('data-pick'));
+        writeStore('ml-last-cat', btn.getAttribute('data-pick'));
+      });
+    });
+    setCategory(readStore('ml-last-cat') || 'Work');
 
     // ── Load wins ──────────────────────────────────────────
     async function loadWins() {
@@ -1360,8 +1414,12 @@
         snapshot.forEach(function(docSnap) {
           wins.push(Object.assign({ firestoreId: docSnap.id }, docSnap.data()));
         });
+        wins.sort(function(a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
         setStatus('Vault synced · ' + wins.length + ' entries', 'synced');
         renderVault();
+        // Show an entry straight away; keep the current one if it still exists.
+        var stillThere = currentSpotlightId && wins.some(function(w) { return w.firestoreId === currentSpotlightId; });
+        if (!stillThere) showRandom();
       } catch(e) {
         setStatus('Could not connect — check your internet', 'error');
         console.error('Firebase error:', e);
@@ -1371,10 +1429,25 @@
     // ── Save / update win ──────────────────────────────────
     async function addWin() {
       var category = document.getElementById('win-category').value;
-      var type = document.getElementById('win-type').value;
       var title = document.getElementById('win-title').value.trim();
       var text = document.getElementById('win-text').value.trim();
-      if (!text) { alert('Please add some content!'); return; }
+
+      // When editing, keep the original creation date and the existing
+      // storage reference, so editing doesn't reset the date and the old
+      // file can still be cleaned up on delete.
+      var existing = editingId ? wins.find(function(w) { return w.firestoreId === editingId; }) : null;
+
+      // Words or a file — either is enough on its own.
+      var hasFile = currentFile || currentFileURL || (existing && existing.image);
+      if (!text && !hasFile) {
+        setStatus('Add some words or a photo first', 'error');
+        document.getElementById('win-text').focus();
+        return;
+      }
+
+      // Left on Auto, the type is worked out from what was saved.
+      var type = document.getElementById('win-type').value ||
+        (isURL(text) ? 'Link' : (text ? 'Note' : 'Memory'));
 
       var fileURL = currentFileURL || null;
       var fileName = currentFileName || null;
@@ -1391,11 +1464,6 @@
           fileType = uploaded.fileType;
           storagePath = uploaded.storagePath;
         }
-
-        // When editing, keep the original creation date and the existing
-        // storage reference, so editing doesn't reset the date and the old
-        // file can still be cleaned up on delete.
-        var existing = editingId ? wins.find(function(w) { return w.firestoreId === editingId; }) : null;
 
         var entry = {
           category: category,
@@ -1429,8 +1497,10 @@
     function resetForm() {
       document.getElementById('win-title').value = '';
       document.getElementById('win-text').value = '';
+      document.getElementById('win-type').value = '';
+      setCategory(readStore('ml-last-cat') || 'Work');
       document.getElementById('image-preview').style.display = 'none';
-      document.getElementById('upload-area').textContent = 'Click to attach a file — image, PDF, Word doc, audio, or video (optional)';
+      document.getElementById('upload-area').textContent = UPLOAD_HINT;
       document.getElementById('upload-area').classList.remove('has-file');
       document.getElementById('file-input').value = '';
       document.getElementById('add-form-title').textContent = 'Add a New Entry';
@@ -1463,8 +1533,8 @@
     function editWin(firestoreId) {
       var win = wins.find(function(w) { return w.firestoreId === firestoreId; });
       if (!win) return;
-      document.getElementById('win-category').value = win.category || 'Work';
-      document.getElementById('win-type').value = win.type;
+      setCategory(win.category || 'Work');
+      document.getElementById('win-type').value = win.type || '';
       document.getElementById('win-title').value = win.title || '';
       document.getElementById('win-text').value = win.text;
 
@@ -1492,7 +1562,7 @@
           area.classList.add('has-file');
         } else {
           preview.style.display = 'none';
-          area.textContent = 'Click to attach a file — image, PDF, Word doc, audio, or video (optional)';
+          area.textContent = UPLOAD_HINT;
           area.classList.remove('has-file');
         }
         currentFileURL = null;
@@ -1571,10 +1641,27 @@
       var spotlight = document.getElementById('spotlight');
       var pool = currentInspireFilter === 'all' ? wins : wins.filter(function(w) { return w.category === currentInspireFilter; });
       if (pool.length === 0) {
+        currentSpotlightId = null;
         spotlight.innerHTML = '<div class="empty">Nothing here yet — go add some.</div>';
         return;
       }
-      var win = pool[Math.floor(Math.random() * pool.length)];
+      // Work through the whole pool before anything comes round again.
+      // What has been shown is remembered on this device between visits.
+      var seen = [];
+      try { seen = JSON.parse(readStore('ml-seen') || '[]') || []; } catch(e) { seen = []; }
+      var unseen = pool.filter(function(w) { return seen.indexOf(w.firestoreId) === -1; });
+      if (unseen.length === 0) {
+        var poolIds = pool.map(function(w) { return w.firestoreId; });
+        seen = seen.filter(function(id) { return poolIds.indexOf(id) === -1; });
+        unseen = pool.length > 1
+          ? pool.filter(function(w) { return w.firestoreId !== currentSpotlightId; })
+          : pool;
+      }
+      var win = unseen[Math.floor(Math.random() * unseen.length)];
+      seen.push(win.firestoreId);
+      writeStore('ml-seen', JSON.stringify(seen));
+      currentSpotlightId = win.firestoreId;
+
       var cat = win.category || 'Work';
       var color = catColor(cat);
 
@@ -1641,6 +1728,7 @@
         document.querySelectorAll('[data-cat]').forEach(function(b) { b.classList.remove('active'); });
         btn.classList.add('active');
         currentInspireFilter = btn.getAttribute('data-cat');
+        showRandom();
       });
     });
 
